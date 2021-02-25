@@ -1,26 +1,17 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Surface : Representable<BoardRepresentation>
+public class Surface 
 {
-    public override string PrefabString => "board";
-
-    public Graph Graph { get; set; }
-
     public List<Vertex> Vertices;
     public int[] Triangles { get; private set; }
     private List<Face> faces;
 
-    public BoardState InitalState { get; private set; }
-
-    // *******************************************************
-
     public Surface(int edgeSize)
     {
-        InitalState = new BoardState();
         // Vertices
         Vertices = new Vertex[edgeSize * edgeSize].ToList();
 
@@ -33,7 +24,7 @@ public class Surface : Representable<BoardRepresentation>
                 Vertex newVertex = new Vertex();
                 Vertices[x + (edgeSize * z)] = newVertex;
                
-                InitalState.VertexStates.Add(newVertex, new VertexState(new Vector3(x, 0, z)));
+                // InitalState.VertexStates.Add(newVertex, new VertexState(new Vector3(x, 0, z)));
             }
         }
 
@@ -42,13 +33,13 @@ public class Surface : Representable<BoardRepresentation>
         {
             foreach (Vertex otherVertex in Vertices)
             {
-                if (Vector3.Distance(
-                        InitalState.VertexStates[vertex].Position,
-                        InitalState.VertexStates[otherVertex].Position) < 2.0f
-                    && !vertex.Equals(otherVertex))
-                {
-                    vertex.AddNeighbour(otherVertex);
-                }
+                // if (Vector3.Distance(
+                //         InitalState.VertexStates[vertex].Position,
+                //         InitalState.VertexStates[otherVertex].Position) < 2.0f
+                //     && !vertex.Equals(otherVertex))
+                // {
+                //     vertex.AddNeighbour(otherVertex);
+                // }
             }
         }
 
@@ -86,27 +77,27 @@ public class Surface : Representable<BoardRepresentation>
         }
     }
 
-    internal SurfacePoint MakeBPFrom2d(Vector3 destination2d)
-    {
-        foreach (Face face in faces)
-        {
-            SurfacePoint candidate = new SurfacePoint(
-                InitalState,
-                face,
-                destination2d);
+    // internal SurfacePoint MakeBPFrom2d(Vector3 destination2d)
+    // {
+    //     foreach (Face face in faces)
+    //     {
+    //         SurfacePoint candidate = new SurfacePoint(
+    //             InitalState,
+    //             face,
+    //             destination2d);
 
-            if (candidate.Barycentrics.CheckInternal())
-            {
-                if(Vector3.Distance(destination2d, candidate.GetCartesians(InitalState)) > 0.1f){
-                    // Debug.Log("makebp broke vector");
-                }
-                return candidate;
-            }
-        }
+    //         if (candidate.Barycentrics.CheckInternal())
+    //         {
+    //             if(Vector3.Distance(destination2d, candidate.GetCartesians(InitalState)) > 0.1f){
+    //                 // Debug.Log("makebp broke vector");
+    //             }
+    //             return candidate;
+    //         }
+    //     }
 
-        Debug.Log("makeBP failed");
-        return null;
-    }
+    //     Debug.Log("makeBP failed");
+    //     return null;
+    // }
 
     public bool TryGetFaceFromIndex(int triangleIndex, out Face face)
     {
@@ -121,49 +112,49 @@ public class Surface : Representable<BoardRepresentation>
         return false;
     }
 
-    public SurfacePoint SumBarAndCart(BoardState boardState, SurfacePoint boardPosition, Vector3 movementVector)
-    {
-        // Face face2d = ProjectFaceOn2D(boardPosition.Face);
-        Vector3 destination = boardPosition.GetCartesians(boardState) + movementVector;
-        Vector3 destination2d = new Vector3(
-            destination.x, 0, destination.z);
+    // public SurfacePoint SumBarAndCart(BoardState boardState, SurfacePoint boardPosition, Vector3 movementVector)
+    // {
+    //     // Face face2d = ProjectFaceOn2D(boardPosition.Face);
+    //     Vector3 destination = boardPosition.GetCartesians(boardState) + movementVector;
+    //     Vector3 destination2d = new Vector3(
+    //         destination.x, 0, destination.z);
 
-        // BoardPosition flatBP = new BoardPosition(simState, face2d, destination2d);
-        SurfacePoint flatBP = new SurfacePoint(SimulationManager.Instance.Board.InitalState, boardPosition.Face, destination2d);
-        if (flatBP.Barycentrics.CheckInternal())
-        {
-            return new SurfacePoint(boardPosition.Face, flatBP.Barycentrics);
-        }
+    //     // BoardPosition flatBP = new BoardPosition(simState, face2d, destination2d);
+    //     SurfacePoint flatBP = new SurfacePoint(SimulationManager.Instance.Board.InitalState, boardPosition.Face, destination2d);
+    //     if (flatBP.Barycentrics.CheckInternal())
+    //     {
+    //         return new SurfacePoint(boardPosition.Face, flatBP.Barycentrics);
+    //     }
 
-        List<Face> farNeighbours = new List<Face>();
-        foreach (Face nextFace in boardPosition.Face.GetNeighbourFaces())
-        {
-            // Face nextFace2d = ProjectFaceOn2D(nextFace);
-            // flatBP = new BoardPosition(simState, nextFace2d, destination2d);
-            flatBP = new SurfacePoint(SimulationManager.Instance.Board.InitalState, nextFace, destination2d);
-            if (flatBP.Barycentrics.CheckInternal())
-            {
-                return new SurfacePoint(nextFace, flatBP.Barycentrics);
-            }
+    //     List<Face> farNeighbours = new List<Face>();
+    //     foreach (Face nextFace in boardPosition.Face.GetNeighbourFaces())
+    //     {
+    //         // Face nextFace2d = ProjectFaceOn2D(nextFace);
+    //         // flatBP = new BoardPosition(simState, nextFace2d, destination2d);
+    //         flatBP = new SurfacePoint(SimulationManager.Instance.Board.InitalState, nextFace, destination2d);
+    //         if (flatBP.Barycentrics.CheckInternal())
+    //         {
+    //             return new SurfacePoint(nextFace, flatBP.Barycentrics);
+    //         }
 
-            farNeighbours.AddRange(nextFace.GetNeighbourFaces());
-        }
+    //         farNeighbours.AddRange(nextFace.GetNeighbourFaces());
+    //     }
 
-        foreach (Face nextFace in farNeighbours)
-        {
-            // Face nextFace2d = ProjectFaceOn2D(nextFace);
-            // flatBP = new BoardPosition(simState, nextFace2d, destination2d);
-            flatBP = new SurfacePoint(SimulationManager.Instance.Board.InitalState, nextFace, destination2d);
-            if (flatBP.Barycentrics.CheckInternal())
-            {
-                return new SurfacePoint(nextFace, flatBP.Barycentrics);
-            }
-        }
+    //     foreach (Face nextFace in farNeighbours)
+    //     {
+    //         // Face nextFace2d = ProjectFaceOn2D(nextFace);
+    //         // flatBP = new BoardPosition(simState, nextFace2d, destination2d);
+    //         flatBP = new SurfacePoint(SimulationManager.Instance.Board.InitalState, nextFace, destination2d);
+    //         if (flatBP.Barycentrics.CheckInternal())
+    //         {
+    //             return new SurfacePoint(nextFace, flatBP.Barycentrics);
+    //         }
+    //     }
 
-        // TODO: make like tryGet
-        Debug.Log("find next face failed");
-        return null;
-    }
+    //     // TODO: make like tryGet
+    //     Debug.Log("find next face failed");
+    //     return null;
+    // }
 
     // private Face ProjectFaceOn2D(Face face)
     // {
