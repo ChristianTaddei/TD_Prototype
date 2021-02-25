@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Face 
 {
-    public static implicit operator CartesianTriangle(Face f) => new CartesianTriangle();
+    // public static implicit operator CartesianTriangle(Face f) => new CartesianTriangle();
     
     public Vertex a { get; }
     public Vertex b { get; }

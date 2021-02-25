@@ -39,10 +39,10 @@ public class TraceLine : InterfaceState
                     //      Color.green
                     //  ));
 
-                    SurfaceLine line = new SurfaceLine(lineStart, lineEnd);
+                    // SurfaceLine line = new SurfaceLine(lineStart, lineEnd);
 
                     ClearPlaceholders();
-                    placeholders.AddRange(InterfaceManager.Instance.MakeHighlight(line));
+                    // placeholders.AddRange(InterfaceManager.Instance.MakeHighlight(line));
                 }
                 else
                 {

@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class SurfacePoint : BarycentricVector
+public class SurfacePoint
 {
-    public BarycentricVector Barycentrics { get; private set; }
+    public BarycentricCoordinates Barycentrics { get; private set; }
     public Face Face { get; private set; }
 
     public Vector3 GetCartesians(BoardState boardState)
@@ -14,7 +14,6 @@ public class SurfacePoint : BarycentricVector
     }
 
     public SurfacePoint(Face face, BarycentricCoordinates barycentric)
-        : base(face.t, barycentric)
     {
 
         this.Face = face;
