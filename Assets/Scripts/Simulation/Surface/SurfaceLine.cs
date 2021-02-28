@@ -10,8 +10,9 @@ public class SurfaceLine
 
     private List<SurfacePoint> crossingPoints;
 
-    public static bool? FromPoints(object disjointedPoint1, object disjointedPoint2, out SurfaceLine surfaceLine)
+    public static bool FromPoints(object disjointedPoint1, object disjointedPoint2, out SurfaceLine surfaceLine)
     {
-        throw new NotImplementedException();
-    }
+        surfaceLine = new SurfaceLine();
+        return false;
+    } 
 }
