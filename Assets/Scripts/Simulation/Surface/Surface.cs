@@ -8,9 +8,16 @@ public class Surface
 {
     private List<Face> faces;
 
-    public Surface(params object[] args){
-        
+    public Surface()
+    {
+        this.faces = new List<Face>();
     }
+
+    internal void AddFace(Face face)
+    {
+        faces.Add(face);
+    }
+
 
     // public List<Vertex> Vertices;
     // public int[] Triangles { get; private set; }
@@ -29,7 +36,7 @@ public class Surface
     //         {
     //             Vertex newVertex = new Vertex();
     //             Vertices[x + (edgeSize * z)] = newVertex;
-               
+
     //             // InitalState.VertexStates.Add(newVertex, new VertexState(new Vector3(x, 0, z)));
     //         }
     //     }

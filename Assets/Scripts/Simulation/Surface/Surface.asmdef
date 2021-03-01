@@ -2,6 +2,7 @@
     "name": "Surface",
     "rootNamespace": "",
     "references": [
+        "GUID:26bb5d328547e7347b935aa657b303bd",
         "GUID:cff0720ee8e34a84dbb5d03776959505",
         "GUID:20bd8ddd5d9c04d409b8dc12fccee760"
     ],

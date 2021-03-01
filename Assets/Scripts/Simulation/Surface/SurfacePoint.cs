@@ -3,27 +3,32 @@ using UnityEngine;
 
 public class SurfacePoint
 {
-    public BarycentricCoordinates Barycentrics { get; private set; }
-    public Face Face { get; private set; }
+    private BarycentricVector barycentricVector;
 
-    // public Vector3 GetCartesians(BoardState boardState)
-    // {
-    //     return boardState.VertexStates[Face.a].Position * Barycentrics.a
-    //             + boardState.VertexStates[Face.b].Position * Barycentrics.b
-    //             + boardState.VertexStates[Face.c].Position * Barycentrics.c;
-    // }
+    private SurfacePoint() { }
 
-    public SurfacePoint(Face face, BarycentricCoordinates barycentric)
+    public SurfacePoint(Face face, CartesianPoint cp)
     {
-
-        this.Face = face;
-        this.Barycentrics = barycentric;
+        this.barycentricVector = BarycentricVector.FromPoint(face.Triangle, cp);
     }
 
-    public SurfacePoint(Face face, Vector3 cartesianCoordinate)
+    public static bool MakeFrom(Face face, CartesianPoint cp, out SurfacePoint newSurfacePoint)
     {
-        this.Face = face;
-        // this.Barycentrics = FromFaceAndPoint(face, cartesianCoordinate);
+        newSurfacePoint = new SurfacePoint(); // TODO: NO_POINT?
+        try
+        {
+            BarycentricVector.FromPoint(face.Triangle, cp);
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            
+        }
+        
+        return true;
     }
 
     // public SurfacePoint(Vertex spawningPosition)

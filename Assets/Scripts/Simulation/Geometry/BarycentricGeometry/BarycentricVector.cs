@@ -21,8 +21,11 @@ public class BarycentricVector : IVector
         barycentricCoordinates = coordinates;
     }
 
-    public static BarycentricVector FromPoint(CartesianTriangle _base, CartesianVector p, bool project = false)
+    // TODO: using bool and out for better performances?
+    public static BarycentricVector FromPoint(CartesianTriangle _base, CartesianPoint cp, bool project = false)
     {
+        CartesianVector p = new CartesianVector(cp.Coordinates); // TODO: CV x CP
+
         CartesianVector a = _base.a.Coordinates;
         CartesianVector b = _base.b.Coordinates;
         CartesianVector c = _base.c.Coordinates;

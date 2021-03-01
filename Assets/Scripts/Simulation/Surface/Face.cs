@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Face 
+public class Face
 {
-    // public static implicit operator CartesianTriangle(Face f) => new CartesianTriangle();
-    
-    public IPoint a { get; }
-    public IPoint b { get; }
-    public IPoint c { get; }
+    private ITriangle triangle;
+    private Surface belongingSurface;
 
-    public Face(IPoint a, IPoint b, IPoint c)
+    public Face(Surface s, CartesianTriangle ct)
     {
-        this.a = a;
-        this.b = b;
-        this.c = c;
+        this.triangle = ct;
+        this.belongingSurface = s;
+        this.belongingSurface.AddFace(this);
     }
+
+    public Face(Surface s, IPoint a, IPoint b, IPoint c) : this(s, new CartesianTriangle(a, b, c)) { }
+
+    public CartesianTriangle Triangle { get; internal set; }
+
+    // TODO: neighbour faces
 
     // public List<Face> GetNeighbourFaces()
     // {
