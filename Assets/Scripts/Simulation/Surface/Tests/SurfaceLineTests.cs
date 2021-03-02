@@ -22,6 +22,7 @@ namespace Tests
         public void Setup()
         {
             #region Disjointed Faces Surface
+
             disjointedSurface = new Surface();
 
             disjointedFace1 = new Face(
@@ -37,11 +38,11 @@ namespace Tests
                 (CartesianPoint)new Vector3(2, 2, 0));
 
             SurfacePoint.MakeFrom(
-               disjointedFace1,
+                disjointedFace1,
                 (CartesianPoint)new Vector3(0, 1, 0),
                 out disjointedPoint1);
             SurfacePoint.MakeFrom(
-               disjointedFace2,
+                disjointedFace2,
                 (CartesianPoint)new Vector3(0, 2, 0),
                 out disjointedPoint2);
 
@@ -62,8 +63,16 @@ namespace Tests
 
             Assert.False(
                 SurfaceLine.FromPoints(disjointedPoint1, disjointedPoint2, out surfaceLine));
+
+        }
+
+        [Test]
+        public void ValidLines()
+        {
+            SurfaceLine surfaceLine;
+
             Assert.True(
-                SurfaceLine.FromPoints(a1, b1, out surfaceLine));
+                   SurfaceLine.FromPoints(a1, b1, out surfaceLine));
             Assert.True(
                 SurfaceLine.FromPoints(b1, c1, out surfaceLine));
             Assert.True(

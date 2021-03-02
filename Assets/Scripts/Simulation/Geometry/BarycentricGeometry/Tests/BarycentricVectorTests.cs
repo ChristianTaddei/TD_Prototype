@@ -10,12 +10,12 @@ namespace Tests
 {
     public class BarycentricVectorTests
     {
-        CartesianTriangle regularBase = 
+        CartesianTriangle regularBase =
             new CartesianTriangle(
                 Vector3.right,
                 Vector3.up,
                 Vector3.forward);
-        CartesianTriangle randomBase = 
+        CartesianTriangle randomBase =
             new CartesianTriangle(
                 new Vector3(12.3643634f, -2.124f, -55.123f),
                 new Vector3(3.0f, 1.5f, -0.124f),
@@ -162,22 +162,19 @@ namespace Tests
         [Test]
         public void FromPointTest()
         {
-            Assert.Throws<Exception>(
-               () => BarycentricVector.FromPoint(regularBase, new Vector3(1, 2, 3))
-            );
-            Assert.Throws<Exception>(
-               () => BarycentricVector.FromPoint(randomBase, new Vector3(1, 2, 3))
-            );
+            BarycentricVector bv;
 
-            Assert.AreEqual(
-               new Vector3(1, 0, 0),
-               BarycentricVector.FromPoint(regularBase, new Vector3(1, 0, 0)).Coordinates
-            );
+            Assert.False(BarycentricVector.FromPoint(regularBase, new Vector3(1, 2, 3), out bv));
+            Assert.False(BarycentricVector.FromPoint(randomBase, new Vector3(1, 2, 3), out bv));
+
+            BarycentricVector.FromPoint(regularBase, new Vector3(1, 0, 0), out bv);
+            Assert.AreEqual(new Vector3(1, 0, 0), bv.Coordinates);
 
             Vector3 cartesianRegularBaseCentre = new Vector3(1, 1, 1) / 3.0f;
+            BarycentricVector.FromPoint(regularBase, new Vector3(1, 0, 0), out bv);
             AssertAreComponentWiseEquals(
                 new Vector3(1, 0, 0),
-                BarycentricVector.FromPoint(regularBase, new Vector3(1, 0, 0)).Coordinates,
+                bv.Coordinates,
                 0.001f
              );
 
@@ -185,9 +182,10 @@ namespace Tests
                 randomBase.a.Coordinates / 3.0f +
                 randomBase.b.Coordinates / 3.0f +
                 randomBase.c.Coordinates / 3.0f;
+            BarycentricVector.FromPoint(randomBase, cartesianRandomBaseCentre, out bv);
             AssertAreComponentWiseEquals(
                 cartesianRandomBaseCentre,
-                BarycentricVector.FromPoint(randomBase, cartesianRandomBaseCentre).Coordinates,
+                bv.Coordinates,
                 0.001f
             );
         }

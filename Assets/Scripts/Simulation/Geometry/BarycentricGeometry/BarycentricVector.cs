@@ -21,9 +21,15 @@ public class BarycentricVector : IVector
         barycentricCoordinates = coordinates;
     }
 
-    // TODO: using bool and out for better performances?
-    public static BarycentricVector FromPoint(CartesianTriangle _base, CartesianPoint cp, bool project = false)
+    private BarycentricVector() { }
+
+    public static bool FromPoint(
+        CartesianTriangle _base,
+        CartesianPoint cp,
+        out BarycentricVector newBarycentricVector,
+        bool project = false)
     {
+        newBarycentricVector = new BarycentricVector(); //TODO: NO_BAR_VEC
         CartesianVector p = new CartesianVector(cp.Coordinates); // TODO: CV x CP
 
         CartesianVector a = _base.a.Coordinates;
@@ -35,26 +41,30 @@ public class BarycentricVector : IVector
         CartesianVector n_b = (a - c).Cross(p - c);
         CartesianVector n_c = (b - a).Cross(p - a);
 
-        if (!(p - a).isComplanarTo(b - a, c - a) && !project)
+        if (!(p - a).isComplanarTo(b - a, c - a))
         {
-            throw new Exception();
-        }
-        else
-        {
-            // when above exc has type
-            // throw new NotImplementedException();
+            if (project)
+            {
+                // TODO: project
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         float squareMag = n.magnitude * n.magnitude;
 
-        BarycentricCoordinates barycentricCoordinates = 
+        BarycentricCoordinates barycentricCoordinates =
             new BarycentricCoordinates(
                 n.Dot(n_a) / squareMag,
-                n.Dot( n_b) / squareMag,
-                n.Dot( n_c) / squareMag
+                n.Dot(n_b) / squareMag,
+                n.Dot(n_c) / squareMag
             );
 
-        return new BarycentricVector(_base, barycentricCoordinates);
+        newBarycentricVector = new BarycentricVector(_base, barycentricCoordinates);
+        return true;
     }
 
     // public static implicit operator Vector3(BarycentricVector bv) => bv.Coordinates;
@@ -81,9 +91,12 @@ public class BarycentricVector : IVector
             return new BarycentricVector(newBase, barycentricCoordinates);
         }
 
-        BarycentricVector oldBaseAInNewBase = BarycentricVector.FromPoint(newBase, _base.a.Coordinates);
-        BarycentricVector oldBaseBInNewBase = BarycentricVector.FromPoint(newBase, _base.b.Coordinates);
-        BarycentricVector oldBaseCInNewBase = BarycentricVector.FromPoint(newBase, _base.c.Coordinates);
+        BarycentricVector oldBaseAInNewBase;
+        BarycentricVector.FromPoint(newBase, _base.a.Coordinates, out oldBaseAInNewBase);
+        BarycentricVector oldBaseBInNewBase;
+        BarycentricVector.FromPoint(newBase, _base.b.Coordinates, out oldBaseBInNewBase);
+        BarycentricVector oldBaseCInNewBase;
+        BarycentricVector.FromPoint(newBase, _base.c.Coordinates, out oldBaseCInNewBase);
 
         return new BarycentricVector(
             newBase,

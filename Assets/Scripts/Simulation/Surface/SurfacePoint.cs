@@ -5,30 +5,25 @@ public class SurfacePoint
 {
     private BarycentricVector barycentricVector;
 
-    private SurfacePoint() { }
-
-    public SurfacePoint(Face face, CartesianPoint cp)
+    public SurfacePoint(BarycentricVector barycentricVector)
     {
-        this.barycentricVector = BarycentricVector.FromPoint(face.Triangle, cp);
+        this.barycentricVector = barycentricVector;
     }
+
+    private SurfacePoint() { }
 
     public static bool MakeFrom(Face face, CartesianPoint cp, out SurfacePoint newSurfacePoint)
     {
-        newSurfacePoint = new SurfacePoint(); // TODO: NO_POINT?
-        try
+        BarycentricVector bv;
+
+        if (BarycentricVector.FromPoint(face.Triangle, cp, out bv))
         {
-            BarycentricVector.FromPoint(face.Triangle, cp);
-        }
-        catch
-        {
-            return false;
-        }
-        finally
-        {
-            
+            newSurfacePoint = new SurfacePoint(bv);
+            return true;
         }
         
-        return true;
+        newSurfacePoint = new SurfacePoint();
+        return false;
     }
 
     // public SurfacePoint(Vertex spawningPosition)

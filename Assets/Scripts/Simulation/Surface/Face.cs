@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Face
 {
-    private ITriangle triangle;
+    private CartesianTriangle triangle;
     private Surface belongingSurface;
 
     public Face(Surface s, CartesianTriangle ct)
@@ -17,7 +17,7 @@ public class Face
 
     public Face(Surface s, IPoint a, IPoint b, IPoint c) : this(s, new CartesianTriangle(a, b, c)) { }
 
-    public CartesianTriangle Triangle { get; internal set; }
+    public CartesianTriangle Triangle { get => triangle; }
 
     // public List<Face> GetNeighbourFaces()
     // {
