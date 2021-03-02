@@ -8,6 +8,18 @@ public class CartesianTriangle : ITriangle
     public IPoint b => new CartesianPoint(m_b);
     public IPoint c => new CartesianPoint(m_c);
 
+    public List<IPoint> Vertices
+    {
+        get
+        {
+            List<IPoint> vertices = new List<IPoint>();
+            vertices.Add(a);
+            vertices.Add(b);
+            vertices.Add(c);
+            return vertices;
+        }
+    }
+
     public CartesianTriangle(IPoint a, IPoint b, IPoint c)
     {
         m_a = new CartesianPoint(a);

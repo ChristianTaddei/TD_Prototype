@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Surface 
+public class Surface
 {
     private List<Face> faces;
 
@@ -18,6 +18,25 @@ public class Surface
         faces.Add(face);
     }
 
+    internal List<Face> neighboursOf(Face startingFace)
+    {
+        List<Face> neighbours = new List<Face>();
+        faces.Where(candidateNeighbour => areNeighbours(candidateNeighbour, startingFace));
+        return neighbours;
+    }
+
+    private bool areNeighbours(Face f1, Face f2)
+    {
+        foreach (IPoint v1 in f1.Triangle.Vertices)
+        {
+            foreach (IPoint v2 in f2.Triangle.Vertices)
+            {
+                if (v1 == v2) return true;
+            }
+        }
+
+        return false;
+    }
 
     // public List<Vertex> Vertices;
     // public int[] Triangles { get; private set; }

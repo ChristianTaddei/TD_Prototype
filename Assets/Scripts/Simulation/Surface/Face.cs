@@ -19,8 +19,6 @@ public class Face
 
     public CartesianTriangle Triangle { get; internal set; }
 
-    // TODO: neighbour faces
-
     // public List<Face> GetNeighbourFaces()
     // {
     //     List<Face> neighbours = new List<Face>();
