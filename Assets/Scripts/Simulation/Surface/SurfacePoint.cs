@@ -1,9 +1,11 @@
 using System.Linq;
 using UnityEngine;
 
-public class SurfacePoint
+public class SurfacePoint : IPoint
 {
     private BarycentricVector barycentricVector;
+
+    public Vector3 Coordinates => barycentricVector.Coordinates;
 
     public SurfacePoint(BarycentricVector barycentricVector)
     {
@@ -11,6 +13,7 @@ public class SurfacePoint
     }
 
     private SurfacePoint() { }
+
 
     public static bool MakeFrom(Face face, CartesianPoint cp, out SurfacePoint newSurfacePoint)
     {

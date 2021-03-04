@@ -72,7 +72,7 @@ namespace Tests
             SurfaceLine surfaceLine;
 
             Assert.True(
-                   SurfaceLine.FromPoints(a1, b1, out surfaceLine));
+                SurfaceLine.FromPoints(a1, b1, out surfaceLine));
             Assert.True(
                 SurfaceLine.FromPoints(b1, c1, out surfaceLine));
             Assert.True(
