@@ -59,24 +59,24 @@ namespace Tests
         [Test]
         public void DisjointedFacesNoLine()
         {
-            SurfaceLine surfaceLine;
+            Path surfaceLine;
 
             Assert.False(
-                SurfaceLine.FromPoints(disjointedPoint1, disjointedPoint2, out surfaceLine));
+                Path.TryMakeDirectPath(disjointedPoint1, disjointedPoint2, out surfaceLine));
 
         }
 
         [Test]
         public void ValidLines()
         {
-            SurfaceLine surfaceLine;
+            Path surfaceLine;
 
             Assert.True(
-                SurfaceLine.FromPoints(a1, b1, out surfaceLine));
+                Path.TryMakeDirectPath(a1, b1, out surfaceLine));
             Assert.True(
-                SurfaceLine.FromPoints(b1, c1, out surfaceLine));
+                Path.TryMakeDirectPath(b1, c1, out surfaceLine));
             Assert.True(
-                SurfaceLine.FromPoints(a1, d2, out surfaceLine));
+                Path.TryMakeDirectPath(a1, d2, out surfaceLine));
         }
     }
 }

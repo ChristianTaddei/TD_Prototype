@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,11 @@ public class CartesianVector : IVector
     public CartesianVector(Vector3 cartesianCoordinates)
     {
         this.cartesianCoordinates = cartesianCoordinates;
+    }
+
+    public static CartesianVector FromPoints(IPoint startPoint, IPoint endPoint)
+    {
+        return new CartesianVector(endPoint.Coordinates - startPoint.Coordinates);
     }
 
     public float Dot(CartesianVector v)
