@@ -10,12 +10,12 @@ public class BarycentricVector : IVector
         + barycentricCoordinates.b * _base.b.Coordinates
         + barycentricCoordinates.c * _base.c.Coordinates;
 
-    public CartesianTriangle Base { get => _base; }
+    public ITriangle Base { get => _base; }
 
-    private readonly CartesianTriangle _base;
+    private readonly ITriangle _base;
     private readonly BarycentricCoordinates barycentricCoordinates;
 
-    public BarycentricVector(CartesianTriangle _base, BarycentricCoordinates coordinates)
+    public BarycentricVector(ITriangle _base, BarycentricCoordinates coordinates)
     {
         this._base = _base;
         barycentricCoordinates = coordinates;
@@ -24,7 +24,7 @@ public class BarycentricVector : IVector
     private BarycentricVector() { }
 
     public static bool FromPoint(
-        CartesianTriangle _base,
+        ITriangle _base,
         CartesianPoint cp,
         out BarycentricVector newBarycentricVector,
         bool project = false)
@@ -84,7 +84,7 @@ public class BarycentricVector : IVector
         return IsPointComplanarToBase() && barycentricCoordinates.CheckInternal();
     }
 
-    public BarycentricVector ChangeBase(CartesianTriangle newBase)
+    public BarycentricVector ChangeBase(ITriangle newBase)
     {
         if (this._base == newBase)
         {

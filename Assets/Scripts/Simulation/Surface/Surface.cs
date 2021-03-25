@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Surface
 {
+    private List<IPoint> vertices;
     private List<Face> faces;
 
     public Surface()
@@ -18,14 +19,14 @@ public class Surface
         faces.Add(face);
     }
 
-    internal List<Face> neighboursOf(Face startingFace)
+    internal List<Face> neighboursOf(Face startingFace) // TODO: make constant not linear
     {
         List<Face> neighbours = new List<Face>();
         faces.Where(candidateNeighbour => areNeighbours(candidateNeighbour, startingFace));
         return neighbours;
     }
 
-    private bool areNeighbours(Face f1, Face f2)
+    private bool areNeighbours(Face f1, Face f2) 
     {
         foreach (IPoint v1 in f1.Triangle.Vertices)
         {

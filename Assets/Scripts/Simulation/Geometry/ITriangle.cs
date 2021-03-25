@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ITriangle 
+public interface ITriangle
 {
-    IPoint a {get;}
-    IPoint b {get;}
-    IPoint c {get;}
+    IPoint a { get; }
+    IPoint b { get; }
+    IPoint c { get; }
+
+    List<IPoint> Vertices { get; }
 }

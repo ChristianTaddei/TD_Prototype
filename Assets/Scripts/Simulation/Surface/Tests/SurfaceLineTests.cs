@@ -37,11 +37,11 @@ namespace Tests
                 (CartesianPoint)new Vector3(0, 2, 2),
                 (CartesianPoint)new Vector3(2, 2, 0));
 
-            SurfacePoint.MakeFrom(
+            SurfacePoint.TryMakeFrom(
                 disjointedFace1,
                 (CartesianPoint)new Vector3(0, 1, 0),
                 out disjointedPoint1);
-            SurfacePoint.MakeFrom(
+            SurfacePoint.TryMakeFrom(
                 disjointedFace2,
                 (CartesianPoint)new Vector3(0, 2, 0),
                 out disjointedPoint2);
