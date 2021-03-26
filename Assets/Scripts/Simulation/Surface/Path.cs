@@ -1,23 +1,32 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class Path
+public class SurfacePath
 {
-    public SurfacePoint start { get; }
-    public SurfacePoint end { get; }
+    public IPoint Start { get => points.First(); }
+    public IPoint End { get => points.Last(); }
 
-    private List<SurfacePoint> crossingPoints;
+    private List<SurfacePoint> points;
 
-    private Path()
+    private SurfacePath()
     {
-        crossingPoints = new List<SurfacePoint>();
+        points = new List<SurfacePoint>();
     }
 
-    public static bool TryMakeDirectPath(SurfacePoint startPoint, SurfacePoint endPoint, out Path directPath)
+    public static bool TryMakeDirectPath(SurfacePoint startPoint, SurfacePoint endPoint, out SurfacePath directPath)
     {
-        directPath = new Path();
+        directPath = new SurfacePath();
+
+        Surface surface;
+        if(startPoint.Surface == endPoint.Surface){
+            surface = endPoint.Surface;
+        } else {
+            return false; 
+        }
+
         List<SurfacePoint> crossingPoints = new List<SurfacePoint>();
 
         CartesianVector startToEndDirection = CartesianVector.FromPoints(startPoint, endPoint);
