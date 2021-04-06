@@ -6,13 +6,13 @@ using UnityEngine;
 public class Face
 {
     private ITriangle triangle;
-    private Surface belongingSurface;
+    public Surface Surface {get; private set;}
 
     public Face(Surface s, ITriangle t)
     {
         this.triangle = t;
-        this.belongingSurface = s;
-        this.belongingSurface.AddFace(this);
+        this.Surface = s;
+        this.Surface.AddFace(this);
     }
 
     public Face(Surface s, IPoint a, IPoint b, IPoint c) : this(s, new CartesianTriangle(a, b, c)) { }

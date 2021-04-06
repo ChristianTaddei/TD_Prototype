@@ -21,8 +21,8 @@ public class SurfacePath
         outputPath = new SurfacePath();
 
         Surface sharedSurface;
-        if(startPoint.Surface == endPoint.Surface){
-            sharedSurface = endPoint.Surface;
+        if(startPoint.Face.Surface == endPoint.Face.Surface){
+            sharedSurface = endPoint.Face.Surface;
         } else { // TODO: sanity checks as aspect?
             Debug.LogError("trying to use points on different surface");
             return false; 
@@ -36,7 +36,7 @@ public class SurfacePath
         while (currentPoint.Face != endPoint.Face)
         {
             SurfacePoint intersection;
-            if (sharedSurface.TryGetIntersection(currentPoint, startToEndDirection, out intersection))
+            if (currentPoint.TryGetIntersectionToward(startToEndDirection, out intersection))
             {
                 crossingPoints.Add(intersection);
                 currentPoint = intersection; // TODO: multi face points
