@@ -46,6 +46,40 @@ public class Surface
         return newFace;
     }
 
+    public bool TryMakeDirectPath(SurfacePoint startPoint, SurfacePoint endPoint, out SurfacePath path)
+    {
+        if (startPoint.Face.Surface != this || endPoint.Face.Surface != this)
+        {
+            path = SurfacePath.NO_PATH;
+            return false;
+        }
+
+        List<SurfacePoint> crossingPoints = new List<SurfacePoint>();
+
+        CartesianVector startToEndDirection = CartesianVector.FromPoints(startPoint, endPoint);
+
+        SurfacePoint currentPoint = startPoint;
+        while (currentPoint.Face != endPoint.Face)
+        {
+            SurfacePoint intersection;
+            if (currentPoint.TryGetIntersectionToward(startToEndDirection, out intersection))
+            {
+                crossingPoints.Add(intersection);
+                currentPoint = intersection; // TODO: multi face points
+            }
+            else
+            {
+                path = SurfacePath.NO_PATH;
+                return false;
+            }
+        }
+
+        // check last inters + dir crosses end
+
+        path = new SurfacePath(crossingPoints);
+        return true;
+    }
+
     // public bool TryMakeSurfacePointFrom(CartesianPoint cartesianPoint, out SurfacePoint newSurfacePoint)
     // {
     //     BarycentricVector bv;

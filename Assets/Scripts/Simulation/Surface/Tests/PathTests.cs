@@ -6,15 +6,15 @@ using NUnit.Framework;
 
 namespace Tests
 {
-    public class SurfaceLineTests
+    public class PathTests
     {
         private Surface disjointedSurface;
         private Face disjointedFace1, disjointedFace2;
         private SurfacePoint disjointedPoint1, disjointedPoint2;
 
         // A square made of two faces, sharing points b and c.
-        private Surface abcd;
-        private Face abc1, bcd2;
+        private Surface Square_abcd;
+        private Face Triangle_abc1, Triangle_bcd2;
         private SurfacePoint a1, b1, c1, b2, c2, d2;
 
 
@@ -57,25 +57,41 @@ namespace Tests
         }
 
         [Test]
-        public void DisjointedFacesNoLine()
+        public void DisjointedFacesNoPath()
         {
-            SurfacePath surfaceLine;
+            SurfacePath path;
 
             Assert.False(
-                SurfacePath.TryMakeDirectPath(disjointedPoint1, disjointedPoint2, out surfaceLine));
+                disjointedSurface.TryMakeDirectPath(disjointedPoint1, disjointedPoint2, out path));
         }
 
         [Test]
-        public void ValidLines()
+        public void SameFaceHasDirectPath()
         {
-            SurfacePath surfaceLine;
+            SurfacePath path;
+
+            // TODO: programmatically: every vertex of same face (both ways), any 2 random points on same face
+            Assert.True(
+                Square_abcd.TryMakeDirectPath(a1, b1, out path));
+            Assert.True(
+                Square_abcd.TryMakeDirectPath(b1, c1, out path));
+            Assert.True(
+                Square_abcd.TryMakeDirectPath(a1, c1, out path));
+            Assert.True(
+                Square_abcd.TryMakeDirectPath(b2, c2, out path));
+            Assert.True(
+                Square_abcd.TryMakeDirectPath(b2, d2, out path));
+            Assert.True(
+                Square_abcd.TryMakeDirectPath(c2, d2, out path));
+        }
+        [Test]
+
+        public void NeighbourFacesHaveDirectPath()
+        {
+            SurfacePath path;
 
             Assert.True(
-                SurfacePath.TryMakeDirectPath(a1, b1, out surfaceLine));
-            Assert.True(
-                SurfacePath.TryMakeDirectPath(b1, c1, out surfaceLine));
-            Assert.True(
-                SurfacePath.TryMakeDirectPath(a1, d2, out surfaceLine));
+                Square_abcd.TryMakeDirectPath(a1, d2, out path));
         }
     }
 }
