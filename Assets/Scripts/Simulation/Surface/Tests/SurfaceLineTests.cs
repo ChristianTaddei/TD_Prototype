@@ -25,29 +25,29 @@ namespace Tests
 
             disjointedSurface = new Surface();
 
-            disjointedFace1 = new Face(
-                disjointedSurface,
+            disjointedFace1 = disjointedSurface.AddFace(
                 (CartesianPoint)new Vector3(0, 1, 0),
                 (CartesianPoint)new Vector3(0, 1, 1),
                 (CartesianPoint)new Vector3(1, 1, 0));
 
-            disjointedFace2 = new Face(
-                disjointedSurface,
+            disjointedFace2 = disjointedSurface.AddFace(
                 (CartesianPoint)new Vector3(0, 2, 0),
                 (CartesianPoint)new Vector3(0, 2, 2),
                 (CartesianPoint)new Vector3(2, 2, 0));
 
-            SurfacePoint.TryMakeFrom(
+            disjointedPoint1 = new SurfacePoint(
                 disjointedFace1,
-                (CartesianPoint)new Vector3(0, 1, 0),
-                out disjointedPoint1);
-            SurfacePoint.TryMakeFrom(
+                new BarycentricVector(
+                    disjointedFace1.Triangle,
+                    new BarycentricCoordinates(1, 0, 0)));
+
+            disjointedPoint2 = new SurfacePoint(
                 disjointedFace2,
-                (CartesianPoint)new Vector3(0, 2, 0),
-                out disjointedPoint2);
+                new BarycentricVector(
+                    disjointedFace1.Triangle,
+                    new BarycentricCoordinates(1, 0, 0)));
 
             #endregion
-
         }
 
         [TearDown]
@@ -63,7 +63,6 @@ namespace Tests
 
             Assert.False(
                 SurfacePath.TryMakeDirectPath(disjointedPoint1, disjointedPoint2, out surfaceLine));
-
         }
 
         [Test]

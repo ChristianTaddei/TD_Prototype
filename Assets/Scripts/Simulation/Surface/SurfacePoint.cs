@@ -17,20 +17,6 @@ public class SurfacePoint : IPoint
 
     private SurfacePoint() { }
 
-    public static bool TryMakeFrom(Face face, CartesianPoint cp, out SurfacePoint newSurfacePoint)
-    {
-        BarycentricVector bv;
-
-        if (BarycentricVector.FromPoint(face.Triangle, cp, out bv))
-        {
-            newSurfacePoint = new SurfacePoint(face, bv);
-            return true;
-        }
-
-        newSurfacePoint = new SurfacePoint();
-        return false;
-    }
-
     internal bool TryGetIntersectionToward(CartesianVector direction, out SurfacePoint intersection)
     {
         intersection = new SurfacePoint();

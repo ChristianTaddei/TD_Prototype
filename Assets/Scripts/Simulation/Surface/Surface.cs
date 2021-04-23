@@ -26,7 +26,7 @@ public class Surface
         return neighbours;
     }
 
-    private bool areNeighbours(Face f1, Face f2) 
+    private bool areNeighbours(Face f1, Face f2)
     {
         foreach (IPoint v1 in f1.Triangle.Vertices)
         {
@@ -38,6 +38,27 @@ public class Surface
 
         return false;
     }
+
+    public Face AddFace(CartesianPoint cartesianPoint1, CartesianPoint cartesianPoint2, CartesianPoint cartesianPoint3)
+    {
+        Face newFace = new Face(this, cartesianPoint1, cartesianPoint2, cartesianPoint3);
+        faces.Add(newFace);
+        return newFace;
+    }
+
+    // public bool TryMakeSurfacePointFrom(CartesianPoint cartesianPoint, out SurfacePoint newSurfacePoint)
+    // {
+    //     BarycentricVector bv;
+
+    //     if (BarycentricVector.FromPoint(face.Triangle, cp, out bv))
+    //     {
+    //         newSurfacePoint = new SurfacePoint(face, bv);
+    //         return true;
+    //     }
+
+    //     newSurfacePoint = new SurfacePoint();
+    //     return false;
+    // }
 
     // public List<Vertex> Vertices;
     // public int[] Triangles { get; private set; }
