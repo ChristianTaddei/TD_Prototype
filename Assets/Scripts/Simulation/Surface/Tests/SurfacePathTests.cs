@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace Tests
 {
-    public class PathTests
+    public class SurfacePathTests
     {
         private Surface disjointedSurface;
         private Face disjointedFace1, disjointedFace2;
@@ -14,8 +14,8 @@ namespace Tests
 
         // A square made of two faces, sharing points b and c.
         private Surface Square_abcd;
-        private Face Triangle_abc1, Triangle_bcd2;
-        private SurfacePoint a1, b1, c1, b2, c2, d2;
+        private Face Triangle_abc, Triangle_bcd;
+        private SurfacePoint a, b_abc, c_abc, b_bcd, c_bcd, d;
 
 
         [SetUp]
@@ -48,6 +48,40 @@ namespace Tests
                     new BarycentricCoordinates(1, 0, 0)));
 
             #endregion
+
+            #region ABC/BCD Square
+
+            Square_abcd = new Surface();
+
+            Triangle_abc = Square_abcd.AddFace(
+                (CartesianPoint)new Vector3(0, 0, 0),
+                (CartesianPoint)new Vector3(0, 1, 0),
+                (CartesianPoint)new Vector3(1, 0, 0));
+
+            Triangle_bcd = Square_abcd.AddFace(
+                (CartesianPoint)new Vector3(0, 1, 0),
+                (CartesianPoint)new Vector3(1, 0, 0),
+                (CartesianPoint)new Vector3(1, 1, 0));
+
+            a = new SurfacePoint(
+                Triangle_bcd,
+                new BarycentricVector(
+                    Triangle_bcd.Triangle,
+                    new BarycentricCoordinates(1, 0, 0)));
+
+            b_abc = new SurfacePoint(
+                Triangle_bcd,
+                new BarycentricVector(
+                    Triangle_bcd.Triangle,
+                    new BarycentricCoordinates(0, 1, 0)));
+
+            c_abc = new SurfacePoint(
+                Triangle_bcd,
+                new BarycentricVector(
+                    Triangle_bcd.Triangle,
+                    new BarycentricCoordinates(0, 0, 1)));
+
+            #endregion
         }
 
         [TearDown]
@@ -72,17 +106,26 @@ namespace Tests
 
             // TODO: programmatically: every vertex of same face (both ways), any 2 random points on same face
             Assert.True(
-                Square_abcd.TryMakeDirectPath(a1, b1, out path));
+                Square_abcd.TryMakeDirectPath(a, b_abc, out path));
+            Assert.AreEqual(a, path.Start);
+            Assert.AreEqual(b_abc, path.End);
+
             Assert.True(
-                Square_abcd.TryMakeDirectPath(b1, c1, out path));
+                Square_abcd.TryMakeDirectPath(b_abc, c_abc, out path));
+            Assert.AreEqual(b_abc, path.Start);
+            Assert.AreEqual(c_abc, path.End);
+
             Assert.True(
-                Square_abcd.TryMakeDirectPath(a1, c1, out path));
-            Assert.True(
-                Square_abcd.TryMakeDirectPath(b2, c2, out path));
-            Assert.True(
-                Square_abcd.TryMakeDirectPath(b2, d2, out path));
-            Assert.True(
-                Square_abcd.TryMakeDirectPath(c2, d2, out path));
+                Square_abcd.TryMakeDirectPath(a, c_abc, out path));
+            Assert.AreEqual(a, path.Start);
+            Assert.AreEqual(c_abc, path.End);
+
+            // Assert.True(
+            //     Square_abcd.TryMakeDirectPath(b2, c2, out path));
+            // Assert.True(
+            //     Square_abcd.TryMakeDirectPath(b2, d2, out path));
+            // Assert.True(
+            //     Square_abcd.TryMakeDirectPath(c2, d2, out path));
         }
         [Test]
 
@@ -90,8 +133,8 @@ namespace Tests
         {
             SurfacePath path;
 
-            Assert.True(
-                Square_abcd.TryMakeDirectPath(a1, d2, out path));
+            // Assert.True(
+            //     Square_abcd.TryMakeDirectPath(a1, d2, out path));
         }
     }
 }

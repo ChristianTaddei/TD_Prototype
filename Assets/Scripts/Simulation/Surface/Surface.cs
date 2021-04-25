@@ -76,7 +76,13 @@ public class Surface
 
         // check last inters + dir crosses end
 
-        path = new SurfacePath(crossingPoints);
+        List<SurfacePoint> allPoints = new List<SurfacePoint>();
+        allPoints.Add(startPoint);
+        allPoints.AddRange(crossingPoints);
+        allPoints.Add(endPoint);
+
+        path = new SurfacePath(allPoints);
+
         return true;
     }
 
