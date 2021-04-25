@@ -64,18 +64,36 @@ namespace Tests
                 (CartesianPoint)new Vector3(1, 1, 0));
 
             a = new SurfacePoint(
+                Triangle_abc,
+                new BarycentricVector(
+                    Triangle_abc.Triangle,
+                    new BarycentricCoordinates(1, 0, 0)));
+
+            b_abc = new SurfacePoint(
+                Triangle_abc,
+                new BarycentricVector(
+                    Triangle_abc.Triangle,
+                    new BarycentricCoordinates(0, 1, 0)));
+
+            c_abc = new SurfacePoint(
+                Triangle_abc,
+                new BarycentricVector(
+                    Triangle_abc.Triangle,
+                    new BarycentricCoordinates(0, 0, 1)));
+
+            b_bcd = new SurfacePoint(
                 Triangle_bcd,
                 new BarycentricVector(
                     Triangle_bcd.Triangle,
                     new BarycentricCoordinates(1, 0, 0)));
 
-            b_abc = new SurfacePoint(
+            c_bcd = new SurfacePoint(
                 Triangle_bcd,
                 new BarycentricVector(
                     Triangle_bcd.Triangle,
                     new BarycentricCoordinates(0, 1, 0)));
 
-            c_abc = new SurfacePoint(
+            d = new SurfacePoint(
                 Triangle_bcd,
                 new BarycentricVector(
                     Triangle_bcd.Triangle,
@@ -105,6 +123,7 @@ namespace Tests
             SurfacePath path;
 
             // TODO: programmatically: every vertex of same face (both ways), any 2 random points on same face
+
             Assert.True(
                 Square_abcd.TryMakeDirectPath(a, b_abc, out path));
             Assert.AreEqual(a, path.Start);
@@ -120,12 +139,20 @@ namespace Tests
             Assert.AreEqual(a, path.Start);
             Assert.AreEqual(c_abc, path.End);
 
-            // Assert.True(
-            //     Square_abcd.TryMakeDirectPath(b2, c2, out path));
-            // Assert.True(
-            //     Square_abcd.TryMakeDirectPath(b2, d2, out path));
-            // Assert.True(
-            //     Square_abcd.TryMakeDirectPath(c2, d2, out path));
+            Assert.True(
+                Square_abcd.TryMakeDirectPath(b_bcd, d, out path));
+            Assert.AreEqual(b_bcd, path.Start);
+            Assert.AreEqual(d, path.End);
+
+            Assert.True(
+                Square_abcd.TryMakeDirectPath(c_bcd, d, out path));
+            Assert.AreEqual(c_bcd, path.Start);
+            Assert.AreEqual(d, path.End);
+
+            Assert.True(
+                Square_abcd.TryMakeDirectPath(b_bcd, c_bcd, out path));
+            Assert.AreEqual(b_bcd, path.Start);
+            Assert.AreEqual(c_bcd, path.End);
         }
         [Test]
 
