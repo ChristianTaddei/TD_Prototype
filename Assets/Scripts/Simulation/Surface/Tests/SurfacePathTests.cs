@@ -160,8 +160,21 @@ namespace Tests
         {
             SurfacePath path;
 
-            // Assert.True(
-            //     Square_abcd.TryMakeDirectPath(a1, d2, out path));
+            Assert.True(
+                Square_abcd.TryMakeDirectPath(a, d, out path));
+            Assert.AreEqual(a, path.Start);
+            Assert.AreEqual(d, path.End);
+
+            SurfacePoint m_abc = new SurfacePoint(
+                Triangle_abc,
+                new BarycentricVector(
+                    Triangle_abc.Triangle,
+                    new BarycentricCoordinates(0, 0.5f, 0.5f)));
+
+            Assert.AreEqual(m_abc, path.Points[1]);
+
+            // 1 -> intermediary on 1st face
+            // 2 -> multiface point (or auto convert to new face for edge points?), equals
         }
     }
 }

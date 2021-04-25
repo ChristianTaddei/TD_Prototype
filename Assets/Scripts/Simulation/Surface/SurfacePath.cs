@@ -12,13 +12,16 @@ public class SurfacePath
     public IPoint End { get => points.Last(); }
 
     private List<SurfacePoint> points;
+    public List<SurfacePoint> Points { get => new List<SurfacePoint>(points);}
 
     private SurfacePath()
     {
-        points = new List<SurfacePoint>();
+        this.points = new List<SurfacePoint>();
     }
 
-    public SurfacePath(List<SurfacePoint> points){
+    public SurfacePath(List<SurfacePoint> points)
+    {
         this.points = points;
     }
+
 }
