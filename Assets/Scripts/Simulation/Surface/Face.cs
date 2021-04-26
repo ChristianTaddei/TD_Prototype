@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class Face
 {
+    public static readonly Face NO_FACE;
     private ITriangle triangle;
+
     public Surface Surface {get; private set;}
 
     public Face(Surface s, ITriangle t)

@@ -56,13 +56,12 @@ public class Surface
 
         List<SurfacePoint> crossingPoints = new List<SurfacePoint>();
 
-        CartesianVector startToEndDirection = CartesianVector.FromPoints(startPoint, endPoint);
-
         SurfacePoint currentPoint = startPoint;
         while (currentPoint.Face != endPoint.Face)
         {
             SurfacePoint intersection;
-            if (currentPoint.TryGetIntersectionToward(startToEndDirection, out intersection))
+            Face nextFace;
+            if (TryGetIntersectionToward(currentPoint, endPoint, out intersection, out nextFace))
             {
                 crossingPoints.Add(intersection);
                 currentPoint = intersection; // TODO: multi face points
@@ -84,6 +83,60 @@ public class Surface
         path = new SurfacePath(allPoints);
 
         return true;
+    }
+
+    private bool TryGetIntersectionToward(SurfacePoint start, SurfacePoint end, out SurfacePoint intersection, out Face otherFace)
+    {
+        BarycentricVector endInStartBase = end.BarycentricVector.ChangeBase(start.BarycentricVector.Base);
+        BarycentricVector startToEnd = endInStartBase - start.BarycentricVector;
+        float coefficient;
+
+        Func<double, double, bool> changedSign = (double before, double after) => before * after <= 0;
+
+        // TODO: need iterable on coordinates and such
+        bool aChangedSign = changedSign(
+            start.BarycentricVector.BarycentricCoordinates.a,
+            endInStartBase.BarycentricCoordinates.a);
+        bool bChangedSign = changedSign(
+            start.BarycentricVector.BarycentricCoordinates.b,
+            endInStartBase.BarycentricCoordinates.b);
+        bool cChangedSign = changedSign(
+            start.BarycentricVector.BarycentricCoordinates.c,
+            endInStartBase.BarycentricCoordinates.c);
+
+        if (aChangedSign || bChangedSign || cChangedSign)
+        {
+            if (aChangedSign)
+            {
+                coefficient = startToEnd.BarycentricCoordinates.a / -start.BarycentricVector.BarycentricCoordinates.a;
+            }
+            else if (bChangedSign)
+            {
+                coefficient = startToEnd.BarycentricCoordinates.b / -start.BarycentricVector.BarycentricCoordinates.b;
+            }
+            else
+            {
+                coefficient = startToEnd.BarycentricCoordinates.c / -start.BarycentricVector.BarycentricCoordinates.c;
+            }
+
+            BarycentricVector intersectionVector =
+                start.BarycentricVector + new BarycentricVector(
+                                            start.Face.Triangle, 
+                                            new BarycentricCoordinates(
+                                                startToEnd.BarycentricCoordinates.a * coefficient,
+                                                startToEnd.BarycentricCoordinates.b * coefficient,
+                                                startToEnd.BarycentricCoordinates.c * coefficient));
+
+            intersection = new SurfacePoint(start.Face, intersectionVector);
+            otherFace = end.Face; // FIXME: not end.Face, use face iterator to get which neight it is
+            return true;
+        }
+        else
+        {
+            intersection = SurfacePoint.NO_POINT;
+            otherFace = Face.NO_FACE;
+            return false; // Stupid # needs monads
+        }
     }
 
     // public bool TryMakeSurfacePointFrom(CartesianPoint cartesianPoint, out SurfacePoint newSurfacePoint)

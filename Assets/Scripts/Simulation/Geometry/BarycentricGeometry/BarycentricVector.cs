@@ -6,19 +6,19 @@ using UnityEngine;
 public class BarycentricVector : IVector
 {
     public Vector3 Coordinates =>
-        barycentricCoordinates.a * _base.a.Coordinates
-        + barycentricCoordinates.b * _base.b.Coordinates
-        + barycentricCoordinates.c * _base.c.Coordinates;
+        BarycentricCoordinates.a * _base.a.Coordinates
+        + BarycentricCoordinates.b * _base.b.Coordinates
+        + BarycentricCoordinates.c * _base.c.Coordinates;
 
     public ITriangle Base { get => _base; }
 
     private readonly ITriangle _base;
-    private readonly BarycentricCoordinates barycentricCoordinates;
+    public readonly BarycentricCoordinates BarycentricCoordinates;
 
     public BarycentricVector(ITriangle _base, BarycentricCoordinates coordinates)
     {
         this._base = _base;
-        barycentricCoordinates = coordinates;
+        BarycentricCoordinates = coordinates;
     }
 
     private BarycentricVector() { }
@@ -71,24 +71,24 @@ public class BarycentricVector : IVector
 
     public bool IsPointComplanarToBase()
     {
-        return barycentricCoordinates.CheckSumToOne();
+        return BarycentricCoordinates.CheckSumToOne();
     }
 
     public bool IsDirectionComplanarToBase()
     {
-        return barycentricCoordinates.CheckSumToZero();
+        return BarycentricCoordinates.CheckSumToZero();
     }
 
     public bool IsPointOnBaseTriangle()
     {
-        return IsPointComplanarToBase() && barycentricCoordinates.CheckInternal();
+        return IsPointComplanarToBase() && BarycentricCoordinates.CheckInternal();
     }
 
     public BarycentricVector ChangeBase(ITriangle newBase)
     {
         if (this._base == newBase)
         {
-            return new BarycentricVector(newBase, barycentricCoordinates);
+            return new BarycentricVector(newBase, BarycentricCoordinates);
         }
 
         BarycentricVector oldBaseAInNewBase;
@@ -101,17 +101,17 @@ public class BarycentricVector : IVector
         return new BarycentricVector(
             newBase,
             new BarycentricCoordinates(
-                oldBaseAInNewBase.barycentricCoordinates.a * this.barycentricCoordinates.a
-                + oldBaseBInNewBase.barycentricCoordinates.a * this.barycentricCoordinates.b
-                + oldBaseCInNewBase.barycentricCoordinates.a * this.barycentricCoordinates.c,
+                oldBaseAInNewBase.BarycentricCoordinates.a * this.BarycentricCoordinates.a
+                + oldBaseBInNewBase.BarycentricCoordinates.a * this.BarycentricCoordinates.b
+                + oldBaseCInNewBase.BarycentricCoordinates.a * this.BarycentricCoordinates.c,
 
-                oldBaseAInNewBase.barycentricCoordinates.b * this.barycentricCoordinates.a
-                + oldBaseBInNewBase.barycentricCoordinates.b * this.barycentricCoordinates.b
-                + oldBaseCInNewBase.barycentricCoordinates.b * this.barycentricCoordinates.c,
+                oldBaseAInNewBase.BarycentricCoordinates.b * this.BarycentricCoordinates.a
+                + oldBaseBInNewBase.BarycentricCoordinates.b * this.BarycentricCoordinates.b
+                + oldBaseCInNewBase.BarycentricCoordinates.b * this.BarycentricCoordinates.c,
 
-                oldBaseAInNewBase.barycentricCoordinates.c * this.barycentricCoordinates.a
-                + oldBaseBInNewBase.barycentricCoordinates.c * this.barycentricCoordinates.b
-                + oldBaseCInNewBase.barycentricCoordinates.c * this.barycentricCoordinates.c
+                oldBaseAInNewBase.BarycentricCoordinates.c * this.BarycentricCoordinates.a
+                + oldBaseBInNewBase.BarycentricCoordinates.c * this.BarycentricCoordinates.b
+                + oldBaseCInNewBase.BarycentricCoordinates.c * this.BarycentricCoordinates.c
             )
         );
     }
@@ -119,34 +119,32 @@ public class BarycentricVector : IVector
     public BarycentricVector Normalize()
     {
         float Magnitude =
-            Math.Abs(barycentricCoordinates.a)
-            + Math.Abs(barycentricCoordinates.b)
-            + Math.Abs(barycentricCoordinates.c);
+            Math.Abs(BarycentricCoordinates.a)
+            + Math.Abs(BarycentricCoordinates.b)
+            + Math.Abs(BarycentricCoordinates.c);
 
         if (Magnitude == 0) throw new Exception();
 
         return new BarycentricVector(
             _base,
             new BarycentricCoordinates(
-                barycentricCoordinates.a / Magnitude,
-                barycentricCoordinates.b / Magnitude,
-                barycentricCoordinates.c / Magnitude
+                BarycentricCoordinates.a / Magnitude,
+                BarycentricCoordinates.b / Magnitude,
+                BarycentricCoordinates.c / Magnitude
             )
         );
     }
 
-    // _base is the base of the second operand
-    // public static BarycentricVector operator +(BarycentricVector b1, BarycentricVector b2)
-    // {
-    //     BarycentricVector same_baseB1 = b1.ChangeBase(b2._base);
+    public static BarycentricVector operator +(BarycentricVector b1, BarycentricVector b2)
+    {
+        BarycentricVector same_baseB2 = b2.ChangeBase(b1._base);
 
-    //     return new BarycentricVector(b2._base, same_baseB1.barycentricCoordinates + b2.barycentricCoordinates);
-    // }
+        return new BarycentricVector(b1._base, b1.BarycentricCoordinates + same_baseB2.BarycentricCoordinates);
+    }
 
-    // public static BarycentricVector operator -(BarycentricVector b1, BarycentricVector b2)
-    // {
-    //     BarycentricVector same_baseB2 = b2.Change_base(b1._base);
-    // STILL USES BASE 2
-    //     return new BarycentricVector(b1._base, b1.BarycentricCoordinates - b2.BarycentricCoordinates);
-    // }
+    public static BarycentricVector operator -(BarycentricVector b1, BarycentricVector b2)
+    {
+        BarycentricVector same_baseB2 = b2.ChangeBase(b1._base);
+        return new BarycentricVector(b1._base, b1.BarycentricCoordinates - same_baseB2.BarycentricCoordinates);
+    }
 }

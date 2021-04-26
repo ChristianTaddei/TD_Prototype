@@ -4,34 +4,20 @@ using UnityEngine;
 
 public class SurfacePoint : IPoint
 {
-    private BarycentricVector barycentricVector;
+    public static readonly SurfacePoint NO_POINT;
 
-    public Vector3 Coordinates => barycentricVector.Coordinates;
+    public BarycentricVector BarycentricVector;
+
+    public Vector3 Coordinates => BarycentricVector.Coordinates;
     public Face Face { get; private set; }
 
     public SurfacePoint(Face face, BarycentricVector barycentricVector)
     {
         this.Face = face;
-        this.barycentricVector = barycentricVector;
+        this.BarycentricVector = barycentricVector;
     }
 
     private SurfacePoint() { }
-
-    internal bool TryGetIntersectionToward(CartesianVector direction, out SurfacePoint intersection)
-    {
-        intersection = new SurfacePoint();
-
-        // BarycentricVector projectedDirection = BarycentricVector.FormCartesianVector(direction);
-
-        return false;
-    }
-
-    // public SurfacePoint(Vertex spawningPosition)
-    // // TODO: tryGet 
-    //     : this(boardState, spawningPosition.Faces.First(), boardState.VertexStates[spawningPosition].Position)
-    // {
-
-    // }
 
     // public static BarycentricCoordinates FromFaceAndPoint(Face face, Vector3 p)
     // {
