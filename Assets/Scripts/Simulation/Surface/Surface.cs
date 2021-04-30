@@ -60,8 +60,7 @@ public class Surface
         while (currentPoint.Face != endPoint.Face)
         {
             SurfacePoint intersection;
-            Face nextFace;
-            if (TryGetIntersectionToward(currentPoint, endPoint, out intersection, out nextFace))
+            if (TryGetIntersectionToward(currentPoint, endPoint, out intersection))
             {
                 crossingPoints.Add(intersection);
                 currentPoint = intersection; // TODO: multi face points
@@ -85,13 +84,13 @@ public class Surface
         return true;
     }
 
-    private bool TryGetIntersectionToward(SurfacePoint start, SurfacePoint end, out SurfacePoint intersection, out Face otherFace)
+    private bool TryGetIntersectionToward(SurfacePoint start, SurfacePoint end, out SurfacePoint intersection)
     {
         BarycentricVector endInStartBase = end.BarycentricVector.ChangeBase(start.BarycentricVector.Base);
         BarycentricVector startToEnd = endInStartBase - start.BarycentricVector;
         float coefficient;
 
-        Func<double, double, bool> changedSign = (double before, double after) => before * after <= 0;
+        Func<double, double, bool> changedSign = (double before, double after) => before * after < 0; // TODO: what if it was 0?
 
         // TODO: need iterable on coordinates and such
         bool aChangedSign = changedSign(
@@ -121,20 +120,18 @@ public class Surface
 
             BarycentricVector intersectionVector =
                 start.BarycentricVector + new BarycentricVector(
-                                            start.Face.Triangle, 
+                                            start.Face.Triangle,
                                             new BarycentricCoordinates(
                                                 startToEnd.BarycentricCoordinates.a * coefficient,
                                                 startToEnd.BarycentricCoordinates.b * coefficient,
                                                 startToEnd.BarycentricCoordinates.c * coefficient));
 
-            intersection = new SurfacePoint(start.Face, intersectionVector);
-            otherFace = end.Face; // FIXME: not end.Face, use face iterator to get which neight it is
+            intersection = new SurfacePoint(end.Face, intersectionVector); // FIXME: this works only in basic test;
             return true;
         }
         else
         {
             intersection = SurfacePoint.NO_POINT;
-            otherFace = Face.NO_FACE;
             return false; // Stupid # needs monads
         }
     }
