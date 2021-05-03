@@ -59,11 +59,11 @@ public class Surface
         SurfacePoint currentPoint = startPoint;
         while (currentPoint.Face != endPoint.Face)
         {
-            SurfacePoint intersection;
-            if (TryGetIntersectionToward(currentPoint, endPoint, out intersection))
+            Maybe<SurfacePoint> intersection = TryGetIntersectionToward(currentPoint, endPoint);
+            if(intersection.HasValue())
             {
-                crossingPoints.Add(intersection);
-                currentPoint = intersection; // TODO: multi face points
+                crossingPoints.Add(intersection.Value);
+                currentPoint = intersection.Value; // TODO: multi face points
             }
             else
             {
@@ -84,12 +84,13 @@ public class Surface
         return true;
     }
 
-    private bool TryGetIntersectionToward(SurfacePoint start, SurfacePoint end, out SurfacePoint intersection)
+    private Maybe<SurfacePoint> TryGetIntersectionToward(SurfacePoint start, SurfacePoint end)
     {
         BarycentricVector endInStartBase = end.BarycentricVector.ChangeBase(start.BarycentricVector.Base);
         BarycentricVector startToEnd = endInStartBase - start.BarycentricVector;
         float coefficient;
 
+        // FIXME: just check after < 0 ?
         Func<double, double, bool> changedSign = (double before, double after) => before * after < 0; // TODO: what if it was 0?
 
         // TODO: need iterable on coordinates and such
@@ -102,6 +103,16 @@ public class Surface
         bool cChangedSign = changedSign(
             start.BarycentricVector.BarycentricCoordinates.c,
             endInStartBase.BarycentricCoordinates.c);
+
+        // List<BarycentricCoordinate> changedCoordinates = new List<BarycentricCoordinate>();
+        // for(BarycentricCoordinate c in BarycentricCoordinates)
+        // {
+        //     if (changedSign(start.BarycentricVector.GetBarycentricCoordinate(c),
+        //                     endInStartBase.GetBarycentricCoordinate(c)))
+        //     {
+        //         changedCoordinates.Add(c);
+        //     }
+        // }
 
         if (aChangedSign || bChangedSign || cChangedSign)
         {
@@ -126,13 +137,11 @@ public class Surface
                                                 startToEnd.BarycentricCoordinates.b * coefficient,
                                                 startToEnd.BarycentricCoordinates.c * coefficient));
 
-            intersection = new SurfacePoint(end.Face, intersectionVector); // FIXME: this works only in basic test;
-            return true;
+            return new Maybe<SurfacePoint>.Just(new SurfacePoint(end.Face, intersectionVector)); // FIXME: this works only in basic test;
         }
         else
         {
-            intersection = SurfacePoint.NO_POINT;
-            return false; // Stupid # needs monads
+            return new Maybe<SurfacePoint>.Nothing();
         }
     }
 
