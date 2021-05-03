@@ -5,13 +5,6 @@ using UnityEngine;
 
 public abstract class Maybe<T>
 {
-    // example use
-    // Optional<Face> GetNeighbour(Face face){
-    //     return face.Neighbour[0] != null 
-    //         ? new Just<Face>(face.Neighbour)
-    //         : new Nothing();
-    // }
-
     public abstract bool HasValue();
 
     public abstract T Value { get; }
@@ -20,7 +13,8 @@ public abstract class Maybe<T>
     {
         private T value;
 
-        public Just(T value){
+        public Just(T value)
+        {
             this.value = value;
         }
 
@@ -35,6 +29,11 @@ public abstract class Maybe<T>
     public sealed class Nothing : Maybe<T>
     {
         public override T Value => throw new Exception("Trying to access Value of Nothing");
+
+        public Nothing()
+        {
+
+        }
 
         public override bool HasValue()
         {

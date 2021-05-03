@@ -111,59 +111,52 @@ namespace Tests
         [Test]
         public void DisjointedFacesNoPath()
         {
-            SurfacePath path;
-
             Assert.False(
-                disjointedSurface.TryMakeDirectPath(disjointedPoint1, disjointedPoint2, out path));
+                disjointedSurface.MakeDirectPath(disjointedPoint1, disjointedPoint2).HasValue());
         }
 
         [Test]
         public void SameFaceHasDirectPath()
         {
-            SurfacePath path;
+            // TODO: should use different variables?
+            Maybe<SurfacePath> path = Square_abcd.MakeDirectPath(a, b_abc);
+            Assert.True(path.HasValue());
+            Assert.AreEqual(a, path.Value.Start);
+            Assert.AreEqual(b_abc, path.Value.End);
 
-            // TODO: programmatically: every vertex of same face (both ways), any 2 random points on same face
+            path = Square_abcd.MakeDirectPath(b_abc, c_abc);
+            Assert.True(path.HasValue());
+            Assert.AreEqual(b_abc, path.Value.Start);
+            Assert.AreEqual(c_abc, path.Value.End);
 
-            Assert.True(
-                Square_abcd.TryMakeDirectPath(a, b_abc, out path));
-            Assert.AreEqual(a, path.Start);
-            Assert.AreEqual(b_abc, path.End);
+            path = Square_abcd.MakeDirectPath(a, c_abc);
+            Assert.True(path.HasValue());
+            Assert.AreEqual(a, path.Value.Start);
+            Assert.AreEqual(c_abc, path.Value.End);
 
-            Assert.True(
-                Square_abcd.TryMakeDirectPath(b_abc, c_abc, out path));
-            Assert.AreEqual(b_abc, path.Start);
-            Assert.AreEqual(c_abc, path.End);
+            path = Square_abcd.MakeDirectPath(b_bcd, d);
+            Assert.True(path.HasValue());
+            Assert.AreEqual(b_bcd, path.Value.Start);
+            Assert.AreEqual(d, path.Value.End);
 
-            Assert.True(
-                Square_abcd.TryMakeDirectPath(a, c_abc, out path));
-            Assert.AreEqual(a, path.Start);
-            Assert.AreEqual(c_abc, path.End);
+            path = Square_abcd.MakeDirectPath(c_bcd, d);
+            Assert.True(path.HasValue());
+            Assert.AreEqual(c_bcd, path.Value.Start);
+            Assert.AreEqual(d, path.Value.End);
 
-            Assert.True(
-                Square_abcd.TryMakeDirectPath(b_bcd, d, out path));
-            Assert.AreEqual(b_bcd, path.Start);
-            Assert.AreEqual(d, path.End);
-
-            Assert.True(
-                Square_abcd.TryMakeDirectPath(c_bcd, d, out path));
-            Assert.AreEqual(c_bcd, path.Start);
-            Assert.AreEqual(d, path.End);
-
-            Assert.True(
-                Square_abcd.TryMakeDirectPath(b_bcd, c_bcd, out path));
-            Assert.AreEqual(b_bcd, path.Start);
-            Assert.AreEqual(c_bcd, path.End);
+            path = Square_abcd.MakeDirectPath(b_bcd, c_bcd);
+            Assert.True(path.HasValue());
+            Assert.AreEqual(b_bcd, path.Value.Start);
+            Assert.AreEqual(c_bcd, path.Value.End);
         }
         [Test]
 
         public void NeighbourFacesHaveDirectPath()
         {
-            SurfacePath path;
-
-            Assert.True(
-                Square_abcd.TryMakeDirectPath(a, d, out path));
-            Assert.AreEqual(a, path.Start);
-            Assert.AreEqual(d, path.End);
+            Maybe<SurfacePath> path = Square_abcd.MakeDirectPath(a, d);
+            Assert.True(path.HasValue());
+            Assert.AreEqual(a, path.Value.Start);
+            Assert.AreEqual(d, path.Value.End);
 
             // SurfacePoint m_bcd = new SurfacePoint(
             //     Triangle_bcd,

@@ -46,12 +46,11 @@ public class Surface
         return newFace;
     }
 
-    public bool TryMakeDirectPath(SurfacePoint startPoint, SurfacePoint endPoint, out SurfacePath path)
+    public Maybe<SurfacePath> MakeDirectPath(SurfacePoint startPoint, SurfacePoint endPoint)
     {
         if (startPoint.Face.Surface != this || endPoint.Face.Surface != this)
         {
-            path = SurfacePath.NO_PATH;
-            return false;
+            return new Maybe<SurfacePath>.Nothing();
         }
 
         List<SurfacePoint> crossingPoints = new List<SurfacePoint>();
@@ -59,7 +58,7 @@ public class Surface
         SurfacePoint currentPoint = startPoint;
         while (currentPoint.Face != endPoint.Face)
         {
-            Maybe<SurfacePoint> intersection = TryGetIntersectionToward(currentPoint, endPoint);
+            Maybe<SurfacePoint> intersection = GetIntersectionToward(currentPoint, endPoint);
             if(intersection.HasValue())
             {
                 crossingPoints.Add(intersection.Value);
@@ -67,8 +66,7 @@ public class Surface
             }
             else
             {
-                path = SurfacePath.NO_PATH;
-                return false;
+                return new Maybe<SurfacePath>.Nothing();
             }
         }
 
@@ -79,12 +77,10 @@ public class Surface
         allPoints.AddRange(crossingPoints);
         allPoints.Add(endPoint);
 
-        path = new SurfacePath(allPoints);
-
-        return true;
+       return new Maybe<SurfacePath>.Just(new SurfacePath(allPoints));
     }
 
-    private Maybe<SurfacePoint> TryGetIntersectionToward(SurfacePoint start, SurfacePoint end)
+    private Maybe<SurfacePoint> GetIntersectionToward(SurfacePoint start, SurfacePoint end)
     {
         BarycentricVector endInStartBase = end.BarycentricVector.ChangeBase(start.BarycentricVector.Base);
         BarycentricVector startToEnd = endInStartBase - start.BarycentricVector;
