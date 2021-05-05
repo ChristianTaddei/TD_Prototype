@@ -91,12 +91,18 @@ public class BarycentricVector : IVector
             return new BarycentricVector(newBase, BarycentricCoordinates);
         }
 
+        bool allSuccess = true;
         BarycentricVector oldBaseAInNewBase;
-        BarycentricVector.FromPoint(newBase, _base.a.Coordinates, out oldBaseAInNewBase);
+        allSuccess &= BarycentricVector.FromPoint(newBase, _base.a.Coordinates, out oldBaseAInNewBase);
         BarycentricVector oldBaseBInNewBase;
-        BarycentricVector.FromPoint(newBase, _base.b.Coordinates, out oldBaseBInNewBase);
+        allSuccess &= BarycentricVector.FromPoint(newBase, _base.b.Coordinates, out oldBaseBInNewBase);
         BarycentricVector oldBaseCInNewBase;
-        BarycentricVector.FromPoint(newBase, _base.c.Coordinates, out oldBaseCInNewBase);
+        allSuccess &= BarycentricVector.FromPoint(newBase, _base.c.Coordinates, out oldBaseCInNewBase);
+
+        if(!allSuccess) {
+           // base change should always be possible
+           throw new Exception("Change base failed");
+        }
 
         return new BarycentricVector(
             newBase,

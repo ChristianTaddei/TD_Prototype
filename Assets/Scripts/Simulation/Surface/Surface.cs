@@ -59,7 +59,7 @@ public class Surface
         while (currentPoint.Face != endPoint.Face)
         {
             Maybe<SurfacePoint> intersection = GetIntersectionToward(currentPoint, endPoint);
-            if(intersection.HasValue())
+            if (intersection.HasValue())
             {
                 crossingPoints.Add(intersection.Value);
                 currentPoint = intersection.Value; // TODO: multi face points
@@ -77,11 +77,25 @@ public class Surface
         allPoints.AddRange(crossingPoints);
         allPoints.Add(endPoint);
 
-       return new Maybe<SurfacePath>.Just(new SurfacePath(allPoints));
+        return new Maybe<SurfacePath>.Just(new SurfacePath(allPoints));
     }
 
-    private Maybe<SurfacePoint> GetIntersectionToward(SurfacePoint start, SurfacePoint end)
+    public Maybe<SurfacePoint> GetIntersectionToward(SurfacePoint start, SurfacePoint end)
     {
+        if (start.Coordinates == end.Coordinates)
+        {
+            if (start.BarycentricVector.BarycentricCoordinates.a == 0.0
+                || start.BarycentricVector.BarycentricCoordinates.b == 0.0
+                || start.BarycentricVector.BarycentricCoordinates.c == 0.0)
+            {
+                return new Maybe<SurfacePoint>.Just(start);
+            }
+            else
+            {
+                return new Maybe<SurfacePoint>.Nothing();
+            }
+        }
+
         BarycentricVector endInStartBase = end.BarycentricVector.ChangeBase(start.BarycentricVector.Base);
         BarycentricVector startToEnd = endInStartBase - start.BarycentricVector;
         float coefficient;

@@ -5,20 +5,23 @@ using UnityEngine;
 
 public abstract class Maybe<T>
 {
-    public abstract bool HasValue();
+    // compared to the 'out' way this ensures the default value is never 
+    // mistakenly used, but does the exception degrade performances?
 
     public abstract T Value { get; }
+
+    public abstract bool HasValue();
 
     public sealed class Just : Maybe<T>
     {
         private T value;
 
+        public override T Value => value;
+
         public Just(T value)
         {
             this.value = value;
         }
-
-        public override T Value => value;
 
         public override bool HasValue()
         {

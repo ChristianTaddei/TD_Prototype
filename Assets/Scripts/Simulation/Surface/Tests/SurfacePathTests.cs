@@ -44,7 +44,7 @@ namespace Tests
             disjointedPoint2 = new SurfacePoint(
                 disjointedFace2,
                 new BarycentricVector(
-                    disjointedFace1.Triangle,
+                    disjointedFace2.Triangle,
                     new BarycentricCoordinates(1, 0, 0)));
 
             #endregion
@@ -149,8 +149,8 @@ namespace Tests
             Assert.AreEqual(b_bcd, path.Value.Start);
             Assert.AreEqual(c_bcd, path.Value.End);
         }
+        
         [Test]
-
         public void NeighbourFacesHaveDirectPath()
         {
             Maybe<SurfacePath> path = Square_abcd.MakeDirectPath(a, d);

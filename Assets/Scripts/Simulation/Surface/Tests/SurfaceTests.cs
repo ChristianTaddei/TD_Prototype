@@ -8,46 +8,10 @@ namespace Tests
 {
     public class SurfaceTests
     {
-        private Surface disjointedSurface;
-        private Face disjointedFace1, disjointedFace2;
-        private SurfacePoint disjointedPoint1, disjointedPoint2;
-
-        // A square made of two faces, sharing points b and c.
-        private Surface abcd;
-        private Face abc1, bcd2;
-        private SurfacePoint a1, b1, c1, b2, c2, d2;
-
-
         [SetUp]
         public void Setup()
         {
-            #region Disjointed Faces Surface
-
-            disjointedSurface = new Surface();
-
-            disjointedFace1 = disjointedSurface.AddFace(
-                (CartesianPoint)new Vector3(0, 1, 0),
-                (CartesianPoint)new Vector3(0, 1, 1),
-                (CartesianPoint)new Vector3(1, 1, 0));
-
-            disjointedFace2 = disjointedSurface.AddFace(
-                (CartesianPoint)new Vector3(0, 2, 0),
-                (CartesianPoint)new Vector3(0, 2, 2),
-                (CartesianPoint)new Vector3(2, 2, 0));
-
-            disjointedPoint1 = new SurfacePoint(
-                disjointedFace1,
-                new BarycentricVector(
-                    disjointedFace1.Triangle,
-                    new BarycentricCoordinates(1, 0, 0)));
-
-            disjointedPoint2 = new SurfacePoint(
-                disjointedFace2,
-                new BarycentricVector(
-                    disjointedFace1.Triangle,
-                    new BarycentricCoordinates(1, 0, 0)));
-
-            #endregion
+          
         }
 
         [TearDown]
@@ -57,7 +21,39 @@ namespace Tests
         }
 
         [Test]
-        public void Test()
+        public void GetIntersectionTowardItself()
+        {
+            // This point in in the middle of a face, and there is no intersection in the direction 000
+            Maybe<SurfacePoint> noIntersection = 
+                TestSurfaceElements.disjointedSurface.GetIntersectionToward(
+                    TestSurfaceElements.disjointedPointMiddle,
+                    TestSurfaceElements.disjointedPointMiddle);
+
+            Assert.False(noIntersection.HasValue());
+
+            // This point in on an edge, so it actually is already an intesection, even in the direction 000
+            Maybe<SurfacePoint> intersection = 
+                TestSurfaceElements.disjointedSurface.GetIntersectionToward(
+                    TestSurfaceElements.disjointedPoint1,
+                    TestSurfaceElements.disjointedPoint1);
+
+            Assert.True(intersection.HasValue());
+        }
+
+        [Test]
+        public void GetIntersectionTowardPointOnSameFace()
+        {
+            Assert.True(true);
+        }
+
+        [Test]
+        public void GetIntersectionTowardExternalPoint()
+        {
+            Assert.True(true);
+        }
+
+        [Test]
+        public void GetIntersectionTowardFaceVertex()
         {
             Assert.True(true);
         }
