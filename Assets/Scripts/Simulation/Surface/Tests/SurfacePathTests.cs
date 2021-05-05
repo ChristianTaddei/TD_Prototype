@@ -26,14 +26,14 @@ namespace Tests
             disjointedSurface = new Surface();
 
             disjointedFace1 = disjointedSurface.AddFace(
-                (CartesianPoint)new Vector3(0, 1, 0),
-                (CartesianPoint)new Vector3(0, 1, 1),
-                (CartesianPoint)new Vector3(1, 1, 0));
+                (CartesianPoint)new Vector3(0, 0, 0),
+                (CartesianPoint)new Vector3(1, 0, 0),
+                (CartesianPoint)new Vector3(0, 1, 0));
 
             disjointedFace2 = disjointedSurface.AddFace(
-                (CartesianPoint)new Vector3(0, 2, 0),
-                (CartesianPoint)new Vector3(0, 2, 2),
-                (CartesianPoint)new Vector3(2, 2, 0));
+                (CartesianPoint)new Vector3(1, 1, 0),
+                (CartesianPoint)new Vector3(2, 1, 0),
+                (CartesianPoint)new Vector3(1, 2, 0));
 
             disjointedPoint1 = new SurfacePoint(
                 disjointedFace1,

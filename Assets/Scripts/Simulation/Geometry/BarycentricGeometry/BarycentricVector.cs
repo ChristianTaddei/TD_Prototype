@@ -91,6 +91,7 @@ public class BarycentricVector : IVector
             return new BarycentricVector(newBase, BarycentricCoordinates);
         }
 
+        // FIXME: can find components of old base in new base algebrically?
         bool allSuccess = true;
         BarycentricVector oldBaseAInNewBase;
         allSuccess &= BarycentricVector.FromPoint(newBase, _base.a.Coordinates, out oldBaseAInNewBase);
@@ -100,8 +101,8 @@ public class BarycentricVector : IVector
         allSuccess &= BarycentricVector.FromPoint(newBase, _base.c.Coordinates, out oldBaseCInNewBase);
 
         if(!allSuccess) {
-           // base change should always be possible
-           throw new Exception("Change base failed");
+           // base change should always be possible (needs projection probably)
+           throw new Exception("ChangeBase -> FromPoint failed");
         }
 
         return new BarycentricVector(
