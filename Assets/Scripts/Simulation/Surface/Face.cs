@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,9 +11,24 @@ public class Face
 
     public Surface Surface {get; private set;}
 
+    public IPoint GetVertex(TriVertexNames n){
+        switch (n)
+        {
+            case TriVertexNames.A:
+                return triangle.a;
+            case TriVertexNames.B:
+                return triangle.b;
+            case TriVertexNames.C:
+                return triangle.c;
+            default:
+                throw new Exception("Coordinate name does not exist");
+        }
+    }
+
     public Face(Surface s, ITriangle t)
     {
-        this.triangle = t;
+        this.triangle = t; // TODO: assign points so that they are alway CCW
+
         this.Surface = s;
         this.Surface.AddFace(this);
     }

@@ -9,6 +9,21 @@ public class BarycentricCoordinates
     public float b { get => _b; }
     public float c { get => _c; }
 
+    public float GetCoord(TriVertexNames coordName)
+    {
+        switch (coordName)
+        {
+            case TriVertexNames.A:
+                return a;
+            case TriVertexNames.B:
+                return b;
+            case TriVertexNames.C:
+                return c;
+            default:
+                throw new Exception("Coordinate name does not exist");
+        }
+    }
+
     public BarycentricCoordinates(float a, float b, float c)
     {
         this._a = a;

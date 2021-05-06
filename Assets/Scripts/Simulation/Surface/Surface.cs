@@ -82,6 +82,8 @@ public class Surface
 
     public Maybe<SurfacePoint> GetIntersectionToward(SurfacePoint start, SurfacePoint end)
     {
+        // TODO: if more than one intersection found, use furthest away from start 
+        // (so if start is an inters already its not automatically returned)
         if (start.Coordinates == end.Coordinates)
         {
             if (start.BarycentricVector.BarycentricCoordinates.a == 0.0
@@ -98,61 +100,61 @@ public class Surface
 
         BarycentricVector endInStartBase = end.BarycentricVector.ChangeBase(start.BarycentricVector.Base);
         BarycentricVector startToEnd = endInStartBase - start.BarycentricVector;
-        float coefficient;
 
-        // FIXME: just check after < 0 ?
-        Func<double, double, bool> changedSign = (double before, double after) => before * after < 0; // TODO: what if it was 0?
-
-        // TODO: need iterable on coordinates and such
-        bool aChangedSign = changedSign(
-            start.BarycentricVector.BarycentricCoordinates.a,
-            endInStartBase.BarycentricCoordinates.a);
-        bool bChangedSign = changedSign(
-            start.BarycentricVector.BarycentricCoordinates.b,
-            endInStartBase.BarycentricCoordinates.b);
-        bool cChangedSign = changedSign(
-            start.BarycentricVector.BarycentricCoordinates.c,
-            endInStartBase.BarycentricCoordinates.c);
-
-        // List<BarycentricCoordinate> changedCoordinates = new List<BarycentricCoordinate>();
-        // for(BarycentricCoordinate c in BarycentricCoordinates)
-        // {
-        //     if (changedSign(start.BarycentricVector.GetBarycentricCoordinate(c),
-        //                     endInStartBase.GetBarycentricCoordinate(c)))
-        //     {
-        //         changedCoordinates.Add(c);
-        //     }
-        // }
-
-        if (aChangedSign || bChangedSign || cChangedSign)
+        List<TriVertexNames> changedCoordinates = new List<TriVertexNames>();
+        foreach (TriVertexNames c in Enum.GetValues(typeof(TriVertexNames)))
         {
-            if (aChangedSign)
+            if (endInStartBase.BarycentricCoordinates.GetCoord(c) < 0) // <= 0 need refinement when starting at intersection
             {
-                coefficient = startToEnd.BarycentricCoordinates.a / -start.BarycentricVector.BarycentricCoordinates.a;
+                changedCoordinates.Add(c);
             }
-            else if (bChangedSign)
-            {
-                coefficient = startToEnd.BarycentricCoordinates.b / -start.BarycentricVector.BarycentricCoordinates.b;
-            }
-            else
-            {
-                coefficient = startToEnd.BarycentricCoordinates.c / -start.BarycentricVector.BarycentricCoordinates.c;
-            }
-
-            BarycentricVector intersectionVector =
-                start.BarycentricVector + new BarycentricVector(
-                                            start.Face.Triangle,
-                                            new BarycentricCoordinates(
-                                                startToEnd.BarycentricCoordinates.a * coefficient,
-                                                startToEnd.BarycentricCoordinates.b * coefficient,
-                                                startToEnd.BarycentricCoordinates.c * coefficient));
-
-            return new Maybe<SurfacePoint>.Just(new SurfacePoint(end.Face, intersectionVector)); // FIXME: this works only in basic test;
         }
-        else
-        {
+
+        if (changedCoordinates.Count == 0)
             return new Maybe<SurfacePoint>.Nothing();
+
+        float coefficient;
+        TriVertexNames changedCoordinate = changedCoordinates.First();
+        coefficient = startToEnd.BarycentricCoordinates.GetCoord(changedCoordinate)
+            / -start.BarycentricVector.BarycentricCoordinates.GetCoord(changedCoordinate);
+
+        List<TriVertexNames> sharedVertices = new List<TriVertexNames>((TriVertexNames[]) Enum.GetValues(typeof(TriVertexNames)));
+        sharedVertices.Remove(changedCoordinates[0]);
+
+        List<Face> facesSharingChangedCoordinates = getFacesSharingCoordinates(start.Face, sharedVertices);
+        if (facesSharingChangedCoordinates.Count == 0)
+            return new Maybe<SurfacePoint>.Nothing();
+
+        Face nextFace = facesSharingChangedCoordinates.First(); // TODO: need refinement
+
+        BarycentricVector intersectionVector =
+            start.BarycentricVector + new BarycentricVector(
+                                        nextFace.Triangle,
+                                        new BarycentricCoordinates(
+                                            startToEnd.BarycentricCoordinates.a * coefficient,
+                                            startToEnd.BarycentricCoordinates.b * coefficient,
+                                            startToEnd.BarycentricCoordinates.c * coefficient));
+
+        return new Maybe<SurfacePoint>.Just(new SurfacePoint(nextFace, intersectionVector));
+    }
+
+    private List<Face> getFacesSharingCoordinates(Face face, List<TriVertexNames> changedCoordinates)
+    {
+        List<Face> facesSharingCoordinates = new List<Face>();
+
+        foreach (Face candidate in faces)
+        {
+            foreach (TriVertexNames v1 in Enum.GetValues(typeof(TriVertexNames)))
+            {
+                foreach (TriVertexNames v2 in Enum.GetValues(typeof(TriVertexNames)))
+                {
+                    if (face.GetVertex(v1) == candidate.GetVertex(v2)) facesSharingCoordinates.Add(candidate);
+                }
+            }
         }
+
+        facesSharingCoordinates.Remove(face);
+        return facesSharingCoordinates;
     }
 
     // public bool TryMakeSurfacePointFrom(CartesianPoint cartesianPoint, out SurfacePoint newSurfacePoint)
