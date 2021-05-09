@@ -9,9 +9,10 @@ public class Face
     public static readonly Face NO_FACE;
     private ITriangle triangle;
 
-    public Surface Surface {get; private set;}
+    public Surface Surface { get; private set; }
 
-    public IPoint GetVertex(TriVertexNames n){
+    public IPoint GetVertex(TriVertexNames n)
+    {
         switch (n)
         {
             case TriVertexNames.A:
@@ -23,6 +24,21 @@ public class Face
             default:
                 throw new Exception("Coordinate name does not exist");
         }
+    }
+
+    public List<TriVertexNames> GetSharedVertices(Face otherFace)
+    {
+        List<TriVertexNames> sharedVertices = new List<TriVertexNames>();
+
+        foreach (TriVertexNames v1 in Enum.GetValues(typeof(TriVertexNames)))
+        {
+            foreach (TriVertexNames v2 in Enum.GetValues(typeof(TriVertexNames)))
+            {
+                if (this.GetVertex(v1).Coordinates == otherFace.GetVertex(v2).Coordinates) sharedVertices.Add(v1);
+            }
+        }
+
+        return sharedVertices;
     }
 
     public Face(Surface s, ITriangle t)
