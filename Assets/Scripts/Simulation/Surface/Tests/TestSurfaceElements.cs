@@ -46,15 +46,17 @@ public class TestSurfaceElements
     // A square made of two faces, sharing points b and c.
     public static readonly Surface Square_abcd = new Surface();
 
-    public static readonly Face Triangle_abc = Square_abcd.AddFace(
+    public static readonly Face Triangle_abc = 
+        Square_abcd.AddFace(
             (CartesianPoint)new Vector3(0, 0, 0),
             (CartesianPoint)new Vector3(0, 1, 0),
             (CartesianPoint)new Vector3(1, 0, 0));
 
-    public static readonly Face Triangle_bcd = Square_abcd.AddFace(
-    (CartesianPoint)new Vector3(0, 1, 0),
-    (CartesianPoint)new Vector3(1, 0, 0),
-    (CartesianPoint)new Vector3(1, 1, 0));
+    public static readonly Face Triangle_bcd = 
+        Square_abcd.AddFace(
+            (CartesianPoint)new Vector3(0, 1, 0),
+            (CartesianPoint)new Vector3(1, 0, 0),
+            (CartesianPoint)new Vector3(1, 1, 0));
 
     public static readonly SurfacePoint a = new SurfacePoint(
        Triangle_abc,

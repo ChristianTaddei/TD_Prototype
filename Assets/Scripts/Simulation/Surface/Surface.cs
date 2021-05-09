@@ -9,20 +9,22 @@ public class Surface
     private List<IPoint> vertices;
     private List<Face> faces;
 
+    public List<Face> Faces { get => faces; set => faces = value; }
+
     public Surface()
     {
-        this.faces = new List<Face>();
+        this.Faces = new List<Face>();
     }
 
     internal void AddFace(Face face)
     {
-        faces.Add(face);
+        Faces.Add(face);
     }
 
     internal List<Face> neighboursOf(Face startingFace) // TODO: make constant not linear
     {
         List<Face> neighbours = new List<Face>();
-        faces.Where(candidateNeighbour => areNeighbours(candidateNeighbour, startingFace));
+        Faces.Where(candidateNeighbour => areNeighbours(candidateNeighbour, startingFace));
         return neighbours;
     }
 
@@ -42,7 +44,7 @@ public class Surface
     public Face AddFace(CartesianPoint cartesianPoint1, CartesianPoint cartesianPoint2, CartesianPoint cartesianPoint3)
     {
         Face newFace = new Face(this, cartesianPoint1, cartesianPoint2, cartesianPoint3);
-        faces.Add(newFace);
+        Faces.Add(newFace);
         return newFace;
     }
 
@@ -118,10 +120,10 @@ public class Surface
         coefficient = startToEnd.BarycentricCoordinates.GetCoord(changedCoordinate)
             / -start.BarycentricVector.BarycentricCoordinates.GetCoord(changedCoordinate);
 
-        List<TriVertexNames> sharedVertices = new List<TriVertexNames>((TriVertexNames[]) Enum.GetValues(typeof(TriVertexNames)));
+        HashSet<TriVertexNames> sharedVertices = new HashSet<TriVertexNames>((TriVertexNames[]) Enum.GetValues(typeof(TriVertexNames)));
         sharedVertices.Remove(changedCoordinates[0]);
 
-        List<Face> facesSharingChangedCoordinates = getFacesSharingCoordinates(start.Face, sharedVertices);
+        HashSet<Face> facesSharingChangedCoordinates = start.Face.GetFacesFromSharedVertices(sharedVertices);
         if (facesSharingChangedCoordinates.Count == 0)
             return new Maybe<SurfacePoint>.Nothing();
 
@@ -136,25 +138,6 @@ public class Surface
                                             startToEnd.BarycentricCoordinates.c * coefficient));
 
         return new Maybe<SurfacePoint>.Just(new SurfacePoint(nextFace, intersectionVector));
-    }
-
-    private List<Face> getFacesSharingCoordinates(Face face, List<TriVertexNames> changedCoordinates)
-    {
-        List<Face> facesSharingCoordinates = new List<Face>();
-
-        foreach (Face candidate in faces)
-        {
-            foreach (TriVertexNames v1 in Enum.GetValues(typeof(TriVertexNames)))
-            {
-                foreach (TriVertexNames v2 in Enum.GetValues(typeof(TriVertexNames)))
-                {
-                    if (face.GetVertex(v1) == candidate.GetVertex(v2)) facesSharingCoordinates.Add(candidate);
-                }
-            }
-        }
-
-        facesSharingCoordinates.Remove(face);
-        return facesSharingCoordinates;
     }
 
     // public bool TryMakeSurfacePointFrom(CartesianPoint cartesianPoint, out SurfacePoint newSurfacePoint)

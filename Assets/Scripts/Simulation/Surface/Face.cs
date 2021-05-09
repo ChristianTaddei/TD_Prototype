@@ -26,9 +26,9 @@ public class Face
         }
     }
 
-    public List<TriVertexNames> GetSharedVertices(Face otherFace)
+    public HashSet<TriVertexNames> GetSharedVertices(Face otherFace)
     {
-        List<TriVertexNames> sharedVertices = new List<TriVertexNames>();
+        HashSet<TriVertexNames> sharedVertices = new HashSet<TriVertexNames>();
 
         foreach (TriVertexNames v1 in Enum.GetValues(typeof(TriVertexNames)))
         {
@@ -39,6 +39,19 @@ public class Face
         }
 
         return sharedVertices;
+    }
+
+    public HashSet<Face> GetFacesFromSharedVertices(HashSet<TriVertexNames> sharedVertices)
+    {
+          HashSet<Face> facesSharingVertices = new HashSet<Face>();
+
+        foreach (Face candidate in this.Surface.Faces)
+        {
+            if(this.GetSharedVertices(candidate) == sharedVertices) facesSharingVertices.Add(candidate);
+        }
+
+        facesSharingVertices.Remove(this);
+        return facesSharingVertices;
     }
 
     public Face(Surface s, ITriangle t)

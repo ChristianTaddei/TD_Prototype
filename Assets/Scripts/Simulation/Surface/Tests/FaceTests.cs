@@ -30,8 +30,23 @@ namespace Tests
         public void FacesShareVertices()
         {
             Assert.AreEqual(
-                new List<TriVertexNames>(new TriVertexNames[]{TriVertexNames.B, TriVertexNames.C}),
-                TestSurfaceElements.Triangle_abc.GetSharedVertices( TestSurfaceElements.Triangle_bcd));
+                new HashSet<TriVertexNames>(new TriVertexNames[] { TriVertexNames.B, TriVertexNames.C }),
+                TestSurfaceElements.Triangle_abc.GetSharedVertices(TestSurfaceElements.Triangle_bcd));
+
+            Assert.AreEqual(
+                new HashSet<TriVertexNames>(new TriVertexNames[] { TriVertexNames.A, TriVertexNames.B }),
+                TestSurfaceElements.Triangle_bcd.GetSharedVertices(TestSurfaceElements.Triangle_abc));
+        }
+
+        [Test]
+        public void GetFaceFromSharedVertices()
+        {
+            HashSet<Face> facesSharingVertices =
+                TestSurfaceElements.Triangle_abc.GetFacesFromSharedVertices(
+                    new HashSet<TriVertexNames>(new TriVertexNames[] { TriVertexNames.A, TriVertexNames.B }));
+
+            Assert.AreEqual(1, facesSharingVertices.Count);
+            Assert.True(facesSharingVertices.Contains(TestSurfaceElements.Triangle_bcd));
         }
     }
 }
