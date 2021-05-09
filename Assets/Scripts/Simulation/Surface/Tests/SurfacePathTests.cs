@@ -158,13 +158,13 @@ namespace Tests
             Assert.AreEqual(a, path.Value.Start);
             Assert.AreEqual(d, path.Value.End);
 
-            // SurfacePoint m_bcd = new SurfacePoint(
-            //     Triangle_bcd,
-            //     new BarycentricVector(
-            //         Triangle_bcd.Triangle,
-            //         new BarycentricCoordinates(0, 0.5f, 0.5f)));
+            SurfacePoint m_bcd = new SurfacePoint(
+                Triangle_bcd,
+                new BarycentricVector(
+                    Triangle_bcd.Triangle,
+                    new BarycentricCoordinates(0.5f, 0.5f, 0)));
 
-            // Assert.AreEqual(m_bcd, path.Points[1]);
+            Assert.AreEqual(m_bcd.Coordinates, path.Value.Points[1].Coordinates);
 
             // 1 -> intermediary on 2nd face
             // 2 -> multiface point (or auto convert to new face for edge points?), equals

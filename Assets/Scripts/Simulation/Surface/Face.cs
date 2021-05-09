@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class Face
 {
-    public static readonly Face NO_FACE;
     private ITriangle triangle;
 
     public Surface Surface { get; private set; }
@@ -43,11 +42,11 @@ public class Face
 
     public HashSet<Face> GetFacesFromSharedVertices(HashSet<TriVertexNames> sharedVertices)
     {
-          HashSet<Face> facesSharingVertices = new HashSet<Face>();
+        HashSet<Face> facesSharingVertices = new HashSet<Face>();
 
         foreach (Face candidate in this.Surface.Faces)
         {
-            if(this.GetSharedVertices(candidate).SetEquals(sharedVertices)) facesSharingVertices.Add(candidate);
+            if (this.GetSharedVertices(candidate).SetEquals(sharedVertices)) facesSharingVertices.Add(candidate);
         }
 
         return facesSharingVertices;

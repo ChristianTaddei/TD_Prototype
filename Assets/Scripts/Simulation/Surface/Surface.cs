@@ -103,7 +103,7 @@ public class Surface
         BarycentricVector endInStartBase = end.BarycentricVector.ChangeBase(start.BarycentricVector.Base);
         BarycentricVector startToEnd = endInStartBase - start.BarycentricVector;
 
-        List<TriVertexNames> changedCoordinates = new List<TriVertexNames>();
+        HashSet<TriVertexNames> changedCoordinates = new HashSet<TriVertexNames>();
         foreach (TriVertexNames c in Enum.GetValues(typeof(TriVertexNames)))
         {
             if (endInStartBase.BarycentricCoordinates.GetCoord(c) < 0) // <= 0 need refinement when starting at intersection
@@ -115,27 +115,25 @@ public class Surface
         if (changedCoordinates.Count == 0)
             return new Maybe<SurfacePoint>.Nothing();
 
-        float coefficient;
         TriVertexNames changedCoordinate = changedCoordinates.First();
-        coefficient = startToEnd.BarycentricCoordinates.GetCoord(changedCoordinate)
-            / -start.BarycentricVector.BarycentricCoordinates.GetCoord(changedCoordinate);
 
-        HashSet<TriVertexNames> sharedVertices = new HashSet<TriVertexNames>((TriVertexNames[]) Enum.GetValues(typeof(TriVertexNames)));
-        sharedVertices.Remove(changedCoordinates[0]);
+        startToEnd.BarycentricCoordinates.SetCoord(changedCoordinate, 0.0f);
+        BarycentricVector intersectionVector =
+            new BarycentricVector(
+                start.Face.Triangle,
+                startToEnd.Normalize().BarycentricCoordinates);
 
+
+        // The next face is the one that shares vertices that didnt change coordinates
+        HashSet<TriVertexNames> sharedVertices = new HashSet<TriVertexNames>((TriVertexNames[])Enum.GetValues(typeof(TriVertexNames)));
+        sharedVertices.RemoveWhere(sv => changedCoordinates.Contains(sv));
         HashSet<Face> facesSharingChangedCoordinates = start.Face.GetFacesFromSharedVertices(sharedVertices);
         if (facesSharingChangedCoordinates.Count == 0)
             return new Maybe<SurfacePoint>.Nothing();
 
         Face nextFace = facesSharingChangedCoordinates.First(); // TODO: need refinement
 
-        BarycentricVector intersectionVector =
-            start.BarycentricVector + new BarycentricVector(
-                                        nextFace.Triangle,
-                                        new BarycentricCoordinates(
-                                            startToEnd.BarycentricCoordinates.a * coefficient,
-                                            startToEnd.BarycentricCoordinates.b * coefficient,
-                                            startToEnd.BarycentricCoordinates.c * coefficient));
+        intersectionVector = intersectionVector.ChangeBase(nextFace.Triangle);
 
         return new Maybe<SurfacePoint>.Just(new SurfacePoint(nextFace, intersectionVector));
     }

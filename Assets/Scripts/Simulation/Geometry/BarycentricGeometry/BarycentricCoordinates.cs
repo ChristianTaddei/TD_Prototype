@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BarycentricCoordinates
 {
-    private readonly float _a, _b, _c;
+    private /*readonly*/ float _a, _b, _c;
 
     public float a { get => _a; }
     public float b { get => _b; }
@@ -19,6 +19,24 @@ public class BarycentricCoordinates
                 return b;
             case TriVertexNames.C:
                 return c;
+            default:
+                throw new Exception("Coordinate name does not exist");
+        }
+    }
+
+    public void SetCoord(TriVertexNames coordName, float value)
+    {
+        switch (coordName)
+        {
+            case TriVertexNames.A:
+                _a = value; // TODO: _a readonly and to this in contructor
+                break;
+            case TriVertexNames.B:
+                _b = value;
+                break;
+            case TriVertexNames.C:
+                _c = value;
+                break;
             default:
                 throw new Exception("Coordinate name does not exist");
         }
