@@ -47,10 +47,9 @@ public class Face
 
         foreach (Face candidate in this.Surface.Faces)
         {
-            if(this.GetSharedVertices(candidate) == sharedVertices) facesSharingVertices.Add(candidate);
+            if(this.GetSharedVertices(candidate).SetEquals(sharedVertices)) facesSharingVertices.Add(candidate);
         }
 
-        facesSharingVertices.Remove(this);
         return facesSharingVertices;
     }
 

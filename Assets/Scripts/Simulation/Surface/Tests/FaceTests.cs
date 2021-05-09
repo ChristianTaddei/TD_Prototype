@@ -43,7 +43,7 @@ namespace Tests
         {
             HashSet<Face> facesSharingVertices =
                 TestSurfaceElements.Triangle_abc.GetFacesFromSharedVertices(
-                    new HashSet<TriVertexNames>(new TriVertexNames[] { TriVertexNames.A, TriVertexNames.B }));
+                    new HashSet<TriVertexNames>(new TriVertexNames[] { TriVertexNames.B, TriVertexNames.C }));
 
             Assert.AreEqual(1, facesSharingVertices.Count);
             Assert.True(facesSharingVertices.Contains(TestSurfaceElements.Triangle_bcd));
