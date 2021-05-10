@@ -6,51 +6,69 @@ public class Rectangle_ACDF
 {
     // A rectangle made of four faces (two squares side by side).
     /*
-        B --- D --- F  // TODO:make all CCW
+        D --- C --- B
         |  \  |  \  |
-        A --- C --- E
+        E --- F --- A
     */
     public static readonly Surface Surface = new Surface();
 
-    private static readonly CartesianPoint _A = new Vector3(0, 0, 0);
-    private static readonly CartesianPoint _B = new Vector3(0, 1, 0);
-    private static readonly CartesianPoint _C = new Vector3(1, 0, 0);
-    private static readonly CartesianPoint _D = new Vector3(1, 1, 0);
-    private static readonly CartesianPoint _E = new Vector3(2, 0, 0);
-    private static readonly CartesianPoint _F = new Vector3(2, 1, 0);
+    private static readonly CartesianPoint _A = new Vector3(2, 0, 0);
+    private static readonly CartesianPoint _B = new Vector3(2, 1, 0);
+    private static readonly CartesianPoint _C = new Vector3(1, 1, 0);
+    private static readonly CartesianPoint _D = new Vector3(0, 1, 0);
+    private static readonly CartesianPoint _E = new Vector3(0, 0, 0);
+    private static readonly CartesianPoint _F = new Vector3(1, 0, 0);
 
-    public static readonly Face ABC = Surface.AddFace(_A, _B, _C);
-    public static readonly Face BCD = Surface.AddFace(_B, _C, _D);
-    public static readonly Face CDE = Surface.AddFace(_C, _D, _E);
-    public static readonly Face DEF = Surface.AddFace(_D, _E, _F);
+    public static readonly Face ACB = Surface.AddFace(_A, _C, _B);
+    public static readonly Face AFC = Surface.AddFace(_A, _F, _C);
+    public static readonly Face FDC = Surface.AddFace(_F, _D, _C);
+    public static readonly Face FED = Surface.AddFace(_F, _E, _D);
 
-    public static readonly SurfacePoint A = new SurfacePoint(
-       ABC,
+    public static readonly SurfacePoint AFC_A = new SurfacePoint(
+       AFC,
        new BarycentricVector(
-           ABC.Triangle,
+           AFC.Triangle,
            new BarycentricCoordinates(1, 0, 0)));
 
-    public static readonly SurfacePoint BCD_B = new SurfacePoint(
-       BCD,
-       new BarycentricVector(
-           BCD.Triangle,
-           new BarycentricCoordinates(1, 0, 0)));
+    public static readonly SurfacePoint ACB_B = new SurfacePoint(
+        ACB,
+        new BarycentricVector(
+        ACB.Triangle,
+        new BarycentricCoordinates(0, 0, 1)));
 
-    public static readonly SurfacePoint CDE_C = new SurfacePoint(
-       CDE,
+    public static readonly SurfacePoint FDC_D = new SurfacePoint(
+       FDC,
        new BarycentricVector(
-           CDE.Triangle,
-           new BarycentricCoordinates(1, 0, 0)));
+           FDC.Triangle,
+           new BarycentricCoordinates(0, 1, 0)));
 
-    public static readonly SurfacePoint CDE_E = new SurfacePoint(
-       CDE,
+    public static readonly SurfacePoint FED_E = new SurfacePoint(
+       FED,
        new BarycentricVector(
-           CDE.Triangle,
-           new BarycentricCoordinates(0, 0, 1)));
+           FED.Triangle,
+           new BarycentricCoordinates(0, 1, 0)));
 
-    public static readonly SurfacePoint F = new SurfacePoint(
-       DEF,
+    public static readonly SurfacePoint AFC_F = new SurfacePoint(
+       AFC,
        new BarycentricVector(
-           DEF.Triangle,
-           new BarycentricCoordinates(0, 0, 1)));
+           AFC.Triangle,
+           new BarycentricCoordinates(0, 1, 0)));
+
+    public static readonly SurfacePoint m_AB_ACB = new SurfacePoint(
+       ACB,
+       new BarycentricVector(
+           ACB.Triangle,
+           new BarycentricCoordinates(0.5f, 0.0f, 0.5f)));
+
+    public static readonly SurfacePoint m_AC_ACB = new SurfacePoint(
+       ACB,
+       new BarycentricVector(
+           ACB.Triangle,
+           new BarycentricCoordinates(0.5f, 0.5f, 0.0f)));
+
+    public static readonly SurfacePoint m_CF_AFC = new SurfacePoint(
+       AFC,
+       new BarycentricVector(
+           AFC.Triangle,
+           new BarycentricCoordinates(0.0f, 0.5f, 0.5f)));
 }

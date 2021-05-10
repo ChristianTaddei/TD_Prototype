@@ -107,4 +107,9 @@ public class BarycentricCoordinates
     {
         return new BarycentricCoordinates(b1.a - b2.a, b1.b - b2.b, b1.c - b2.c);
     }
+
+    public static BarycentricCoordinates operator *(float f, BarycentricCoordinates b)
+    {
+        return new BarycentricCoordinates( b.a * f, b.b * f, b.c * f);
+    }
 }

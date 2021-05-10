@@ -113,23 +113,29 @@ public class Surface
         }
 
         if (changedCoordinates.Count == 0)
+        {
             return new Maybe<SurfacePoint>.Nothing();
+        }
 
         TriangleVertices changedCoordinate = changedCoordinates.First();
 
-        startToEnd.BarycentricCoordinates.SetCoord(changedCoordinate, 0.0f);
+        float coefficient = -start.BarycentricVector.BarycentricCoordinates.GetCoord(changedCoordinate)/startToEnd.BarycentricCoordinates.GetCoord(changedCoordinate); 
+
         BarycentricVector intersectionVector =
             new BarycentricVector(
                 start.Face.Triangle,
-                startToEnd.Normalize().BarycentricCoordinates);
+                (start.BarycentricVector.BarycentricCoordinates + coefficient * startToEnd.BarycentricCoordinates));
+        // Could check if this is normalized (must be if calc are correct)
+        
 
-
-        // The next face is the shares vertices that didnt change coordinates
         HashSet<TriangleVertices> sharedVertices = new HashSet<TriangleVertices>((TriangleVertices[])Enum.GetValues(typeof(TriangleVertices)));
         sharedVertices.RemoveWhere(sv => changedCoordinates.Contains(sv));
+
         HashSet<Face> facesSharingChangedCoordinates = start.Face.GetFacesFromSharedVertices(sharedVertices);
         if (facesSharingChangedCoordinates.Count == 0)
+        {
             return new Maybe<SurfacePoint>.Nothing();
+        }
 
         Face nextFace = facesSharingChangedCoordinates.First(); // TODO: need refinement
 
