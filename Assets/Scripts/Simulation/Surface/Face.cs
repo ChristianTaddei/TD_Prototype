@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Face
+public class Face // TODO: Face is a triangle
 {
     private ITriangle triangle;
 
@@ -54,7 +54,7 @@ public class Face
 
     public Face(Surface s, ITriangle t)
     {
-        this.triangle = t; // TODO: assign points so that they are alway CCW
+        this.triangle = t; // TODO: CCW as requirement or enforced?
 
         this.Surface = s;
         this.Surface.AddFace(this);

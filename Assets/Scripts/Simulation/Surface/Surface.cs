@@ -21,7 +21,7 @@ public class Surface
         Faces.Add(face);
     }
 
-    internal List<Face> neighboursOf(Face startingFace) // TODO: make constant not linear
+    internal List<Face> neighboursOf(Face startingFace)
     {
         List<Face> neighbours = new List<Face>();
         Faces.Where(candidateNeighbour => areNeighbours(candidateNeighbour, startingFace));
@@ -64,7 +64,7 @@ public class Surface
             if (intersection.HasValue())
             {
                 crossingPoints.Add(intersection.Value);
-                currentPoint = intersection.Value; // TODO: multi face points
+                currentPoint = intersection.Value; // TODO: Points with multiple representations...
             }
             else
             {
@@ -84,7 +84,7 @@ public class Surface
 
     public Maybe<SurfacePoint> GetIntersectionToward(SurfacePoint start, SurfacePoint end)
     {
-        // TODO: if more than one intersection found, use furthest away from start 
+        // TODO: Corner Cases, if more than one intersection found, use furthest away from start 
         // (so if start is an inters already its not automatically returned)
         if (start.Coordinates == end.Coordinates)
         {
@@ -137,7 +137,7 @@ public class Surface
             return new Maybe<SurfacePoint>.Nothing();
         }
 
-        Face nextFace = facesSharingChangedCoordinates.First(); // TODO: need refinement
+        Face nextFace = facesSharingChangedCoordinates.First(); // TODO: Corner Cases
 
         intersectionVector = intersectionVector.ChangeBase(nextFace.Triangle);
 
@@ -303,7 +303,6 @@ public class Surface
     // //         }
     // //     }
 
-    // //     // TODO: make like tryGet
     // //     Debug.Log("find next face failed");
     // //     return null;
     // // }

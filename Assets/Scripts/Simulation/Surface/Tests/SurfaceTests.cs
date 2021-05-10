@@ -40,22 +40,22 @@ namespace Tests
             Assert.True(intersection.HasValue());
         }
 
-        [Test]
-        public void GetIntersectionTowardPointOnSameFace()
-        {
-            Assert.True(true);
-        }
+        // [Test]
+        // public void GetIntersectionTowardPointOnSameFace()
+        // {
+        //     Assert.True(true);
+        // }
 
-        [Test]
-        public void GetIntersectionTowardExternalPoint()
-        {
-            Assert.True(true);
-        }
+        // [Test]
+        // public void GetIntersectionTowardExternalPoint()
+        // {
+        //     Assert.True(true);
+        // }
 
-        [Test]
-        public void GetIntersectionTowardFaceVertex()
-        {
-            Assert.True(true);
-        }
+        // [Test]
+        // public void GetIntersectionTowardFaceVertex()
+        // {
+        //     Assert.True(true);
+        // }
     }
 }

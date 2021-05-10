@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rectangle_ACDF
+public class Rectangle_ABDE
 {
-    // A rectangle made of four faces (two squares side by side).
     /*
         D --- C --- B
         |  \  |  \  |

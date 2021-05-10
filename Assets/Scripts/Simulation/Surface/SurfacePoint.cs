@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class SurfacePoint : IPoint
 {
-    public static readonly SurfacePoint NO_POINT; // TODO: remove
-
     public BarycentricVector BarycentricVector;
 
     public Vector3 Coordinates => BarycentricVector.Coordinates;

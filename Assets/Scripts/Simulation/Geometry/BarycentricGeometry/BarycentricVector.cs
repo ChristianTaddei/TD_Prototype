@@ -29,7 +29,7 @@ public class BarycentricVector : IVector
         out BarycentricVector newBarycentricVector,
         bool project = false)
     {
-        newBarycentricVector = new BarycentricVector(); //TODO: NO_BAR_VEC
+        newBarycentricVector = new BarycentricVector(); //TODO: Monad
         CartesianVector p = new CartesianVector(cp.Coordinates); // TODO: CV x CP
 
         CartesianVector a = _base.a.Coordinates;
