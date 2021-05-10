@@ -5,13 +5,13 @@ using UnityEngine;
 public class BarycentricCoordinates
 {
     public static IEnumerable<TriangleVertices> Coordinates => (TriangleVertices[])Enum.GetValues(typeof(TriangleVertices)); 
-    private /*readonly*/ float _a, _b, _c;
+    private readonly float _a, _b, _c;
 
     public float a { get => _a; }
     public float b { get => _b; }
     public float c { get => _c; }
 
-    public float GetCoord(TriangleVertices coordName)
+    public float GetCoordinate(TriangleVertices coordName)
     {
         switch (coordName)
         {
@@ -21,24 +21,6 @@ public class BarycentricCoordinates
                 return b;
             case TriangleVertices.C:
                 return c;
-            default:
-                throw new Exception("Coordinate name does not exist");
-        }
-    }
-
-    public void SetCoord(TriangleVertices coordName, float value)
-    {
-        switch (coordName)
-        {
-            case TriangleVertices.A:
-                _a = value; // TODO: _a readonly and to this in contructor
-                break;
-            case TriangleVertices.B:
-                _b = value;
-                break;
-            case TriangleVertices.C:
-                _c = value;
-                break;
             default:
                 throw new Exception("Coordinate name does not exist");
         }
@@ -56,7 +38,7 @@ public class BarycentricCoordinates
 
     public bool CheckSumToOne()
     {
-        if (a + b + c > 1.0001f
+        if (a + b + c > 1.0001f // TODO: steamline float tolerance
             || a + b + c < 0.9999f)
         {
             // Debug.LogWarning("Barycentric does not sum to 1: "
@@ -100,7 +82,7 @@ public class BarycentricCoordinates
         return true;
     }
 
-    // Test? or keep in vector only?
+    // TODO: keep in vector only?
     public static BarycentricCoordinates operator +(BarycentricCoordinates b1, BarycentricCoordinates b2)
     {
         return new BarycentricCoordinates(b1.a + b2.a, b1.b + b2.b, b1.c + b2.c);

@@ -106,7 +106,7 @@ public class Surface
         HashSet<TriangleVertices> changedCoordinates = new HashSet<TriangleVertices>();
         foreach (TriangleVertices c in BarycentricCoordinates.Coordinates)
         {
-            if (endInStartBase.BarycentricCoordinates.GetCoord(c) < 0) // <= 0 need refinement when starting at intersection
+            if (endInStartBase.BarycentricCoordinates.GetCoordinate(c) < 0) // TODO: Corner Case, <= 0 need refinement when starting at intersection
             {
                 changedCoordinates.Add(c);
             }
@@ -119,7 +119,7 @@ public class Surface
 
         TriangleVertices changedCoordinate = changedCoordinates.First();
 
-        float coefficient = -start.BarycentricVector.BarycentricCoordinates.GetCoord(changedCoordinate)/startToEnd.BarycentricCoordinates.GetCoord(changedCoordinate); 
+        float coefficient = -start.BarycentricVector.BarycentricCoordinates.GetCoordinate(changedCoordinate)/startToEnd.BarycentricCoordinates.GetCoordinate(changedCoordinate); 
 
         BarycentricVector intersectionVector =
             new BarycentricVector(
@@ -253,7 +253,7 @@ public class Surface
 
     // public bool TryGetFaceFromIndex(int triangleIndex, out Face face)
     // {
-    //     // FIXME: what if faces does not have a value?
+    //     // FIX: what if faces does not have a value?
     //     if (triangleIndex < faces.Count)
     //     {
     //         face = faces[triangleIndex];

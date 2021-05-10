@@ -91,7 +91,7 @@ public class BarycentricVector : IVector
             return new BarycentricVector(newBase, BarycentricCoordinates);
         }
 
-        // FIXME: can find components of old base in new base algebrically?
+        // TODO: can find components of old base in new base algebrically?
         bool allSuccess = true;
         BarycentricVector oldBaseAInNewBase;
         allSuccess &= BarycentricVector.FromPoint(newBase, _base.a.Coordinates, out oldBaseAInNewBase);
