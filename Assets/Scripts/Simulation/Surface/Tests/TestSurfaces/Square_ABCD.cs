@@ -5,6 +5,11 @@ using UnityEngine;
 public class Square_ABCD
 {
     // A square made of two faces.
+     /*
+        B --- D // TODO:make all CCW 
+        |  \  |  
+        A --- C 
+    */
     public static readonly Surface Surface = new Surface();
 
     public static readonly Face ABC = 
