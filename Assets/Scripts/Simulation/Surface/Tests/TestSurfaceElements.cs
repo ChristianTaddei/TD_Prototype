@@ -10,15 +10,15 @@ public class TestSurfaceElements
 
     public static readonly Face disjointedFace1 =
         disjointedSurface.AddFace(
-            (CartesianPoint)new Vector3(0, 1, 0),
-            (CartesianPoint)new Vector3(0, 1, 1),
-            (CartesianPoint)new Vector3(1, 1, 0));
+            (CartesianPoint)new Vector3(0, 0, 0),
+            (CartesianPoint)new Vector3(1, 0, 0),
+            (CartesianPoint)new Vector3(0, 1, 0));
 
     public static readonly Face disjointedFace2 =
         disjointedSurface.AddFace(
-            (CartesianPoint)new Vector3(0, 2, 0),
-            (CartesianPoint)new Vector3(0, 2, 2),
-            (CartesianPoint)new Vector3(2, 2, 0));
+            (CartesianPoint)new Vector3(1, 1, 0),
+            (CartesianPoint)new Vector3(2, 1, 0),
+            (CartesianPoint)new Vector3(1, 2, 0));
 
     public static readonly SurfacePoint disjointedPoint1 =
         new SurfacePoint(
@@ -31,7 +31,7 @@ public class TestSurfaceElements
         new SurfacePoint(
                 disjointedFace2,
                 new BarycentricVector(
-                    disjointedFace1.Triangle,
+                    disjointedFace2.Triangle,
                     new BarycentricCoordinates(1, 0, 0)));
 
     public static readonly SurfacePoint disjointedPointMiddle =

@@ -124,7 +124,7 @@ public class Surface
                 startToEnd.Normalize().BarycentricCoordinates);
 
 
-        // The next face is the one that shares vertices that didnt change coordinates
+        // The next face is the shares vertices that didnt change coordinates
         HashSet<TriVertexNames> sharedVertices = new HashSet<TriVertexNames>((TriVertexNames[])Enum.GetValues(typeof(TriVertexNames)));
         sharedVertices.RemoveWhere(sv => changedCoordinates.Contains(sv));
         HashSet<Face> facesSharingChangedCoordinates = start.Face.GetFacesFromSharedVertices(sharedVertices);
