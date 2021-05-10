@@ -104,7 +104,7 @@ public class Surface
         BarycentricVector startToEnd = endInStartBase - start.BarycentricVector;
 
         HashSet<TriangleVertices> changedCoordinates = new HashSet<TriangleVertices>();
-        foreach (TriangleVertices c in Enum.GetValues(typeof(TriangleVertices)))
+        foreach (TriangleVertices c in BarycentricCoordinates.Coordinates)
         {
             if (endInStartBase.BarycentricCoordinates.GetCoord(c) < 0) // <= 0 need refinement when starting at intersection
             {
@@ -128,7 +128,7 @@ public class Surface
         // Could check if this is normalized (must be if calc are correct)
         
 
-        HashSet<TriangleVertices> sharedVertices = new HashSet<TriangleVertices>((TriangleVertices[])Enum.GetValues(typeof(TriangleVertices)));
+        HashSet<TriangleVertices> sharedVertices = new HashSet<TriangleVertices>(BarycentricCoordinates.Coordinates);
         sharedVertices.RemoveWhere(sv => changedCoordinates.Contains(sv));
 
         HashSet<Face> facesSharingChangedCoordinates = start.Face.GetFacesFromSharedVertices(sharedVertices);

@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BarycentricCoordinates
 {
+    public static IEnumerable<TriangleVertices> Coordinates => (TriangleVertices[])Enum.GetValues(typeof(TriangleVertices)); 
     private /*readonly*/ float _a, _b, _c;
 
     public float a { get => _a; }

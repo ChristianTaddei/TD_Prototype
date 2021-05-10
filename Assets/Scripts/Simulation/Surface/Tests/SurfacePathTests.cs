@@ -54,7 +54,7 @@ namespace Tests
             AssertPathIsJustStartAndEnd(Square_ABCD.Barycentre_ADC, Square_ABCD.ADC_D);
             AssertPathIsJustStartAndEnd(Square_ABCD.ADC_D, Square_ABCD.Barycentre_ADC);
             AssertPathIsJustStartAndEnd(Square_ABCD.PointNotOnEdge_ABC, Square_ABCD.Barycentre_ABC);
-            // TODO: tests on points not on edges
+            // TODO: tests points not on edges
         }
 
         [Test]
