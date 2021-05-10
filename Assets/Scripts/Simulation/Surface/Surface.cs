@@ -103,8 +103,8 @@ public class Surface
         BarycentricVector endInStartBase = end.BarycentricVector.ChangeBase(start.BarycentricVector.Base);
         BarycentricVector startToEnd = endInStartBase - start.BarycentricVector;
 
-        HashSet<TriVertexNames> changedCoordinates = new HashSet<TriVertexNames>();
-        foreach (TriVertexNames c in Enum.GetValues(typeof(TriVertexNames)))
+        HashSet<TriangleVertices> changedCoordinates = new HashSet<TriangleVertices>();
+        foreach (TriangleVertices c in Enum.GetValues(typeof(TriangleVertices)))
         {
             if (endInStartBase.BarycentricCoordinates.GetCoord(c) < 0) // <= 0 need refinement when starting at intersection
             {
@@ -115,7 +115,7 @@ public class Surface
         if (changedCoordinates.Count == 0)
             return new Maybe<SurfacePoint>.Nothing();
 
-        TriVertexNames changedCoordinate = changedCoordinates.First();
+        TriangleVertices changedCoordinate = changedCoordinates.First();
 
         startToEnd.BarycentricCoordinates.SetCoord(changedCoordinate, 0.0f);
         BarycentricVector intersectionVector =
@@ -125,7 +125,7 @@ public class Surface
 
 
         // The next face is the shares vertices that didnt change coordinates
-        HashSet<TriVertexNames> sharedVertices = new HashSet<TriVertexNames>((TriVertexNames[])Enum.GetValues(typeof(TriVertexNames)));
+        HashSet<TriangleVertices> sharedVertices = new HashSet<TriangleVertices>((TriangleVertices[])Enum.GetValues(typeof(TriangleVertices)));
         sharedVertices.RemoveWhere(sv => changedCoordinates.Contains(sv));
         HashSet<Face> facesSharingChangedCoordinates = start.Face.GetFacesFromSharedVertices(sharedVertices);
         if (facesSharingChangedCoordinates.Count == 0)

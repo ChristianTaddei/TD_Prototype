@@ -30,23 +30,23 @@ namespace Tests
         public void FacesShareVertices()
         {
             Assert.AreEqual(
-                new HashSet<TriVertexNames>(new TriVertexNames[] { TriVertexNames.B, TriVertexNames.C }),
-                Square_abcd.Triangle_abc.GetSharedVertices(Square_abcd.Triangle_bcd));
+                new HashSet<TriangleVertices>(new TriangleVertices[] { TriangleVertices.B, TriangleVertices.C }),
+                Square_ABCD.ABC.GetSharedVertices(Square_ABCD.BCD));
 
             Assert.AreEqual(
-                new HashSet<TriVertexNames>(new TriVertexNames[] { TriVertexNames.A, TriVertexNames.B }),
-                Square_abcd.Triangle_bcd.GetSharedVertices(Square_abcd.Triangle_abc));
+                new HashSet<TriangleVertices>(new TriangleVertices[] { TriangleVertices.A, TriangleVertices.B }),
+                Square_ABCD.BCD.GetSharedVertices(Square_ABCD.ABC));
         }
 
         [Test]
         public void GetFaceFromSharedVertices()
         {
             HashSet<Face> facesSharingVertices =
-                Square_abcd.Triangle_abc.GetFacesFromSharedVertices(
-                    new HashSet<TriVertexNames>(new TriVertexNames[] { TriVertexNames.B, TriVertexNames.C }));
+                Square_ABCD.ABC.GetFacesFromSharedVertices(
+                    new HashSet<TriangleVertices>(new TriangleVertices[] { TriangleVertices.B, TriangleVertices.C }));
 
             Assert.AreEqual(1, facesSharingVertices.Count);
-            Assert.True(facesSharingVertices.Contains(Square_abcd.Triangle_bcd));
+            Assert.True(facesSharingVertices.Contains(Square_ABCD.BCD));
         }
     }
 }

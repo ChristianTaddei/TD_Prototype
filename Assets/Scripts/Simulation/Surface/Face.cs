@@ -10,28 +10,28 @@ public class Face
 
     public Surface Surface { get; private set; }
 
-    public IPoint GetVertex(TriVertexNames n)
+    public IPoint GetVertex(TriangleVertices n)
     {
         switch (n)
         {
-            case TriVertexNames.A:
+            case TriangleVertices.A:
                 return triangle.a;
-            case TriVertexNames.B:
+            case TriangleVertices.B:
                 return triangle.b;
-            case TriVertexNames.C:
+            case TriangleVertices.C:
                 return triangle.c;
             default:
                 throw new Exception("Coordinate name does not exist");
         }
     }
 
-    public HashSet<TriVertexNames> GetSharedVertices(Face otherFace)
+    public HashSet<TriangleVertices> GetSharedVertices(Face otherFace)
     {
-        HashSet<TriVertexNames> sharedVertices = new HashSet<TriVertexNames>();
+        HashSet<TriangleVertices> sharedVertices = new HashSet<TriangleVertices>();
 
-        foreach (TriVertexNames v1 in Enum.GetValues(typeof(TriVertexNames)))
+        foreach (TriangleVertices v1 in Enum.GetValues(typeof(TriangleVertices)))
         {
-            foreach (TriVertexNames v2 in Enum.GetValues(typeof(TriVertexNames)))
+            foreach (TriangleVertices v2 in Enum.GetValues(typeof(TriangleVertices)))
             {
                 if (this.GetVertex(v1).Coordinates == otherFace.GetVertex(v2).Coordinates) sharedVertices.Add(v1);
             }
@@ -40,7 +40,7 @@ public class Face
         return sharedVertices;
     }
 
-    public HashSet<Face> GetFacesFromSharedVertices(HashSet<TriVertexNames> sharedVertices)
+    public HashSet<Face> GetFacesFromSharedVertices(HashSet<TriangleVertices> sharedVertices)
     {
         HashSet<Face> facesSharingVertices = new HashSet<Face>();
 

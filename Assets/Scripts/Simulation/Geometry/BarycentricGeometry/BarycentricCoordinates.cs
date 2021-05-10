@@ -9,32 +9,32 @@ public class BarycentricCoordinates
     public float b { get => _b; }
     public float c { get => _c; }
 
-    public float GetCoord(TriVertexNames coordName)
+    public float GetCoord(TriangleVertices coordName)
     {
         switch (coordName)
         {
-            case TriVertexNames.A:
+            case TriangleVertices.A:
                 return a;
-            case TriVertexNames.B:
+            case TriangleVertices.B:
                 return b;
-            case TriVertexNames.C:
+            case TriangleVertices.C:
                 return c;
             default:
                 throw new Exception("Coordinate name does not exist");
         }
     }
 
-    public void SetCoord(TriVertexNames coordName, float value)
+    public void SetCoord(TriangleVertices coordName, float value)
     {
         switch (coordName)
         {
-            case TriVertexNames.A:
+            case TriangleVertices.A:
                 _a = value; // TODO: _a readonly and to this in contructor
                 break;
-            case TriVertexNames.B:
+            case TriangleVertices.B:
                 _b = value;
                 break;
-            case TriVertexNames.C:
+            case TriangleVertices.C:
                 _c = value;
                 break;
             default:

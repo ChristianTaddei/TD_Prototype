@@ -36,57 +36,57 @@ namespace Tests
         {
             // TODO: should use different variables?
             Maybe<SurfacePath> path =
-                Square_abcd.Surface
+                Square_ABCD.Surface
                     .MakeDirectPath(
-                        Square_abcd.a,
-                        Square_abcd.b_abc);
+                        Square_ABCD.A,
+                        Square_ABCD.B_ABC);
 
             Assert.True(path.HasValue());
             Assert.AreEqual(
-                Square_abcd.a,
+                Square_ABCD.A,
                 path.Value.Start);
             Assert.AreEqual(
-                Square_abcd.b_abc,
+                Square_ABCD.B_ABC,
                 path.Value.End);
 
-            path = Square_abcd.Surface.MakeDirectPath(Square_abcd.b_abc, Square_abcd.c_abc);
+            path = Square_ABCD.Surface.MakeDirectPath(Square_ABCD.B_ABC, Square_ABCD.C_ABC);
             Assert.True(path.HasValue());
-            Assert.AreEqual(Square_abcd.b_abc, path.Value.Start);
-            Assert.AreEqual(Square_abcd.c_abc, path.Value.End);
+            Assert.AreEqual(Square_ABCD.B_ABC, path.Value.Start);
+            Assert.AreEqual(Square_ABCD.C_ABC, path.Value.End);
 
-            path = Square_abcd.Surface.MakeDirectPath(Square_abcd.a, Square_abcd.c_abc);
+            path = Square_ABCD.Surface.MakeDirectPath(Square_ABCD.A, Square_ABCD.C_ABC);
             Assert.True(path.HasValue());
-            Assert.AreEqual(Square_abcd.a, path.Value.Start);
-            Assert.AreEqual(Square_abcd.c_abc, path.Value.End);
+            Assert.AreEqual(Square_ABCD.A, path.Value.Start);
+            Assert.AreEqual(Square_ABCD.C_ABC, path.Value.End);
 
-            path = Square_abcd.Surface.MakeDirectPath(Square_abcd.b_bcd, Square_abcd.d);
+            path = Square_ABCD.Surface.MakeDirectPath(Square_ABCD.B_BCD, Square_ABCD.D);
             Assert.True(path.HasValue());
-            Assert.AreEqual(Square_abcd.b_bcd, path.Value.Start);
-            Assert.AreEqual(Square_abcd.d, path.Value.End);
+            Assert.AreEqual(Square_ABCD.B_BCD, path.Value.Start);
+            Assert.AreEqual(Square_ABCD.D, path.Value.End);
 
-            path = Square_abcd.Surface.MakeDirectPath(Square_abcd.c_bcd, Square_abcd.d);
+            path = Square_ABCD.Surface.MakeDirectPath(Square_ABCD.C_BCD, Square_ABCD.D);
             Assert.True(path.HasValue());
-            Assert.AreEqual(Square_abcd.c_bcd, path.Value.Start);
-            Assert.AreEqual(Square_abcd.d, path.Value.End);
+            Assert.AreEqual(Square_ABCD.C_BCD, path.Value.Start);
+            Assert.AreEqual(Square_ABCD.D, path.Value.End);
 
-            path = Square_abcd.Surface.MakeDirectPath(Square_abcd.b_bcd, Square_abcd.c_bcd);
+            path = Square_ABCD.Surface.MakeDirectPath(Square_ABCD.B_BCD, Square_ABCD.C_BCD);
             Assert.True(path.HasValue());
-            Assert.AreEqual(Square_abcd.b_bcd, path.Value.Start);
-            Assert.AreEqual(Square_abcd.c_bcd, path.Value.End);
+            Assert.AreEqual(Square_ABCD.B_BCD, path.Value.Start);
+            Assert.AreEqual(Square_ABCD.C_BCD, path.Value.End);
         }
 
         [Test]
         public void NeighbourFacesHaveDirectPath()
         {
-            Maybe<SurfacePath> path = Square_abcd.Surface.MakeDirectPath(Square_abcd.a, Square_abcd.d);
+            Maybe<SurfacePath> path = Square_ABCD.Surface.MakeDirectPath(Square_ABCD.A, Square_ABCD.D);
             Assert.True(path.HasValue());
-            Assert.AreEqual(Square_abcd.a, path.Value.Start);
-            Assert.AreEqual(Square_abcd.d, path.Value.End);
+            Assert.AreEqual(Square_ABCD.A, path.Value.Start);
+            Assert.AreEqual(Square_ABCD.D, path.Value.End);
 
             SurfacePoint m_bcd = new SurfacePoint(
-                Square_abcd.Triangle_bcd,
+                Square_ABCD.BCD,
                 new BarycentricVector(
-                    Square_abcd.Triangle_bcd.Triangle,
+                    Square_ABCD.BCD.Triangle,
                     new BarycentricCoordinates(0.5f, 0.5f, 0)));
 
             Assert.AreEqual(m_bcd.Coordinates, path.Value.Points[1].Coordinates);
