@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace Tests
 {
-    public class CartesianPointTests
+    public class CartesianVectorTests
     {
 
         [SetUp] 

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Surface
 {
-    private List<IPoint> vertices;
+    private List<IVector> vertices;
     private List<Face> faces;
 
     public List<Face> Faces { get => faces; set => faces = value; }
@@ -41,7 +41,7 @@ public class Surface
         return false;
     }
 
-    public Face AddFace(CartesianPoint cartesianPoint1, CartesianPoint cartesianPoint2, CartesianPoint cartesianPoint3)
+    public Face AddFace(CartesianVector cartesianPoint1, CartesianVector cartesianPoint2, CartesianVector cartesianPoint3)
     {
         Face newFace = new Face(this, new Triangle(cartesianPoint1, cartesianPoint2, cartesianPoint3));
         Faces.Add(newFace);
@@ -86,7 +86,7 @@ public class Surface
     {
         // TODO: Corner Cases, if more than one intersection found, use furthest away from start 
         // (so if start is an inters already its not automatically returned)
-        if (start.Coordinates == end.Coordinates)
+        if (start.Position == end.Position)
         {
             if (start.BarycentricVector.BarycentricCoordinates.a == 0.0
                 || start.BarycentricVector.BarycentricCoordinates.b == 0.0

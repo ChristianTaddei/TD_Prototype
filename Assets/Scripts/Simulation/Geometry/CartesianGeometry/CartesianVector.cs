@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CartesianVector : IVector
 {
-    public Vector3 Coordinates =>
+    public Vector3 Position =>
         new Vector3(
             cartesianCoordinates.x,
             cartesianCoordinates.y,
@@ -21,9 +21,9 @@ public class CartesianVector : IVector
         this.cartesianCoordinates = cartesianCoordinates;
     }
 
-    public static CartesianVector FromPoints(IPoint startPoint, IPoint endPoint)
+    public static CartesianVector FromPoints(IVector startPoint, IVector endPoint)
     {
-        return new CartesianVector(endPoint.Coordinates - startPoint.Coordinates);
+        return new CartesianVector(endPoint.Position - startPoint.Position);
     }
 
     public float Dot(CartesianVector v)

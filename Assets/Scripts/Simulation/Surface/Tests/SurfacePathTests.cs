@@ -69,7 +69,7 @@ namespace Tests
                         Assert.AreEqual(3, path.Value.Points.Count);
                         Assert.AreEqual(start, path.Value.Start);
                         Assert.AreEqual(end, path.Value.End);
-                        Assert.AreEqual(intersection.Coordinates, path.Value.Points[1].Coordinates);
+                        Assert.AreEqual(intersection.Position, path.Value.Points[1].Position);
                     };
 
             AssertPathHasOnlyOneInstersection(Square_ABCD.ABC_B, Square_ABCD.CenterOnABC, Square_ABCD.ADC_D);
@@ -117,16 +117,16 @@ namespace Tests
                 new BarycentricVector(
                     Rectangle_ABDE.FED,
                     new BarycentricCoordinates(2.0f / 3.0f, 0.0f, 1.0f / 3.0f)));
-            Assert.AreEqual(intersection.Coordinates, path.Value.Points[1].Coordinates);
+            Assert.AreEqual(intersection.Position, path.Value.Points[1].Position);
 
-            Assert.AreEqual(Rectangle_ABDE.m_CF_AFC.Coordinates, path.Value.Points[2].Coordinates);
+            Assert.AreEqual(Rectangle_ABDE.m_CF_AFC.Position, path.Value.Points[2].Position);
 
             intersection = new SurfacePoint(
                  Rectangle_ABDE.ACB,
                  new BarycentricVector(
                      Rectangle_ABDE.ACB,
                      new BarycentricCoordinates(1.0f / 3.0f, 2.0f / 3.0f, 0.0f)));
-            Assert.AreEqual(intersection.Coordinates, path.Value.Points[3].Coordinates);
+            Assert.AreEqual(intersection.Position, path.Value.Points[3].Position);
         }
     }
 }

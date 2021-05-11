@@ -8,15 +8,15 @@ public class Triangle
     public static IEnumerable<TriangleVerticesIdentifier> Vertices =>
         (TriangleVerticesIdentifier[])Enum.GetValues(typeof(TriangleVerticesIdentifier));
 
-    private readonly IPoint _A;
-    private readonly IPoint _B;
-    private readonly IPoint _C;
+    private readonly IVector _A;
+    private readonly IVector _B;
+    private readonly IVector _C;
 
-    public IPoint A { get => _A; }
-    public IPoint B { get => _B; }
-    public IPoint C { get => _C; }
+    public IVector A { get => _A; }
+    public IVector B { get => _B; }
+    public IVector C { get => _C; }
 
-    public Triangle(IPoint A, IPoint B, IPoint C)
+    public Triangle(IVector A, IVector B, IVector C)
     {
         _A = A;
         _B = B;
@@ -30,7 +30,7 @@ public class Triangle
         _C = t._C;
     }
 
-    public IPoint GetVertex(TriangleVerticesIdentifier v)
+    public IVector GetVertex(TriangleVerticesIdentifier v)
     {
         switch (v)
         {

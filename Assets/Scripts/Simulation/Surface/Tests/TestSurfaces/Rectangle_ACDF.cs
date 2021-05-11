@@ -11,12 +11,12 @@ public class Rectangle_ABDE
     */
     public static readonly Surface Surface = new Surface();
 
-    private static readonly CartesianPoint _A = new Vector3(2, 0, 0);
-    private static readonly CartesianPoint _B = new Vector3(2, 1, 0);
-    private static readonly CartesianPoint _C = new Vector3(1, 1, 0);
-    private static readonly CartesianPoint _D = new Vector3(0, 1, 0);
-    private static readonly CartesianPoint _E = new Vector3(0, 0, 0);
-    private static readonly CartesianPoint _F = new Vector3(1, 0, 0);
+    private static readonly CartesianVector _A = new Vector3(2, 0, 0);
+    private static readonly CartesianVector _B = new Vector3(2, 1, 0);
+    private static readonly CartesianVector _C = new Vector3(1, 1, 0);
+    private static readonly CartesianVector _D = new Vector3(0, 1, 0);
+    private static readonly CartesianVector _E = new Vector3(0, 0, 0);
+    private static readonly CartesianVector _F = new Vector3(1, 0, 0);
 
     public static readonly Face ACB = Surface.AddFace(_A, _C, _B);
     public static readonly Face AFC = Surface.AddFace(_A, _F, _C);

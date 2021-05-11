@@ -16,7 +16,7 @@ public class Face : Triangle
         {
             foreach (TriangleVerticesIdentifier v2 in Vertices)
             {
-                if (this.GetVertex(v1).Coordinates == otherFace.GetVertex(v2).Coordinates) sharedVertices.Add(v1);
+                if (this.GetVertex(v1).Position == otherFace.GetVertex(v2).Position) sharedVertices.Add(v1);
             }
         }
 

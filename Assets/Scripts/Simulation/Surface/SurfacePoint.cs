@@ -2,11 +2,11 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-public class SurfacePoint : IPoint
+public class SurfacePoint : IVector
 {
     public BarycentricVector BarycentricVector;
 
-    public Vector3 Coordinates => BarycentricVector.Coordinates;
+    public Vector3 Position => BarycentricVector.Position;
     public Face Face { get; private set; }
 
     public SurfacePoint(Face face, BarycentricVector barycentricVector)

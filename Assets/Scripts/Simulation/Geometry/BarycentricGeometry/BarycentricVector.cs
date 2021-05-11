@@ -3,16 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// A base and 3 cooridnates specifying a point in space
 public class BarycentricVector : IVector
 {
-    public Vector3 Coordinates =>
-        BarycentricCoordinates.a * _base.A.Coordinates
-        + BarycentricCoordinates.b * _base.B.Coordinates
-        + BarycentricCoordinates.c * _base.C.Coordinates;
-
-    public Triangle Base { get => _base; }
+    public Vector3 Position =>
+        BarycentricCoordinates.a * _base.A.Position
+        + BarycentricCoordinates.b * _base.B.Position
+        + BarycentricCoordinates.c * _base.C.Position;
 
     private readonly Triangle _base;
+    public Triangle Base { get => _base; }
+
     public readonly BarycentricCoordinates BarycentricCoordinates;
 
     public BarycentricVector(Triangle _base, BarycentricCoordinates coordinates)
@@ -25,16 +26,16 @@ public class BarycentricVector : IVector
 
     public static bool FromPoint(
         Triangle _base,
-        CartesianPoint cp,
+        CartesianVector cp,
         out BarycentricVector newBarycentricVector,
         bool project = false)
     {
         newBarycentricVector = new BarycentricVector(); //TODO: Monad
-        CartesianVector p = new CartesianVector(cp.Coordinates); // TODO: CV x CP
+        CartesianVector p = new CartesianVector(cp.Position); // TODO: CV x CP
 
-        CartesianVector a = _base.A.Coordinates;
-        CartesianVector b = _base.B.Coordinates;
-        CartesianVector c = _base.C.Coordinates;
+        CartesianVector a = _base.A.Position;
+        CartesianVector b = _base.B.Position;
+        CartesianVector c = _base.C.Position;
 
         CartesianVector n = (b - a).Cross(c - a);
         CartesianVector n_a = (c - b).Cross(p - b);
@@ -94,11 +95,11 @@ public class BarycentricVector : IVector
         // TODO: can find components of old base in new base algebrically?
         bool allSuccess = true;
         BarycentricVector oldBaseAInNewBase;
-        allSuccess &= BarycentricVector.FromPoint(newBase, _base.A.Coordinates, out oldBaseAInNewBase);
+        allSuccess &= BarycentricVector.FromPoint(newBase, _base.A.Position, out oldBaseAInNewBase);
         BarycentricVector oldBaseBInNewBase;
-        allSuccess &= BarycentricVector.FromPoint(newBase, _base.B.Coordinates, out oldBaseBInNewBase);
+        allSuccess &= BarycentricVector.FromPoint(newBase, _base.B.Position, out oldBaseBInNewBase);
         BarycentricVector oldBaseCInNewBase;
-        allSuccess &= BarycentricVector.FromPoint(newBase, _base.C.Coordinates, out oldBaseCInNewBase);
+        allSuccess &= BarycentricVector.FromPoint(newBase, _base.C.Position, out oldBaseCInNewBase);
 
         if(!allSuccess) {
            // base change should always be possible (needs projection probably)

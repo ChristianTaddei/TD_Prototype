@@ -11,10 +11,10 @@ public class Square_ABCD
     */
     public static readonly Surface Surface = new Surface();
 
-    private static readonly CartesianPoint _A = new Vector3(1, 0, 0);
-    private static readonly CartesianPoint _B = new Vector3(1, 1, 0);
-    private static readonly CartesianPoint _C = new Vector3(0, 1, 0);
-    private static readonly CartesianPoint _D = new Vector3(0, 0, 0);
+    private static readonly CartesianVector _A = new Vector3(1, 0, 0);
+    private static readonly CartesianVector _B = new Vector3(1, 1, 0);
+    private static readonly CartesianVector _C = new Vector3(0, 1, 0);
+    private static readonly CartesianVector _D = new Vector3(0, 0, 0);
 
     public static readonly Face ABC = Surface.AddFace(_A, _B, _C);
     public static readonly Face ADC = Surface.AddFace(_A, _D, _C);
