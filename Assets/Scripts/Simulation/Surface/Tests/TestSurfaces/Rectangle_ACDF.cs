@@ -26,48 +26,48 @@ public class Rectangle_ABDE
     public static readonly SurfacePoint AFC_A = new SurfacePoint(
        AFC,
        new BarycentricVector(
-           AFC.Triangle,
+           AFC,
            new BarycentricCoordinates(1, 0, 0)));
 
     public static readonly SurfacePoint ACB_B = new SurfacePoint(
         ACB,
         new BarycentricVector(
-        ACB.Triangle,
+        ACB,
         new BarycentricCoordinates(0, 0, 1)));
 
     public static readonly SurfacePoint FDC_D = new SurfacePoint(
        FDC,
        new BarycentricVector(
-           FDC.Triangle,
+           FDC,
            new BarycentricCoordinates(0, 1, 0)));
 
     public static readonly SurfacePoint FED_E = new SurfacePoint(
        FED,
        new BarycentricVector(
-           FED.Triangle,
+           FED,
            new BarycentricCoordinates(0, 1, 0)));
 
     public static readonly SurfacePoint AFC_F = new SurfacePoint(
        AFC,
        new BarycentricVector(
-           AFC.Triangle,
+           AFC,
            new BarycentricCoordinates(0, 1, 0)));
 
     public static readonly SurfacePoint m_AB_ACB = new SurfacePoint(
        ACB,
        new BarycentricVector(
-           ACB.Triangle,
+           ACB,
            new BarycentricCoordinates(0.5f, 0.0f, 0.5f)));
 
     public static readonly SurfacePoint m_AC_ACB = new SurfacePoint(
        ACB,
        new BarycentricVector(
-           ACB.Triangle,
+           ACB,
            new BarycentricCoordinates(0.5f, 0.5f, 0.0f)));
 
     public static readonly SurfacePoint m_CF_AFC = new SurfacePoint(
        AFC,
        new BarycentricVector(
-           AFC.Triangle,
+           AFC,
            new BarycentricCoordinates(0.0f, 0.5f, 0.5f)));
 }

@@ -4,34 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Face // TODO: Face is a triangle
+public class Face : Triangle
 {
-    private ITriangle triangle;
-
     public Surface Surface { get; private set; }
 
-    public IPoint GetVertex(TriangleVertices n)
+    public HashSet<TriangleVerticesIdentifier> GetSharedVertices(Face otherFace)
     {
-        switch (n)
-        {
-            case TriangleVertices.A:
-                return triangle.a;
-            case TriangleVertices.B:
-                return triangle.b;
-            case TriangleVertices.C:
-                return triangle.c;
-            default:
-                throw new Exception("Coordinate name does not exist");
-        }
-    }
+        HashSet<TriangleVerticesIdentifier> sharedVertices = new HashSet<TriangleVerticesIdentifier>();
 
-    public HashSet<TriangleVertices> GetSharedVertices(Face otherFace)
-    {
-        HashSet<TriangleVertices> sharedVertices = new HashSet<TriangleVertices>();
-
-        foreach (TriangleVertices v1 in Enum.GetValues(typeof(TriangleVertices)))
+        foreach (TriangleVerticesIdentifier v1 in Vertices)
         {
-            foreach (TriangleVertices v2 in Enum.GetValues(typeof(TriangleVertices)))
+            foreach (TriangleVerticesIdentifier v2 in Vertices)
             {
                 if (this.GetVertex(v1).Coordinates == otherFace.GetVertex(v2).Coordinates) sharedVertices.Add(v1);
             }
@@ -40,7 +23,7 @@ public class Face // TODO: Face is a triangle
         return sharedVertices;
     }
 
-    public HashSet<Face> GetFacesFromSharedVertices(HashSet<TriangleVertices> sharedVertices)
+    public HashSet<Face> GetFacesFromSharedVertices(HashSet<TriangleVerticesIdentifier> sharedVertices)
     {
         HashSet<Face> facesSharingVertices = new HashSet<Face>();
 
@@ -52,17 +35,12 @@ public class Face // TODO: Face is a triangle
         return facesSharingVertices;
     }
 
-    public Face(Surface s, ITriangle t)
+    public Face(Surface s, Triangle t) : base(t)
     {
-        this.triangle = t; // TODO: CCW as requirement or enforced?
-
         this.Surface = s;
         this.Surface.AddFace(this);
     }
 
-    public Face(Surface s, IPoint a, IPoint b, IPoint c) : this(s, new CartesianTriangle(a, b, c)) { }
-
-    public ITriangle Triangle { get => triangle; }
 
     // public List<Face> GetNeighbourFaces()
     // {

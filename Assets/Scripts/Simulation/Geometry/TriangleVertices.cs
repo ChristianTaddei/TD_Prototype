@@ -1,5 +1,5 @@
 
-public enum TriangleVertices
+public enum TriangleVerticesIdentifier
 {
     A, B, C
 }

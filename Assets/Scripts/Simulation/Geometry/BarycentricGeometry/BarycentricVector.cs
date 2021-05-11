@@ -6,16 +6,16 @@ using UnityEngine;
 public class BarycentricVector : IVector
 {
     public Vector3 Coordinates =>
-        BarycentricCoordinates.a * _base.a.Coordinates
-        + BarycentricCoordinates.b * _base.b.Coordinates
-        + BarycentricCoordinates.c * _base.c.Coordinates;
+        BarycentricCoordinates.a * _base.A.Coordinates
+        + BarycentricCoordinates.b * _base.B.Coordinates
+        + BarycentricCoordinates.c * _base.C.Coordinates;
 
-    public ITriangle Base { get => _base; }
+    public Triangle Base { get => _base; }
 
-    private readonly ITriangle _base;
+    private readonly Triangle _base;
     public readonly BarycentricCoordinates BarycentricCoordinates;
 
-    public BarycentricVector(ITriangle _base, BarycentricCoordinates coordinates)
+    public BarycentricVector(Triangle _base, BarycentricCoordinates coordinates)
     {
         this._base = _base;
         BarycentricCoordinates = coordinates;
@@ -24,7 +24,7 @@ public class BarycentricVector : IVector
     private BarycentricVector() { }
 
     public static bool FromPoint(
-        ITriangle _base,
+        Triangle _base,
         CartesianPoint cp,
         out BarycentricVector newBarycentricVector,
         bool project = false)
@@ -32,9 +32,9 @@ public class BarycentricVector : IVector
         newBarycentricVector = new BarycentricVector(); //TODO: Monad
         CartesianVector p = new CartesianVector(cp.Coordinates); // TODO: CV x CP
 
-        CartesianVector a = _base.a.Coordinates;
-        CartesianVector b = _base.b.Coordinates;
-        CartesianVector c = _base.c.Coordinates;
+        CartesianVector a = _base.A.Coordinates;
+        CartesianVector b = _base.B.Coordinates;
+        CartesianVector c = _base.C.Coordinates;
 
         CartesianVector n = (b - a).Cross(c - a);
         CartesianVector n_a = (c - b).Cross(p - b);
@@ -84,7 +84,7 @@ public class BarycentricVector : IVector
         return IsPointComplanarToBase() && BarycentricCoordinates.CheckInternal();
     }
 
-    public BarycentricVector ChangeBase(ITriangle newBase)
+    public BarycentricVector ChangeBase(Triangle newBase)
     {
         if (this._base == newBase)
         {
@@ -94,11 +94,11 @@ public class BarycentricVector : IVector
         // TODO: can find components of old base in new base algebrically?
         bool allSuccess = true;
         BarycentricVector oldBaseAInNewBase;
-        allSuccess &= BarycentricVector.FromPoint(newBase, _base.a.Coordinates, out oldBaseAInNewBase);
+        allSuccess &= BarycentricVector.FromPoint(newBase, _base.A.Coordinates, out oldBaseAInNewBase);
         BarycentricVector oldBaseBInNewBase;
-        allSuccess &= BarycentricVector.FromPoint(newBase, _base.b.Coordinates, out oldBaseBInNewBase);
+        allSuccess &= BarycentricVector.FromPoint(newBase, _base.B.Coordinates, out oldBaseBInNewBase);
         BarycentricVector oldBaseCInNewBase;
-        allSuccess &= BarycentricVector.FromPoint(newBase, _base.c.Coordinates, out oldBaseCInNewBase);
+        allSuccess &= BarycentricVector.FromPoint(newBase, _base.C.Coordinates, out oldBaseCInNewBase);
 
         if(!allSuccess) {
            // base change should always be possible (needs projection probably)

@@ -85,7 +85,7 @@ namespace Tests
             SurfacePoint intersection = new SurfacePoint( // TODO: intersections in rectangle file
                 Rectangle_ABDE.ACB,
                 new BarycentricVector(
-                    Rectangle_ABDE.ACB.Triangle,
+                    Rectangle_ABDE.ACB,
                     new BarycentricCoordinates(2.0f / 3.0f, 1.0f / 3.0f, 0.0f)));
             AssertPathHasOnlyOneInstersection(Rectangle_ABDE.AFC_F, intersection, Rectangle_ABDE.m_AB_ACB);
             AssertPathHasOnlyOneInstersection(Rectangle_ABDE.m_AB_ACB, intersection, Rectangle_ABDE.AFC_F);
@@ -93,7 +93,7 @@ namespace Tests
             intersection = new SurfacePoint(
                 Rectangle_ABDE.ACB,
                 new BarycentricVector(
-                    Rectangle_ABDE.ACB.Triangle,
+                    Rectangle_ABDE.ACB,
                     new BarycentricCoordinates(1.0f / 3.0f, 2.0f / 3.0f, 0.0f)));
             AssertPathHasOnlyOneInstersection(Rectangle_ABDE.ACB_B, intersection, Rectangle_ABDE.m_CF_AFC);
             AssertPathHasOnlyOneInstersection(Rectangle_ABDE.m_CF_AFC, intersection, Rectangle_ABDE.ACB_B);
@@ -115,7 +115,7 @@ namespace Tests
             SurfacePoint intersection = new SurfacePoint(
                 Rectangle_ABDE.FED,
                 new BarycentricVector(
-                    Rectangle_ABDE.FED.Triangle,
+                    Rectangle_ABDE.FED,
                     new BarycentricCoordinates(2.0f / 3.0f, 0.0f, 1.0f / 3.0f)));
             Assert.AreEqual(intersection.Coordinates, path.Value.Points[1].Coordinates);
 
@@ -124,7 +124,7 @@ namespace Tests
             intersection = new SurfacePoint(
                  Rectangle_ABDE.ACB,
                  new BarycentricVector(
-                     Rectangle_ABDE.ACB.Triangle,
+                     Rectangle_ABDE.ACB,
                      new BarycentricCoordinates(1.0f / 3.0f, 2.0f / 3.0f, 0.0f)));
             Assert.AreEqual(intersection.Coordinates, path.Value.Points[3].Coordinates);
         }

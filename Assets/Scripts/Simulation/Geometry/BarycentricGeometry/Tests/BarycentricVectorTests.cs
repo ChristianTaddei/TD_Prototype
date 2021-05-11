@@ -10,16 +10,16 @@ namespace Tests
 {
     public class BarycentricVectorTests
     {
-        CartesianTriangle regularBase =
-            new CartesianTriangle(
-                Vector3.right,
-                Vector3.up,
-                Vector3.forward);
-        CartesianTriangle randomBase =
-            new CartesianTriangle(
-                new Vector3(12.3643634f, -2.124f, -55.123f),
-                new Vector3(3.0f, 1.5f, -0.124f),
-                new Vector3(22.2f, 123.8f, 48.566666666f));
+        Triangle regularBase =
+            new Triangle(
+                new CartesianPoint(Vector3.right),
+                new CartesianPoint(Vector3.up),
+                new CartesianPoint(Vector3.forward));
+        Triangle randomBase =
+            new Triangle(
+                new CartesianPoint(new Vector3(12.3643634f, -2.124f, -55.123f)),
+                new CartesianPoint(new Vector3(3.0f, 1.5f, -0.124f)),
+                new CartesianPoint(new Vector3(22.2f, 123.8f, 48.566666666f)));
 
         BarycentricCoordinates originBC = new BarycentricCoordinates(0.0f, 0.0f, 0.0f);
         BarycentricCoordinates aBC = new BarycentricCoordinates(1.0f, 0.0f, 0.0f);
@@ -179,9 +179,9 @@ namespace Tests
              );
 
             Vector3 cartesianRandomBaseCentre =
-                randomBase.a.Coordinates / 3.0f +
-                randomBase.b.Coordinates / 3.0f +
-                randomBase.c.Coordinates / 3.0f;
+                randomBase.A.Coordinates / 3.0f +
+                randomBase.B.Coordinates / 3.0f +
+                randomBase.C.Coordinates / 3.0f;
             BarycentricVector.FromPoint(randomBase, cartesianRandomBaseCentre, out bv);
             AssertAreComponentWiseEquals(
                 cartesianRandomBaseCentre,
@@ -197,9 +197,9 @@ namespace Tests
         }
 
         [Test]
-        public void ChangeBaseDoesNotChangePointTest()
+        public void CoordinatesStayTheSame()
         {
-            Action<BarycentricVector, CartesianTriangle> assertionsToTest = (bv, otherBase) =>
+            Action<BarycentricVector, Triangle> AssertCoordinatesStayTheSame = (bv, otherBase) =>
             {
                 Assert.AreEqual( // Change base to itself
                     bv.Coordinates,
@@ -212,16 +212,16 @@ namespace Tests
                     bv.ChangeBase(otherBase).ChangeBase(bv.Base).Coordinates);
             };
 
-            CartesianTriangle otherRegBase =
-                new CartesianTriangle(
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0)
+            Triangle otherRegBase =
+                new Triangle(
+                    new CartesianPoint(new Vector3(0, 1, 0)),
+                    new CartesianPoint(new Vector3(0, 0, 1)),
+                    new CartesianPoint(new Vector3(1, 0, 0))
                 );
 
-            assertionsToTest(aRegBase, otherRegBase);
+            AssertCoordinatesStayTheSame(aRegBase, otherRegBase);
 
-            assertionsToTest(centerRegBase, otherRegBase);
+            AssertCoordinatesStayTheSame(centerRegBase, otherRegBase);
 
             // what happens when using planes that contains origin?
             // assertionsToTest(originRegBase, otherRegBase);

@@ -30,11 +30,11 @@ public class Surface
 
     private bool areNeighbours(Face f1, Face f2)
     {
-        foreach (IPoint v1 in f1.Triangle.Vertices)
+        foreach (TriangleVerticesIdentifier v1 in Triangle.Vertices)
         {
-            foreach (IPoint v2 in f2.Triangle.Vertices)
+            foreach (TriangleVerticesIdentifier v2 in Triangle.Vertices)
             {
-                if (v1 == v2) return true;
+                if (f1.GetVertex(v1) == f1.GetVertex(v2)) return true;
             }
         }
 
@@ -43,7 +43,7 @@ public class Surface
 
     public Face AddFace(CartesianPoint cartesianPoint1, CartesianPoint cartesianPoint2, CartesianPoint cartesianPoint3)
     {
-        Face newFace = new Face(this, cartesianPoint1, cartesianPoint2, cartesianPoint3);
+        Face newFace = new Face(this, new Triangle(cartesianPoint1, cartesianPoint2, cartesianPoint3));
         Faces.Add(newFace);
         return newFace;
     }
@@ -103,8 +103,8 @@ public class Surface
         BarycentricVector endInStartBase = end.BarycentricVector.ChangeBase(start.BarycentricVector.Base);
         BarycentricVector startToEnd = endInStartBase - start.BarycentricVector;
 
-        HashSet<TriangleVertices> changedCoordinates = new HashSet<TriangleVertices>();
-        foreach (TriangleVertices c in BarycentricCoordinates.Coordinates)
+        HashSet<TriangleVerticesIdentifier> changedCoordinates = new HashSet<TriangleVerticesIdentifier>();
+        foreach (TriangleVerticesIdentifier c in BarycentricCoordinates.Coordinates)
         {
             if (endInStartBase.BarycentricCoordinates.GetCoordinate(c) < 0) // TODO: Corner Case, <= 0 need refinement when starting at intersection
             {
@@ -117,18 +117,18 @@ public class Surface
             return new Maybe<SurfacePoint>.Nothing();
         }
 
-        TriangleVertices changedCoordinate = changedCoordinates.First();
+        TriangleVerticesIdentifier changedCoordinate = changedCoordinates.First();
 
         float coefficient = -start.BarycentricVector.BarycentricCoordinates.GetCoordinate(changedCoordinate)/startToEnd.BarycentricCoordinates.GetCoordinate(changedCoordinate); 
 
         BarycentricVector intersectionVector =
             new BarycentricVector(
-                start.Face.Triangle,
+                start.Face,
                 (start.BarycentricVector.BarycentricCoordinates + coefficient * startToEnd.BarycentricCoordinates));
         // Could check if this is normalized (must be if calc are correct)
         
 
-        HashSet<TriangleVertices> sharedVertices = new HashSet<TriangleVertices>(BarycentricCoordinates.Coordinates);
+        HashSet<TriangleVerticesIdentifier> sharedVertices = new HashSet<TriangleVerticesIdentifier>(BarycentricCoordinates.Coordinates);
         sharedVertices.RemoveWhere(sv => changedCoordinates.Contains(sv));
 
         HashSet<Face> facesSharingChangedCoordinates = start.Face.GetFacesFromSharedVertices(sharedVertices);
@@ -139,7 +139,7 @@ public class Surface
 
         Face nextFace = facesSharingChangedCoordinates.First(); // TODO: Corner Cases
 
-        intersectionVector = intersectionVector.ChangeBase(nextFace.Triangle);
+        intersectionVector = intersectionVector.ChangeBase(nextFace);
 
         return new Maybe<SurfacePoint>.Just(new SurfacePoint(nextFace, intersectionVector));
     }

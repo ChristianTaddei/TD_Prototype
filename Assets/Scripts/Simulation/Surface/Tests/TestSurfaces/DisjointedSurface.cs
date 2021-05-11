@@ -22,20 +22,20 @@ public class DisjointedSurface
         new SurfacePoint(
                 Face1,
                 new BarycentricVector(
-                    Face1.Triangle,
+                    Face1,
                     new BarycentricCoordinates(1, 0, 0)));
 
     public static readonly SurfacePoint PointOn2 =
         new SurfacePoint(
                 Face2,
                 new BarycentricVector(
-                    Face2.Triangle,
+                    Face2,
                     new BarycentricCoordinates(1, 0, 0)));
 
     public static readonly SurfacePoint BaricentreOf1 =
         new SurfacePoint(
                 Face1,
                 new BarycentricVector(
-                    Face1.Triangle,
+                    Face1,
                     new BarycentricCoordinates(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f)));
 }
