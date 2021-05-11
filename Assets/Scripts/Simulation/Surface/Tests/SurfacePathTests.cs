@@ -144,8 +144,8 @@ namespace Tests
 
             AssertPathHasOnlyOneInstersection(FoldedSquare_ABCD.ADC_D, FoldedSquare_ABCD.CenterOnABC, FoldedSquare_ABCD.ABC_B);
             AssertPathHasOnlyOneInstersection(FoldedSquare_ABCD.ADC_D, FoldedSquare_ABCD.CenterOnADC, FoldedSquare_ABCD.ABC_B);
-            // AssertPathHasOnlyOneInstersection(FoldedSquare_ABCD.ABC_B, FoldedSquare_ABCD.CenterOnABC, FoldedSquare_ABCD.ADC_D);
-            // AssertPathHasOnlyOneInstersection(FoldedSquare_ABCD.ABC_B, FoldedSquare_ABCD.ABC_A, FoldedSquare_ABCD.ADC_D);
+            AssertPathHasOnlyOneInstersection(FoldedSquare_ABCD.ABC_B, FoldedSquare_ABCD.CenterOnABC, FoldedSquare_ABCD.ADC_D);
+            AssertPathHasOnlyOneInstersection(FoldedSquare_ABCD.ABC_B, FoldedSquare_ABCD.CenterOnADC, FoldedSquare_ABCD.ADC_D);
         }
     }
 }

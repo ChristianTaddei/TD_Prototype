@@ -68,7 +68,6 @@ namespace Tests
 
             cv = new Vector3(0.0f, 0.0f, 1.5f);
             Assert.AreEqual(new Vector3(0.5f, 0.5f, 1.0f), cv.Project(Plane_45degs).Position);
-
         }
     }
 }

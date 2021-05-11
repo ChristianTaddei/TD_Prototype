@@ -160,18 +160,13 @@ namespace Tests
         }
 
         [Test]
-        public void FromPointTest()
+        public void ConstructFromCartesian()
         {
-            BarycentricVector bv;
-
-            Assert.False(BarycentricVector.FromPoint(regularBase, new Vector3(1, 2, 3), out bv));
-            Assert.False(BarycentricVector.FromPoint(randomBase, new Vector3(1, 2, 3), out bv));
-
-            BarycentricVector.FromPoint(regularBase, new Vector3(1, 0, 0), out bv);
+            BarycentricVector bv = new BarycentricVector(regularBase, new Vector3(1, 0, 0));
             Assert.AreEqual(new Vector3(1, 0, 0), bv.Position);
 
             Vector3 cartesianRegularBaseCentre = new Vector3(1, 1, 1) / 3.0f;
-            BarycentricVector.FromPoint(regularBase, new Vector3(1, 0, 0), out bv);
+            bv = new BarycentricVector(regularBase, new Vector3(1, 0, 0));
             AssertAreComponentWiseEquals(
                 new Vector3(1, 0, 0),
                 bv.Position,
@@ -182,7 +177,7 @@ namespace Tests
                 randomBase.A.Position / 3.0f +
                 randomBase.B.Position / 3.0f +
                 randomBase.C.Position / 3.0f;
-            BarycentricVector.FromPoint(randomBase, cartesianRandomBaseCentre, out bv);
+            bv = new BarycentricVector(randomBase, cartesianRandomBaseCentre);
             AssertAreComponentWiseEquals(
                 cartesianRandomBaseCentre,
                 bv.Position,

@@ -100,7 +100,8 @@ public class Surface
             }
         }
 
-        BarycentricVector endInStartBase = end.BarycentricVector.ChangeBase(start.BarycentricVector.Base);
+        CartesianVector projectedEnd = new CartesianVector(end.BarycentricVector.Position).Project(start.BarycentricVector.Base);
+        BarycentricVector endInStartBase = new BarycentricVector(start.BarycentricVector.Base, projectedEnd);
         BarycentricVector startToEnd = endInStartBase - start.BarycentricVector;
 
         HashSet<TriangleVerticesIdentifier> changedCoordinates = new HashSet<TriangleVerticesIdentifier>();
@@ -119,14 +120,14 @@ public class Surface
 
         TriangleVerticesIdentifier changedCoordinate = changedCoordinates.First();
 
-        float coefficient = -start.BarycentricVector.BarycentricCoordinates.GetCoordinate(changedCoordinate)/startToEnd.BarycentricCoordinates.GetCoordinate(changedCoordinate); 
+        float coefficient = -start.BarycentricVector.BarycentricCoordinates.GetCoordinate(changedCoordinate) / startToEnd.BarycentricCoordinates.GetCoordinate(changedCoordinate);
 
         BarycentricVector intersectionVector =
             new BarycentricVector(
                 start.Face,
                 (start.BarycentricVector.BarycentricCoordinates + coefficient * startToEnd.BarycentricCoordinates));
         // Could check if this is normalized (must be if calc are correct)
-        
+
 
         HashSet<TriangleVerticesIdentifier> sharedVertices = new HashSet<TriangleVerticesIdentifier>(BarycentricCoordinates.Coordinates);
         sharedVertices.RemoveWhere(sv => changedCoordinates.Contains(sv));

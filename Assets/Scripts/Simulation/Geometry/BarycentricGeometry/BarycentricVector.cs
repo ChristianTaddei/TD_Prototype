@@ -22,37 +22,23 @@ public class BarycentricVector : IVector
         BarycentricCoordinates = coordinates;
     }
 
-    private BarycentricVector() { }
-
-    public static bool FromPoint(
-        Triangle _base,
-        CartesianVector p,
-        out BarycentricVector newBarycentricVector,
-        bool project = false)
+    public BarycentricVector(Triangle _base, CartesianVector p) // TODO: project by default, want warning or something?
     {
-        newBarycentricVector = new BarycentricVector(); //TODO: Monad
+        this._base = _base;
 
         CartesianVector a = _base.A.Position;
         CartesianVector b = _base.B.Position;
         CartesianVector c = _base.C.Position;
 
+        if (!(CartesianVector.areComplanar(p - a, b - a, c - a)))
+        {
+            p = p.Project(_base);
+        }
+
         CartesianVector n = (b - a).Cross(c - a);
         CartesianVector n_a = (c - b).Cross(p - b);
         CartesianVector n_b = (a - c).Cross(p - c);
         CartesianVector n_c = (b - a).Cross(p - a);
-
-        if (!(CartesianVector.areComplanar(p - a,b - a, c - a)))
-        {
-            if (project)
-            {
-                // TODO: project
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         float squareMag = n.magnitude * n.magnitude;
 
@@ -63,9 +49,10 @@ public class BarycentricVector : IVector
                 n.Dot(n_c) / squareMag
             );
 
-        newBarycentricVector = new BarycentricVector(_base, barycentricCoordinates);
-        return true;
+        this.BarycentricCoordinates = barycentricCoordinates;
     }
+
+    private BarycentricVector() { }
 
     // public static implicit operator Vector3(BarycentricVector bv) => bv.Coordinates;
 
@@ -93,16 +80,14 @@ public class BarycentricVector : IVector
 
         // TODO: can find components of old base in new base algebrically?
         bool allSuccess = true;
-        BarycentricVector oldBaseAInNewBase;
-        allSuccess &= BarycentricVector.FromPoint(newBase, _base.A.Position, out oldBaseAInNewBase);
-        BarycentricVector oldBaseBInNewBase;
-        allSuccess &= BarycentricVector.FromPoint(newBase, _base.B.Position, out oldBaseBInNewBase);
-        BarycentricVector oldBaseCInNewBase;
-        allSuccess &= BarycentricVector.FromPoint(newBase, _base.C.Position, out oldBaseCInNewBase);
+        BarycentricVector oldBaseAInNewBase = new BarycentricVector(newBase, _base.A.Position);
+        BarycentricVector oldBaseBInNewBase = new BarycentricVector(newBase, _base.B.Position);
+        BarycentricVector oldBaseCInNewBase = new BarycentricVector(newBase, _base.C.Position);
 
-        if(!allSuccess) {
-           // base change should always be possible (needs projection probably)
-           throw new Exception("ChangeBase -> FromPoint failed");
+        if (!allSuccess)
+        {
+            // base change should always be possible (needs projection probably)
+            throw new Exception("ChangeBase -> FromPoint failed");
         }
 
         return new BarycentricVector(
