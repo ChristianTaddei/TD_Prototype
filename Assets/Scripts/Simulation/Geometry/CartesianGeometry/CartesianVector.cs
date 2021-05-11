@@ -42,6 +42,20 @@ public class CartesianVector : IVector
         return false;
     }
 
+    public CartesianVector Project(Triangle triangleDefiningPlane)
+    {
+        CartesianVector projectedVector;
+
+        CartesianVector Plane_AB = triangleDefiningPlane.B.Position - triangleDefiningPlane.A.Position;
+        CartesianVector Plane_AC = triangleDefiningPlane.C.Position - triangleDefiningPlane.A.Position;
+        CartesianVector Plane_n = Plane_AB.Cross(Plane_AC);
+        CartesianVector AP = this.Position - triangleDefiningPlane.A.Position;
+     
+        projectedVector = this.Position - (AP.Dot(Plane_n) / (Plane_n.magnitude * Plane_n.magnitude )) * Plane_n.Position;
+
+        return projectedVector;
+    }
+
     public static implicit operator CartesianVector(Vector3 v) => new CartesianVector(v);
     // public static implicit operator Vector3(CartesianVector ev) => ev.CartesianCoordinates;
 

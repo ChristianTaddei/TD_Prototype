@@ -16,6 +16,31 @@ namespace Tests
 
         }
 
+        # region Common assertions
+        Action<SurfacePoint, SurfacePoint, SurfacePoint> AssertPathHasOnlyOneInstersection =
+            (SurfacePoint start, SurfacePoint intersection, SurfacePoint end) =>
+                {
+                    Maybe<SurfacePath> path = start.Face.Surface.MakeDirectPath(start, end);
+
+                    Assert.True(path.HasValue());
+                    Assert.AreEqual(3, path.Value.Points.Count);
+                    Assert.AreEqual(start, path.Value.Start);
+                    Assert.AreEqual(end, path.Value.End);
+                    Assert.AreEqual(intersection.Position, path.Value.Points[1].Position);
+                };
+
+        Action<SurfacePoint, SurfacePoint> AssertPathIsJustStartAndEnd =
+            (SurfacePoint start, SurfacePoint end) =>
+                {
+                    Maybe<SurfacePath> path = start.Face.Surface.MakeDirectPath(start, end);
+
+                    Assert.True(path.HasValue());
+                    Assert.AreEqual(2, path.Value.Points.Count);
+                    Assert.AreEqual(start, path.Value.Start);
+                    Assert.AreEqual(end, path.Value.End);
+                };
+        #endregion
+
         [Test]
         public void DisjointedFacesNoPath()
         {
@@ -31,17 +56,6 @@ namespace Tests
         [Test]
         public void PointsOnSameFace()
         {
-            Action<SurfacePoint, SurfacePoint> AssertPathIsJustStartAndEnd =
-                (SurfacePoint start, SurfacePoint end) =>
-                    {
-                        Maybe<SurfacePath> path = start.Face.Surface.MakeDirectPath(start, end);
-
-                        Assert.True(path.HasValue());
-                        Assert.AreEqual(2, path.Value.Points.Count);
-                        Assert.AreEqual(start, path.Value.Start);
-                        Assert.AreEqual(end, path.Value.End);
-                    };
-
             AssertPathIsJustStartAndEnd(Square_ABCD.ABC_A, Square_ABCD.ABC_B);
             AssertPathIsJustStartAndEnd(Square_ABCD.ADC_D, Square_ABCD.ADC_A);
             AssertPathIsJustStartAndEnd(Square_ABCD.ADC_C, Square_ABCD.ADC_D);
@@ -56,17 +70,7 @@ namespace Tests
         [Test]
         public void PointsOnNeighbourFaces()
         {
-            Action<SurfacePoint, SurfacePoint, SurfacePoint> AssertPathHasOnlyOneInstersection =
-                (SurfacePoint start, SurfacePoint intersection, SurfacePoint end) =>
-                    {
-                        Maybe<SurfacePath> path = start.Face.Surface.MakeDirectPath(start, end);
 
-                        Assert.True(path.HasValue());
-                        Assert.AreEqual(3, path.Value.Points.Count);
-                        Assert.AreEqual(start, path.Value.Start);
-                        Assert.AreEqual(end, path.Value.End);
-                        Assert.AreEqual(intersection.Position, path.Value.Points[1].Position);
-                    };
 
             AssertPathHasOnlyOneInstersection(Square_ABCD.ABC_B, Square_ABCD.CenterOnABC, Square_ABCD.ADC_D);
             AssertPathHasOnlyOneInstersection(Square_ABCD.ADC_D, Square_ABCD.CenterOnABC, Square_ABCD.ABC_B);
@@ -123,6 +127,25 @@ namespace Tests
                      Rectangle_ABDE.ACB,
                      new BarycentricCoordinates(1.0f / 3.0f, 2.0f / 3.0f, 0.0f)));
             Assert.AreEqual(intersection.Position, path.Value.Points[3].Position);
+        }
+
+        [Test]
+        public void PointsOnNonComplanarFaces()
+        {
+            /*
+                C <<< B 
+                |  \  v  
+                D --- A 
+            */
+
+            // AssertPathIsJustStartAndEnd(FoldedSquare_ABCD.ADC_C, FoldedSquare_ABCD.ABC_A); // Corner
+            AssertPathIsJustStartAndEnd(FoldedSquare_ABCD.ABC_B, FoldedSquare_ABCD.ABC_A);
+            AssertPathIsJustStartAndEnd(FoldedSquare_ABCD.ABC_C, FoldedSquare_ABCD.ABC_B);
+
+            AssertPathHasOnlyOneInstersection(FoldedSquare_ABCD.ADC_D, FoldedSquare_ABCD.CenterOnABC, FoldedSquare_ABCD.ABC_B);
+            AssertPathHasOnlyOneInstersection(FoldedSquare_ABCD.ADC_D, FoldedSquare_ABCD.CenterOnADC, FoldedSquare_ABCD.ABC_B);
+            // AssertPathHasOnlyOneInstersection(FoldedSquare_ABCD.ABC_B, FoldedSquare_ABCD.CenterOnABC, FoldedSquare_ABCD.ADC_D);
+            // AssertPathHasOnlyOneInstersection(FoldedSquare_ABCD.ABC_B, FoldedSquare_ABCD.ABC_A, FoldedSquare_ABCD.ADC_D);
         }
     }
 }
