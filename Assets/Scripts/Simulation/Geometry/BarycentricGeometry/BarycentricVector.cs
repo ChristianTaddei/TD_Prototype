@@ -26,12 +26,11 @@ public class BarycentricVector : IVector
 
     public static bool FromPoint(
         Triangle _base,
-        CartesianVector cp,
+        CartesianVector p,
         out BarycentricVector newBarycentricVector,
         bool project = false)
     {
         newBarycentricVector = new BarycentricVector(); //TODO: Monad
-        CartesianVector p = new CartesianVector(cp.Position); // TODO: CV x CP
 
         CartesianVector a = _base.A.Position;
         CartesianVector b = _base.B.Position;
@@ -42,7 +41,7 @@ public class BarycentricVector : IVector
         CartesianVector n_b = (a - c).Cross(p - c);
         CartesianVector n_c = (b - a).Cross(p - a);
 
-        if (!(p - a).isComplanarTo(b - a, c - a))
+        if (!(CartesianVector.areComplanar(p - a,b - a, c - a)))
         {
             if (project)
             {

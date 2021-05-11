@@ -21,11 +21,6 @@ public class CartesianVector : IVector
         this.cartesianCoordinates = cartesianCoordinates;
     }
 
-    public static CartesianVector FromPoints(IVector startPoint, IVector endPoint)
-    {
-        return new CartesianVector(endPoint.Position - startPoint.Position);
-    }
-
     public float Dot(CartesianVector v)
     {
         return Vector3.Dot(this.cartesianCoordinates, v.cartesianCoordinates);
@@ -36,9 +31,9 @@ public class CartesianVector : IVector
         return new CartesianVector(Vector3.Cross(this.cartesianCoordinates, v.cartesianCoordinates));
     }
 
-    public bool isComplanarTo(CartesianVector a, CartesianVector b)
+    public static bool areComplanar(CartesianVector a, CartesianVector b, CartesianVector c)
     {
-        float mixedProd = this.Dot(a.Cross(b));
+        float mixedProd = a.Dot(b.Cross(c));
         if (System.Math.Abs(mixedProd) <= 0.001f)
         {
             return true;
