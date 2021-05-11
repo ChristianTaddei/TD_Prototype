@@ -17,6 +17,15 @@ namespace Tests
         }
 
         # region Common assertions
+        // TODO: when going for noncomplanars we need toleance, where to define it?
+        Action<SurfacePoint, SurfacePoint> AssertAreSamePosition =
+            (SurfacePoint a, SurfacePoint b) =>
+                {
+                    Assert.True(UnityEngine.Mathf.Abs(a.Position.x - b.Position.x) < 0.0001f);
+                    Assert.True(UnityEngine.Mathf.Abs(a.Position.y - b.Position.y) < 0.0001f);
+                    Assert.True(UnityEngine.Mathf.Abs(a.Position.z - b.Position.z) < 0.0001f);
+                };
+
         Action<SurfacePoint, SurfacePoint, SurfacePoint> AssertPathHasOnlyOneInstersection =
             (SurfacePoint start, SurfacePoint intersection, SurfacePoint end) =>
                 {
@@ -146,6 +155,38 @@ namespace Tests
             AssertPathHasOnlyOneInstersection(FoldedSquare_ABCD.ADC_D, FoldedSquare_ABCD.CenterOnADC, FoldedSquare_ABCD.ABC_B);
             AssertPathHasOnlyOneInstersection(FoldedSquare_ABCD.ABC_B, FoldedSquare_ABCD.CenterOnABC, FoldedSquare_ABCD.ADC_D);
             AssertPathHasOnlyOneInstersection(FoldedSquare_ABCD.ABC_B, FoldedSquare_ABCD.CenterOnADC, FoldedSquare_ABCD.ADC_D);
+
+            Maybe<SurfacePath> path = FoldedRectangle_ABDE.Surface
+                .MakeDirectPath(FoldedRectangle_ABDE.FED_E, FoldedRectangle_ABDE.FDC_C);
+
+            Assert.True(path.HasValue());
+            Assert.AreEqual(FoldedRectangle_ABDE.FED_E, path.Value.Start);
+            Assert.AreEqual(FoldedRectangle_ABDE.FDC_C, path.Value.End);
+            Assert.AreEqual(3, path.Value.Points.Count);
+
+            AssertAreSamePosition(FoldedRectangle_ABDE.m_FD_FDC, path.Value.Points[1]);
+        }
+
+        [Test]
+        public void PointsOnNonComplanarFarFaces()
+        {
+            Maybe<SurfacePath> path = FoldedRectangle_ABDE.Surface
+                    .MakeDirectPath(FoldedRectangle_ABDE.FED_E, FoldedRectangle_ABDE.ACB_B);
+
+            Assert.True(path.HasValue());
+            Assert.AreEqual(FoldedRectangle_ABDE.FED_E, path.Value.Start);
+            Assert.AreEqual(FoldedRectangle_ABDE.ACB_B, path.Value.End);
+            Assert.AreEqual(5, path.Value.Points.Count);
+
+            SurfacePoint intersection = new SurfacePoint(
+                FoldedRectangle_ABDE.FED,
+                new BarycentricVector(
+                    FoldedRectangle_ABDE.FED,
+                    new BarycentricCoordinates(2.0f / 3.0f, 0.0f, 1.0f / 3.0f)));
+
+            AssertAreSamePosition(intersection, path.Value.Points[1]);
+            AssertAreSamePosition(FoldedRectangle_ABDE.m_CF_AFC, path.Value.Points[2]);
+            // points[3]
         }
     }
 }

@@ -57,6 +57,7 @@ public class Surface
 
         List<SurfacePoint> crossingPoints = new List<SurfacePoint>();
 
+        int tries = 0;
         SurfacePoint currentPoint = startPoint;
         while (currentPoint.Face != endPoint.Face)
         {
@@ -69,6 +70,12 @@ public class Surface
             else
             {
                 return new Maybe<SurfacePath>.Nothing();
+            }
+
+            tries++;
+            if (tries > 1000)
+            {
+                throw new Exception("Too many tries to get intersection");
             }
         }
 
@@ -100,8 +107,30 @@ public class Surface
             }
         }
 
-        CartesianVector projectedEnd = new CartesianVector(end.BarycentricVector.Position).Project(start.BarycentricVector.Base);
-        BarycentricVector endInStartBase = new BarycentricVector(start.BarycentricVector.Base, projectedEnd);
+        Triangle flatStartBase = new Triangle(
+            new CartesianVector(
+                new Vector3(
+                    start.BarycentricVector.Base.A.Position.x,
+                    start.BarycentricVector.Base.A.Position.y,
+                    0)),
+            new CartesianVector(
+                new Vector3(
+                    start.BarycentricVector.Base.B.Position.x,
+                    start.BarycentricVector.Base.B.Position.y,
+                    0)),
+            new CartesianVector(
+                new Vector3(
+                    start.BarycentricVector.Base.C.Position.x,
+                    start.BarycentricVector.Base.C.Position.y,
+                    0)));
+
+        BarycentricVector flatEnd = new BarycentricVector(
+            flatStartBase,
+            new CartesianVector(end.BarycentricVector.Position).Project(flatStartBase));
+
+        BarycentricVector endInStartBase = new BarycentricVector(
+            start.BarycentricVector.Base,
+            flatEnd.BarycentricCoordinates);
         BarycentricVector startToEnd = endInStartBase - start.BarycentricVector;
 
         HashSet<TriangleVerticesIdentifier> changedCoordinates = new HashSet<TriangleVerticesIdentifier>();
