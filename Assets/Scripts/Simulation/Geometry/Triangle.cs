@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Triangle
 {
-    public static IEnumerable<TriangleVerticesIdentifier> Vertices =>
-        (TriangleVerticesIdentifier[])Enum.GetValues(typeof(TriangleVerticesIdentifier));
+    public static IEnumerable<TriangleVertexIdentifiers> Vertices =>
+        (TriangleVertexIdentifiers[])Enum.GetValues(typeof(TriangleVertexIdentifiers));
 
     private readonly IVector _A;
     private readonly IVector _B;
@@ -30,15 +30,15 @@ public class Triangle
         _C = t._C;
     }
 
-    public IVector GetVertex(TriangleVerticesIdentifier v)
+    public IVector GetVertex(TriangleVertexIdentifiers v)
     {
         switch (v)
         {
-            case TriangleVerticesIdentifier.A:
+            case TriangleVertexIdentifiers.A:
                 return A;
-            case TriangleVerticesIdentifier.B:
+            case TriangleVertexIdentifiers.B:
                 return B;
-            case TriangleVerticesIdentifier.C:
+            case TriangleVertexIdentifiers.C:
                 return C;
             default:
                 throw new Exception("Coordinate name does not exist");

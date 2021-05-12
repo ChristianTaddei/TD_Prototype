@@ -77,7 +77,7 @@ namespace Tests
         }
 
         [Test]
-        public void PointsOnNeighbourFaces()
+        public void PointsOnNearFaces()
         {
 
 
@@ -139,14 +139,8 @@ namespace Tests
         }
 
         [Test]
-        public void PointsOnNonComplanarFaces()
+        public void PointsOnNonComplanarNearFaces()
         {
-            /*
-                C <<< B 
-                |  \  v  
-                D --- A 
-            */
-
             // AssertPathIsJustStartAndEnd(FoldedSquare_ABCD.ADC_C, FoldedSquare_ABCD.ABC_A); // Corner
             AssertPathIsJustStartAndEnd(FoldedSquare_ABCD.ABC_B, FoldedSquare_ABCD.ABC_A);
             AssertPathIsJustStartAndEnd(FoldedSquare_ABCD.ABC_C, FoldedSquare_ABCD.ABC_B);

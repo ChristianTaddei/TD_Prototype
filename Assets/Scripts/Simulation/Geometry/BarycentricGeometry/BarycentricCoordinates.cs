@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class BarycentricCoordinates
 {
-    public static IEnumerable<TriangleVerticesIdentifier> Coordinates => (TriangleVerticesIdentifier[])Enum.GetValues(typeof(TriangleVerticesIdentifier)); 
+    public static IEnumerable<TriangleVertexIdentifiers> Coordinates => (TriangleVertexIdentifiers[])Enum.GetValues(typeof(TriangleVertexIdentifiers)); 
     private readonly float _a, _b, _c;
 
     public float a { get => _a; }
     public float b { get => _b; }
     public float c { get => _c; }
 
-    public float GetCoordinate(TriangleVerticesIdentifier coordName)
+    public float GetCoordinate(TriangleVertexIdentifiers coordName)
     {
         switch (coordName)
         {
-            case TriangleVerticesIdentifier.A:
+            case TriangleVertexIdentifiers.A:
                 return a;
-            case TriangleVerticesIdentifier.B:
+            case TriangleVertexIdentifiers.B:
                 return b;
-            case TriangleVerticesIdentifier.C:
+            case TriangleVertexIdentifiers.C:
                 return c;
             default:
                 throw new Exception("Coordinate name does not exist");

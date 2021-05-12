@@ -8,13 +8,13 @@ public class Face : Triangle
 {
     public Surface Surface { get; private set; }
 
-    public HashSet<TriangleVerticesIdentifier> GetSharedVertices(Face otherFace)
+    public HashSet<TriangleVertexIdentifiers> GetSharedVertices(Face otherFace)
     {
-        HashSet<TriangleVerticesIdentifier> sharedVertices = new HashSet<TriangleVerticesIdentifier>();
+        HashSet<TriangleVertexIdentifiers> sharedVertices = new HashSet<TriangleVertexIdentifiers>();
 
-        foreach (TriangleVerticesIdentifier v1 in Vertices)
+        foreach (TriangleVertexIdentifiers v1 in Vertices)
         {
-            foreach (TriangleVerticesIdentifier v2 in Vertices)
+            foreach (TriangleVertexIdentifiers v2 in Vertices)
             {
                 if (this.GetVertex(v1).Position == otherFace.GetVertex(v2).Position) sharedVertices.Add(v1);
             }
@@ -23,7 +23,7 @@ public class Face : Triangle
         return sharedVertices;
     }
 
-    public HashSet<Face> GetFacesFromSharedVertices(HashSet<TriangleVerticesIdentifier> sharedVertices)
+    public HashSet<Face> GetFacesFromSharedVertices(HashSet<TriangleVertexIdentifiers> sharedVertices)
     {
         HashSet<Face> facesSharingVertices = new HashSet<Face>();
 

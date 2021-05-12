@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class Surface
 {
-    private List<IVector> vertices;
     private List<Face> faces;
 
     public List<Face> Faces { get => faces; set => faces = value; }
@@ -30,9 +29,9 @@ public class Surface
 
     private bool areNeighbours(Face f1, Face f2)
     {
-        foreach (TriangleVerticesIdentifier v1 in Triangle.Vertices)
+        foreach (TriangleVertexIdentifiers v1 in Triangle.Vertices)
         {
-            foreach (TriangleVerticesIdentifier v2 in Triangle.Vertices)
+            foreach (TriangleVertexIdentifiers v2 in Triangle.Vertices)
             {
                 if (f1.GetVertex(v1) == f1.GetVertex(v2)) return true;
             }
@@ -107,6 +106,7 @@ public class Surface
             }
         }
 
+        // TODO: exctract some ugliness to Vector.FlatProject or something
         Triangle flatStartBase = new Triangle(
             new CartesianVector(
                 new Vector3(
@@ -133,8 +133,8 @@ public class Surface
             flatEnd.BarycentricCoordinates);
         BarycentricVector startToEnd = endInStartBase - start.BarycentricVector;
 
-        HashSet<TriangleVerticesIdentifier> changedCoordinates = new HashSet<TriangleVerticesIdentifier>();
-        foreach (TriangleVerticesIdentifier c in BarycentricCoordinates.Coordinates)
+        HashSet<TriangleVertexIdentifiers> changedCoordinates = new HashSet<TriangleVertexIdentifiers>();
+        foreach (TriangleVertexIdentifiers c in BarycentricCoordinates.Coordinates)
         {
             if (endInStartBase.BarycentricCoordinates.GetCoordinate(c) < 0) // TODO: Corner Case, <= 0 need refinement when starting at intersection
             {
@@ -147,7 +147,7 @@ public class Surface
             return new Maybe<SurfacePoint>.Nothing();
         }
 
-        TriangleVerticesIdentifier changedCoordinate = changedCoordinates.First();
+        TriangleVertexIdentifiers changedCoordinate = changedCoordinates.First();
 
         float coefficient = -start.BarycentricVector.BarycentricCoordinates.GetCoordinate(changedCoordinate) / startToEnd.BarycentricCoordinates.GetCoordinate(changedCoordinate);
 
@@ -158,7 +158,7 @@ public class Surface
         // Could check if this is normalized (must be if calc are correct)
 
 
-        HashSet<TriangleVerticesIdentifier> sharedVertices = new HashSet<TriangleVerticesIdentifier>(BarycentricCoordinates.Coordinates);
+        HashSet<TriangleVertexIdentifiers> sharedVertices = new HashSet<TriangleVertexIdentifiers>(BarycentricCoordinates.Coordinates);
         sharedVertices.RemoveWhere(sv => changedCoordinates.Contains(sv));
 
         HashSet<Face> facesSharingChangedCoordinates = start.Face.GetFacesFromSharedVertices(sharedVertices);
@@ -174,90 +174,30 @@ public class Surface
         return new Maybe<SurfacePoint>.Just(new SurfacePoint(nextFace, intersectionVector));
     }
 
-    // public bool TryMakeSurfacePointFrom(CartesianPoint cartesianPoint, out SurfacePoint newSurfacePoint)
-    // {
-    //     BarycentricVector bv;
+    // Surface made of squares
+    public Surface(float edgeSize) : this() 
+    {
+        for (int i = 0; i < edgeSize; i++)
+        {
+            for (int j = 0; j < edgeSize; j++)
+            {
+                makeSquareAt(new Vector3(i,j,0));
+            }
+        }
+    }
 
-    //     if (BarycentricVector.FromPoint(face.Triangle, cp, out bv))
-    //     {
-    //         newSurfacePoint = new SurfacePoint(face, bv);
-    //         return true;
-    //     }
+    public List<CartesianVector> makeSquareAt(Vector3 point)
+    {
+        CartesianVector _A = point + new Vector3(1, 0, 0);
+        CartesianVector _B = point + new Vector3(1, 1, 0);
+        CartesianVector _C = point + new Vector3(0, 1, 0);
+        CartesianVector _D = point + new Vector3(0, 0, 0);
 
-    //     newSurfacePoint = new SurfacePoint();
-    //     return false;
-    // }
+        Face ABC = AddFace(_A, _B, _C);
+        Face ADC = AddFace(_A, _D, _C);
 
-    // public List<Vertex> Vertices;
-    // public int[] Triangles { get; private set; }
-    // private List<Face> faces;
-
-    // public Surface(int edgeSize)
-    // {
-    //     // Vertices
-    //     Vertices = new Vertex[edgeSize * edgeSize].ToList();
-
-    //     // Create a vertex at every (i,j) integer position
-    //     int vc = 0;
-    //     for (int z = 0; z < edgeSize; z++)
-    //     {
-    //         for (int x = 0; x < edgeSize; x++)
-    //         {
-    //             Vertex newVertex = new Vertex();
-    //             Vertices[x + (edgeSize * z)] = newVertex;
-
-    //             // InitalState.VertexStates.Add(newVertex, new VertexState(new Vector3(x, 0, z)));
-    //         }
-    //     }
-
-    //     // Connect all vertices closer than 2.0f
-    //     foreach (Vertex vertex in Vertices)
-    //     {
-    //         foreach (Vertex otherVertex in Vertices)
-    //         {
-    //             // if (Vector3.Distance(
-    //             //         InitalState.VertexStates[vertex].Position,
-    //             //         InitalState.VertexStates[otherVertex].Position) < 2.0f
-    //             //     && !vertex.Equals(otherVertex))
-    //             // {
-    //             //     vertex.AddNeighbour(otherVertex);
-    //             // }
-    //         }
-    //     }
-
-    //     // Mesh and faces
-    //     Triangles = new int[(edgeSize - 1) * (edgeSize - 1) * 6];
-    //     faces = new List<Face>();
-
-    //     for (int i = 0; i < Vertices.Count; i++)
-    //     {
-    //         int row = i % edgeSize;
-    //         int col = i / edgeSize;
-
-    //         if (row < edgeSize - 1 && col < edgeSize - 1)
-    //         {
-    //             int triangleStartingIndex = (row + (col * (edgeSize - 1))) * 6;
-
-    //             faces.Add(new Face(
-    //                         Vertices[i],
-    //                         Vertices[i + 1],
-    //                         Vertices[i + edgeSize]));
-
-    //             Triangles[triangleStartingIndex] = i;
-    //             Triangles[triangleStartingIndex + 1] = i + edgeSize;
-    //             Triangles[triangleStartingIndex + 2] = i + 1; 
-
-    //             faces.Add(new Face(
-    //                         Vertices[i + 1 + edgeSize],
-    //                         Vertices[i + edgeSize],
-    //                         Vertices[i + 1]));
-
-    //             Triangles[triangleStartingIndex + 3] = i + 1 + edgeSize;
-    //             Triangles[triangleStartingIndex + 4] = i + 1;
-    //             Triangles[triangleStartingIndex + 5] = i + edgeSize; 
-    //         }
-    //     }
-    // }
+        return new List<CartesianVector>() { _A, _B, _C, _D };
+    }
 
     // // internal SurfacePoint MakeBPFrom2d(Vector3 destination2d)
     // // {
