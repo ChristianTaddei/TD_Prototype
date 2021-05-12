@@ -5,6 +5,7 @@ namespace Tests
 {
     public class SurfacePathTests
     {
+        [SetUp]
         public void Setup()
         {
 
