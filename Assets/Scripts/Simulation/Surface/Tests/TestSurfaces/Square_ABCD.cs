@@ -16,26 +16,26 @@ public class Square_ABCD
     private static readonly CartesianVector _C = new Vector3(0, 1, 0);
     private static readonly CartesianVector _D = new Vector3(0, 0, 0);
 
-    public static readonly Face ABC = Surface.AddFace(_A, _B, _C);
+    public static readonly Face ACB = Surface.AddFace(_A, _C, _B);
     public static readonly Face ADC = Surface.AddFace(_A, _D, _C);
 
     public static readonly SurfacePoint ABC_A = new SurfacePoint(
-       ABC,
+       ACB,
        new BarycentricVector(
-           ABC,
+           ACB,
            new BarycentricCoordinates(1, 0, 0)));
 
     public static readonly SurfacePoint ABC_B = new SurfacePoint(
-       ABC,
+       ACB,
        new BarycentricVector(
-           ABC,
-           new BarycentricCoordinates(0, 1, 0)));
+           ACB,
+           new BarycentricCoordinates(0, 0, 1)));
 
     public static readonly SurfacePoint ABC_C = new SurfacePoint(
-       ABC,
+       ACB,
        new BarycentricVector(
-           ABC,
-           new BarycentricCoordinates(0, 0, 1)));
+           ACB,
+           new BarycentricCoordinates(0, 1, 0)));
 
     public static readonly SurfacePoint ADC_A = new SurfacePoint(
        ADC,
@@ -56,10 +56,10 @@ public class Square_ABCD
            new BarycentricCoordinates(0, 0, 1)));
 
     public static readonly SurfacePoint CenterOnABC = new SurfacePoint(
-                ABC,
+                ACB,
                 new BarycentricVector(
-                    ABC,
-                    new BarycentricCoordinates(0.5f, 0.0f, 0.5f)));
+                    ACB,
+                    new BarycentricCoordinates(0.5f, 0.5f, 0.0f)));
 
     public static readonly SurfacePoint CenterOnADC = new SurfacePoint(
                 ADC,
@@ -68,15 +68,15 @@ public class Square_ABCD
                     new BarycentricCoordinates(0.5f, 0.0f, 0.5f)));
 
     public static readonly SurfacePoint Barycentre_ABC = new SurfacePoint(
-                ABC,
+                ACB,
                 new BarycentricVector(
-                    ABC,
+                    ACB,
                     new BarycentricCoordinates(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f)));
 
     public static readonly SurfacePoint PointNotOnEdge_ABC = new SurfacePoint(
-                ABC,
+                ACB,
                 new BarycentricVector(
-                    ABC,
+                    ACB,
                     new BarycentricCoordinates(2.0f / 3.0f, 1.0f / 6.0f, 1.0f / 6.0f)));
 
     public static readonly SurfacePoint Barycentre_ADC = new SurfacePoint(

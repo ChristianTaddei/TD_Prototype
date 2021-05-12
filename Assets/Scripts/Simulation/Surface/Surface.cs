@@ -181,136 +181,19 @@ public class Surface
         {
             for (int j = 0; j < edgeSize; j++)
             {
-                makeSquareAt(new Vector3(i,j,0));
+                addSquareAt(new Vector3(i,0,j));
             }
         }
     }
 
-    public List<CartesianVector> makeSquareAt(Vector3 point)
+    public void addSquareAt(Vector3 point)
     {
         CartesianVector _A = point + new Vector3(1, 0, 0);
-        CartesianVector _B = point + new Vector3(1, 1, 0);
-        CartesianVector _C = point + new Vector3(0, 1, 0);
+        CartesianVector _B = point + new Vector3(1, 0, 1);
+        CartesianVector _C = point + new Vector3(0, 0, 1);
         CartesianVector _D = point + new Vector3(0, 0, 0);
 
-        Face ABC = AddFace(_A, _B, _C);
+        Face ACB = AddFace(_A, _C, _B);
         Face ADC = AddFace(_A, _D, _C);
-
-        return new List<CartesianVector>() { _A, _B, _C, _D };
     }
-
-    // // internal SurfacePoint MakeBPFrom2d(Vector3 destination2d)
-    // // {
-    // //     foreach (Face face in faces)
-    // //     {
-    // //         SurfacePoint candidate = new SurfacePoint(
-    // //             InitalState,
-    // //             face,
-    // //             destination2d);
-
-    // //         if (candidate.Barycentrics.CheckInternal())
-    // //         {
-    // //             if(Vector3.Distance(destination2d, candidate.GetCartesians(InitalState)) > 0.1f){
-    // //                 // Debug.Log("makebp broke vector");
-    // //             }
-    // //             return candidate;
-    // //         }
-    // //     }
-
-    // //     Debug.Log("makeBP failed");
-    // //     return null;
-    // // }
-
-    // public bool TryGetFaceFromIndex(int triangleIndex, out Face face)
-    // {
-    //     // FIX: what if faces does not have a value?
-    //     if (triangleIndex < faces.Count)
-    //     {
-    //         face = faces[triangleIndex];
-    //         return true;
-    //     }
-
-    //     face = default;
-    //     return false;
-    // }
-
-    // // public SurfacePoint SumBarAndCart(BoardState boardState, SurfacePoint boardPosition, Vector3 movementVector)
-    // // {
-    // //     // Face face2d = ProjectFaceOn2D(boardPosition.Face);
-    // //     Vector3 destination = boardPosition.GetCartesians(boardState) + movementVector;
-    // //     Vector3 destination2d = new Vector3(
-    // //         destination.x, 0, destination.z);
-
-    // //     // BoardPosition flatBP = new BoardPosition(simState, face2d, destination2d);
-    // //     SurfacePoint flatBP = new SurfacePoint(SimulationManager.Instance.Board.InitalState, boardPosition.Face, destination2d);
-    // //     if (flatBP.Barycentrics.CheckInternal())
-    // //     {
-    // //         return new SurfacePoint(boardPosition.Face, flatBP.Barycentrics);
-    // //     }
-
-    // //     List<Face> farNeighbours = new List<Face>();
-    // //     foreach (Face nextFace in boardPosition.Face.GetNeighbourFaces())
-    // //     {
-    // //         // Face nextFace2d = ProjectFaceOn2D(nextFace);
-    // //         // flatBP = new BoardPosition(simState, nextFace2d, destination2d);
-    // //         flatBP = new SurfacePoint(SimulationManager.Instance.Board.InitalState, nextFace, destination2d);
-    // //         if (flatBP.Barycentrics.CheckInternal())
-    // //         {
-    // //             return new SurfacePoint(nextFace, flatBP.Barycentrics);
-    // //         }
-
-    // //         farNeighbours.AddRange(nextFace.GetNeighbourFaces());
-    // //     }
-
-    // //     foreach (Face nextFace in farNeighbours)
-    // //     {
-    // //         // Face nextFace2d = ProjectFaceOn2D(nextFace);
-    // //         // flatBP = new BoardPosition(simState, nextFace2d, destination2d);
-    // //         flatBP = new SurfacePoint(SimulationManager.Instance.Board.InitalState, nextFace, destination2d);
-    // //         if (flatBP.Barycentrics.CheckInternal())
-    // //         {
-    // //             return new SurfacePoint(nextFace, flatBP.Barycentrics);
-    // //         }
-    // //     }
-
-    // //     Debug.Log("find next face failed");
-    // //     return null;
-    // // }
-
-    // // private Face ProjectFaceOn2D(Face face)
-    // // {
-    // //     return new Face(
-    // //                  new Vertex(
-    // //                      new Vector3(
-    // //                         face.a.Position.x,
-    // //                         0,
-    // //                         face.a.Position.z)),
-    // //                  new Vertex(
-    // //                      new Vector3(
-    // //                         face.b.Position.x,
-    // //                         0,
-    // //                         face.b.Position.z)),
-    // //                  new Vertex(
-    // //                      new Vector3(
-    // //                         face.c.Position.x,
-    // //                         0,
-    // //                         face.c.Position.z)));
-    // // }
-
-    // // private static Vector3 ProjectVectorOnFace(Face face, Vector3 vector)
-    // // {
-    // //     Vector3 op = vector;
-    // //     Vector3 ap = face.a.Position;
-    // //     Vector3 n = Vector3.Cross(
-    // //         face.b.Position - face.a.Position,
-    // //         face.c.Position - face.a.Position);
-    // //     Vector3 projectedDest = op - (Vector3.Dot(ap, n) / n.sqrMagnitude) * n;
-    // //     return projectedDest;
-    // // }
-
-    // // public BoardPosition ToBoardPosition(Vertex vertex)
-    // // {
-    // //     Face foundFace = faces.First(face => face.a == vertex || face.b == vertex || face.c == vertex);
-    // //     return new BoardPosition(foundFace, vertex.Position);
-    // // }
 }
