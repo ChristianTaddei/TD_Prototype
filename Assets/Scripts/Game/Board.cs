@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,16 +31,8 @@ public class Board
         }
     }
 
-    // public bool TryGetFaceFromIndex(int triangleIndex, out Face face)
-    // {
-    //     // FIXME: what if faces does not have a value?
-    //     if (triangleIndex < faces.Count)
-    //     {
-    //         face = faces[triangleIndex];
-    //         return true;
-    //     }
-
-    //     face = default;
-    //     return false;
-    // }
+    public bool TryGetSurfacePointFromPosition(int triangleIndex, Vector3 point, out SurfacePoint sp)
+    {
+        return surface.TryGetSurfacePointFromPosition(triangleIndex, point, out sp);
+    }
 }

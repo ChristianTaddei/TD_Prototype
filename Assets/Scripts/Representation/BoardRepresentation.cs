@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class BoardRepresentation : MonoBehaviour
 {
+    private Board board;
+
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
     private MeshCollider meshCollider;
@@ -46,11 +48,15 @@ public class BoardRepresentation : MonoBehaviour
 
     public static BoardRepresentation MakeFrom(Board board)
     {
+
+
         // Debug.Log("made terrain");
         GameObject representationGameObject = new GameObject("Terrain");
 
         BoardRepresentation terrainRepresentation = representationGameObject
             .AddComponent<BoardRepresentation>();
+
+        terrainRepresentation.board = board;
 
         representationGameObject.tag = "Terrain";
 
@@ -62,7 +68,7 @@ public class BoardRepresentation : MonoBehaviour
         // have to initialize vertices (cant wait sync) to initialize triangles
         terrainRepresentation.vertices = board.Vertices.ToArray<Vector3>();
         terrainRepresentation.terrainMesh.vertices = terrainRepresentation.vertices;
-        terrainRepresentation.terrainMesh.triangles = board.Triangles.ToArray<int>() ;
+        terrainRepresentation.terrainMesh.triangles = board.Triangles.ToArray<int>();
 
         // TODO: material from representationManager?
         terrainRepresentation.SetupMaterial(Resources.Load("Materials/GroundMaterial", typeof(Material)) as Material);
@@ -74,6 +80,11 @@ public class BoardRepresentation : MonoBehaviour
         // terrainRepresentation.meshCollider.sharedMesh = terrainRepresentation.terrainMesh;
 
         return terrainRepresentation;
+    }
+
+    internal bool TryGetSurfacePointFromPosition(int triangleIndex, Vector3 point, out SurfacePoint sp)
+    {
+        return board.TryGetSurfacePointFromPosition(triangleIndex, point, out sp);
     }
 
     public void SetupComponents(MeshFilter meshFilter, MeshRenderer meshRenderer, MeshCollider meshCollider)

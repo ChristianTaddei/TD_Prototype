@@ -40,6 +40,12 @@ public class Surface
         return false;
     }
 
+    public bool TryGetSurfacePointFromPosition(int triangleIndex, Vector3 point, out SurfacePoint sp)
+    {
+        sp = new SurfacePoint(faces[triangleIndex], new BarycentricVector(faces[triangleIndex], new CartesianVector(point)));
+        return true;
+    }
+
     public Face AddFace(CartesianVector cartesianPoint1, CartesianVector cartesianPoint2, CartesianVector cartesianPoint3)
     {
         Face newFace = new Face(this, new Triangle(cartesianPoint1, cartesianPoint2, cartesianPoint3));
@@ -175,13 +181,13 @@ public class Surface
     }
 
     // Surface made of squares
-    public Surface(float edgeSize) : this() 
+    public Surface(float edgeSize) : this()
     {
         for (int i = 0; i < edgeSize; i++)
         {
             for (int j = 0; j < edgeSize; j++)
             {
-                addSquareAt(new Vector3(i,0,j));
+                addSquareAt(new Vector3(i, 0, j));
             }
         }
     }
