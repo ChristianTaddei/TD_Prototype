@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,12 +8,18 @@ public class InputManager : MonoBehaviour
 
     private CameraController mainCameraController;
 
+    private GameObject marker;
     void Start()
     {
         Instance = this;
         mainCameraController = Camera.main.GetComponent<CameraController>();
+
+        marker = (GameObject)Resources.Load("Prefabs/marker");
+        marker.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
     }
 
+    private SurfacePoint oldP = null;
+    private List<GameObject> markers = new List<GameObject>();
     void Update()
     {
         mainCameraController.MoveCamera(
@@ -21,10 +28,38 @@ public class InputManager : MonoBehaviour
         mainCameraController.ZoomCamera(
             Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime);
 
-        if(LeftClick()){
-            SurfacePoint sp;
-            if(TryGetSurfacePointUnderCursor(out sp)){
-                Instantiate(Resources.Load("Prefabs/Tower"), sp.Position, Quaternion.identity);
+        if (LeftClick())
+        {
+            SurfacePoint newP;
+            if (TryGetSurfacePointUnderCursor(out newP))
+            {
+                if (oldP == null)
+                {
+                    oldP = newP;
+                }
+
+                else
+                {
+                    foreach (GameObject m in markers)
+                    {
+                        GameObject.Destroy(m);
+                    }
+                    markers.Clear();
+
+                    Maybe<SurfacePath> path = newP.Face.Surface.MakeDirectPath(oldP, newP);
+                    if (path.HasValue())
+                    {
+                        foreach (SurfacePoint pathPoint in path.Value.Points)
+                        {
+                            markers.Add(Instantiate(marker, pathPoint.Position, Quaternion.identity));
+                        }
+                    }
+                    else {
+                        Debug.Log("failed to make path");
+                    }
+
+                    oldP = null;
+                }
             }
         }
     }

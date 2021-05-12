@@ -10,13 +10,13 @@ public class DisjointedSurface
         Surface.AddFace(
             (CartesianVector)new Vector3(0, 0, 0),
             (CartesianVector)new Vector3(1, 0, 0),
-            (CartesianVector)new Vector3(0, 1, 0));
+            (CartesianVector)new Vector3(0, 0, 1));
 
     public static readonly Face Face2 =
         Surface.AddFace(
-            (CartesianVector)new Vector3(1, 1, 0),
-            (CartesianVector)new Vector3(2, 1, 0),
-            (CartesianVector)new Vector3(1, 2, 0));
+            (CartesianVector)new Vector3(1, 0, 1),
+            (CartesianVector)new Vector3(2, 0, 1),
+            (CartesianVector)new Vector3(1, 0, 2));
 
     public static readonly SurfacePoint PointOn1 =
         new SurfacePoint(

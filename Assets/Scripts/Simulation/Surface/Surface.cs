@@ -117,18 +117,18 @@ public class Surface
             new CartesianVector(
                 new Vector3(
                     start.BarycentricVector.Base.A.Position.x,
-                    start.BarycentricVector.Base.A.Position.y,
-                    0)),
+                    0,
+                    start.BarycentricVector.Base.A.Position.z)),
             new CartesianVector(
                 new Vector3(
                     start.BarycentricVector.Base.B.Position.x,
-                    start.BarycentricVector.Base.B.Position.y,
-                    0)),
+                    0,
+                    start.BarycentricVector.Base.B.Position.z)),
             new CartesianVector(
                 new Vector3(
                     start.BarycentricVector.Base.C.Position.x,
-                    start.BarycentricVector.Base.C.Position.y,
-                    0)));
+                    0,
+                    start.BarycentricVector.Base.C.Position.z)));
 
         BarycentricVector flatEnd = new BarycentricVector(
             flatStartBase,

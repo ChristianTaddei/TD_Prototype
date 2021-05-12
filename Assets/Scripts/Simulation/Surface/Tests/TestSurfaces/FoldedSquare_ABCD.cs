@@ -13,7 +13,7 @@ public class FoldedSquare_ABCD
 
     private static readonly CartesianVector _A = new Vector3(1, 0, 0);
     private static readonly CartesianVector _B = new Vector3(1, 1, 1);
-    private static readonly CartesianVector _C = new Vector3(0, 1, 0);
+    private static readonly CartesianVector _C = new Vector3(0, 0, 1);
     private static readonly CartesianVector _D = new Vector3(0, 0, 0);
 
     public static readonly Face ABC = Surface.AddFace(_A, _B, _C);

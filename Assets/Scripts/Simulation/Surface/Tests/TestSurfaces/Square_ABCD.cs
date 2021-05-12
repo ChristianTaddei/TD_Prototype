@@ -12,8 +12,8 @@ public class Square_ABCD
     public static readonly Surface Surface = new Surface();
 
     private static readonly CartesianVector _A = new Vector3(1, 0, 0);
-    private static readonly CartesianVector _B = new Vector3(1, 1, 0);
-    private static readonly CartesianVector _C = new Vector3(0, 1, 0);
+    private static readonly CartesianVector _B = new Vector3(1, 0, 1);
+    private static readonly CartesianVector _C = new Vector3(0, 0, 1);
     private static readonly CartesianVector _D = new Vector3(0, 0, 0);
 
     public static readonly Face ACB = Surface.AddFace(_A, _C, _B);
