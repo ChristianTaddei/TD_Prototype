@@ -1,5 +1,7 @@
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Tests
 {
@@ -66,26 +68,24 @@ namespace Tests
         [Test]
         public void PointsOnSameFace()
         {
-            AssertPathIsJustStartAndEnd(Square_ABCD.ABC_A, Square_ABCD.ABC_B);
+            AssertPathIsJustStartAndEnd(Square_ABCD.ACB_A, Square_ABCD.ACB_B);
             AssertPathIsJustStartAndEnd(Square_ABCD.ADC_D, Square_ABCD.ADC_A);
             AssertPathIsJustStartAndEnd(Square_ABCD.ADC_C, Square_ABCD.ADC_D);
-            AssertPathIsJustStartAndEnd(Square_ABCD.CenterOnABC, Square_ABCD.ABC_B);
-            AssertPathIsJustStartAndEnd(Square_ABCD.ABC_C, Square_ABCD.CenterOnABC);
+            AssertPathIsJustStartAndEnd(Square_ABCD.CenterOnACB, Square_ABCD.ACB_B);
+            AssertPathIsJustStartAndEnd(Square_ABCD.ACB_C, Square_ABCD.CenterOnACB);
             AssertPathIsJustStartAndEnd(Square_ABCD.Barycentre_ADC, Square_ABCD.ADC_D);
             AssertPathIsJustStartAndEnd(Square_ABCD.ADC_D, Square_ABCD.Barycentre_ADC);
-            AssertPathIsJustStartAndEnd(Square_ABCD.PointNotOnEdge_ABC, Square_ABCD.Barycentre_ABC);
+            AssertPathIsJustStartAndEnd(Square_ABCD.PointNotOnEdge_ACB, Square_ABCD.Barycentre_ACB);
             // TODO: tests points not on edges
         }
 
         [Test]
         public void PointsOnNearFaces()
         {
-
-
-            AssertPathHasOnlyOneInstersection(Square_ABCD.ABC_B, Square_ABCD.CenterOnABC, Square_ABCD.ADC_D);
-            AssertPathHasOnlyOneInstersection(Square_ABCD.ADC_D, Square_ABCD.CenterOnABC, Square_ABCD.ABC_B);
-            AssertPathHasOnlyOneInstersection(Square_ABCD.ABC_B, Square_ABCD.CenterOnADC, Square_ABCD.ADC_D);
-            AssertPathHasOnlyOneInstersection(Square_ABCD.ADC_D, Square_ABCD.CenterOnADC, Square_ABCD.ABC_B);
+            AssertPathHasOnlyOneInstersection(Square_ABCD.ACB_B, Square_ABCD.CenterOnACB, Square_ABCD.ADC_D);
+            AssertPathHasOnlyOneInstersection(Square_ABCD.ADC_D, Square_ABCD.CenterOnACB, Square_ABCD.ACB_B);
+            AssertPathHasOnlyOneInstersection(Square_ABCD.ACB_B, Square_ABCD.CenterOnADC, Square_ABCD.ADC_D);
+            AssertPathHasOnlyOneInstersection(Square_ABCD.ADC_D, Square_ABCD.CenterOnADC, Square_ABCD.ACB_B);
 
             // TODO: Corner Cases, what to do for paths on the other diagonal but with start and end on different faces?
 
@@ -114,6 +114,8 @@ namespace Tests
         [Test]
         public void PointsOnFarFaces()
         {
+
+            #region Bottom left to top right
             Maybe<SurfacePath> path = Rectangle_ABDE.Surface
                 .MakeDirectPath(Rectangle_ABDE.FED_E, Rectangle_ABDE.ACB_B);
 
@@ -137,12 +139,12 @@ namespace Tests
                      Rectangle_ABDE.ACB,
                      new BarycentricCoordinates(1.0f / 3.0f, 2.0f / 3.0f, 0.0f)));
             Assert.AreEqual(intersection.Position, path.Value.Points[3].Position);
+            #endregion
         }
 
         [Test]
         public void PointsOnNonComplanarNearFaces()
         {
-            // AssertPathIsJustStartAndEnd(FoldedSquare_ABCD.ADC_C, FoldedSquare_ABCD.ABC_A); // Corner
             AssertPathIsJustStartAndEnd(FoldedSquare_ABCD.ABC_B, FoldedSquare_ABCD.ABC_A);
             AssertPathIsJustStartAndEnd(FoldedSquare_ABCD.ABC_C, FoldedSquare_ABCD.ABC_B);
 
@@ -182,6 +184,49 @@ namespace Tests
             AssertAreSamePosition(intersection, path.Value.Points[1]);
             AssertAreSamePosition(FoldedRectangle_ABDE.m_CF_AFC, path.Value.Points[2]);
             // points[3]
+        }
+
+        // TODO: auto project, so check proj on high surfaces{
+
+        [Test]
+        public void LargeSquareLongDiagonalBackUp()
+        {
+            SurfacePoint start = default;
+            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(3.122f, 0, 2.05f), out start));
+            // Assert.AreEqual(new Vector3(3.1f, 0, 2.1f), start.Position);
+
+            SurfacePoint end = default;
+            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(0.8f, 0, 5.1f), out end));
+            // Assert.AreEqual(new Vector3(0.8f, 0, 5.1f), end.Position);
+
+            Maybe<SurfacePath> path = LargeSquare.Surface.MakeDirectPath(start, end);
+            Assert.True(path.HasValue());
+            // Assert.AreEqual(8, path.Value.Points.Count);
+
+            Assert.AreEqual(new HashSet<SurfacePoint>(path.Value.Points).Count, path.Value.Points.Count);
+            bool duplicates = false;
+            foreach (SurfacePoint p1 in path.Value.Points)
+            {
+                foreach (SurfacePoint p2 in path.Value.Points)
+                {
+                    if (
+                        p1 != p2 &&
+                        UnityEngine.Mathf.Abs(p1.Position.x - p2.Position.x) < 0.0001f
+                        && UnityEngine.Mathf.Abs(p1.Position.y - p2.Position.y) < 0.0001f
+                        && UnityEngine.Mathf.Abs(p1.Position.z - p2.Position.z) < 0.0001f)
+                    {
+                        duplicates = true;
+                    }
+                }
+            }
+            Assert.False(duplicates);
+
+        }
+
+        [Test]
+        public void CornerCases()
+        {
+            AssertPathIsJustStartAndEnd(Square_ABCD.ADC_C, Square_ABCD.ACB_A); 
         }
     }
 }

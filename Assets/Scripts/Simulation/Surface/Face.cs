@@ -35,6 +35,20 @@ public class Face : Triangle
         return facesSharingVertices;
     }
 
+    public HashSet<Face> GetFacesFromAtLeastOneSharedVertex(HashSet<TriangleVertexIdentifiers> sharedVertices)
+    {
+        HashSet<Face> facesSharingVertices = new HashSet<Face>();
+
+        foreach (Face candidate in this.Surface.Faces)
+        {
+            foreach(TriangleVertexIdentifiers v in this.GetSharedVertices(candidate)){
+                if(sharedVertices.Contains(v)) facesSharingVertices.Add(candidate);
+            }
+        }
+
+        return facesSharingVertices;
+    }
+
     public Face(Surface s, Triangle t) : base(t)
     {
         this.Surface = s;

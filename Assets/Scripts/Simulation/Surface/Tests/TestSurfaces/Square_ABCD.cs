@@ -19,19 +19,19 @@ public class Square_ABCD
     public static readonly Face ACB = Surface.AddFace(_A, _C, _B);
     public static readonly Face ADC = Surface.AddFace(_A, _D, _C);
 
-    public static readonly SurfacePoint ABC_A = new SurfacePoint(
+    public static readonly SurfacePoint ACB_A = new SurfacePoint(
        ACB,
        new BarycentricVector(
            ACB,
            new BarycentricCoordinates(1, 0, 0)));
 
-    public static readonly SurfacePoint ABC_B = new SurfacePoint(
+    public static readonly SurfacePoint ACB_B = new SurfacePoint(
        ACB,
        new BarycentricVector(
            ACB,
            new BarycentricCoordinates(0, 0, 1)));
 
-    public static readonly SurfacePoint ABC_C = new SurfacePoint(
+    public static readonly SurfacePoint ACB_C = new SurfacePoint(
        ACB,
        new BarycentricVector(
            ACB,
@@ -55,7 +55,7 @@ public class Square_ABCD
            ADC,
            new BarycentricCoordinates(0, 0, 1)));
 
-    public static readonly SurfacePoint CenterOnABC = new SurfacePoint(
+    public static readonly SurfacePoint CenterOnACB = new SurfacePoint(
                 ACB,
                 new BarycentricVector(
                     ACB,
@@ -67,13 +67,13 @@ public class Square_ABCD
                     ADC,
                     new BarycentricCoordinates(0.5f, 0.0f, 0.5f)));
 
-    public static readonly SurfacePoint Barycentre_ABC = new SurfacePoint(
+    public static readonly SurfacePoint Barycentre_ACB = new SurfacePoint(
                 ACB,
                 new BarycentricVector(
                     ACB,
                     new BarycentricCoordinates(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f)));
 
-    public static readonly SurfacePoint PointNotOnEdge_ABC = new SurfacePoint(
+    public static readonly SurfacePoint PointNotOnEdge_ACB = new SurfacePoint(
                 ACB,
                 new BarycentricVector(
                     ACB,

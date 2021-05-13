@@ -46,10 +46,24 @@ public class Surface
         return true;
     }
 
+    public bool TryGetSurfacePointFromPosition(Vector3 point, out SurfacePoint sp)
+    {
+        foreach (Face face in faces)
+        {
+            sp = new SurfacePoint(face, new BarycentricVector(face, new CartesianVector(point)));
+            if (sp.BarycentricVector.IsPointOnBaseTriangle())
+            {
+                return true;
+            }
+        }
+
+        sp = default; // FIXME: monads here
+        return false;
+    }
+
     public Face AddFace(CartesianVector cartesianPoint1, CartesianVector cartesianPoint2, CartesianVector cartesianPoint3)
     {
         Face newFace = new Face(this, new Triangle(cartesianPoint1, cartesianPoint2, cartesianPoint3));
-        Faces.Add(newFace);
         return newFace;
     }
 
@@ -69,8 +83,10 @@ public class Surface
             Maybe<SurfacePoint> intersection = GetIntersectionToward(currentPoint, endPoint);
             if (intersection.HasValue())
             {
+                if (intersection.Value.Position == endPoint.Position) break;
+
                 crossingPoints.Add(intersection.Value);
-                currentPoint = intersection.Value; // TODO: Points with multiple representations...
+                currentPoint = intersection.Value;
             }
             else
             {
@@ -84,8 +100,6 @@ public class Surface
             }
         }
 
-        // check last inters + dir crosses end
-
         List<SurfacePoint> allPoints = new List<SurfacePoint>();
         allPoints.Add(startPoint);
         allPoints.AddRange(crossingPoints);
@@ -98,6 +112,7 @@ public class Surface
     {
         // TODO: Corner Cases, if more than one intersection found, use furthest away from start 
         // (so if start is an inters already its not automatically returned)
+
         if (start.Position == end.Position)
         {
             if (start.BarycentricVector.BarycentricCoordinates.a == 0.0
@@ -112,72 +127,130 @@ public class Surface
             }
         }
 
-        // TODO: exctract some ugliness to Vector.FlatProject or something
-        Triangle flatStartBase = new Triangle(
-            new CartesianVector(
-                new Vector3(
-                    start.BarycentricVector.Base.A.Position.x,
-                    0,
-                    start.BarycentricVector.Base.A.Position.z)),
-            new CartesianVector(
-                new Vector3(
-                    start.BarycentricVector.Base.B.Position.x,
-                    0,
-                    start.BarycentricVector.Base.B.Position.z)),
-            new CartesianVector(
-                new Vector3(
-                    start.BarycentricVector.Base.C.Position.x,
-                    0,
-                    start.BarycentricVector.Base.C.Position.z)));
-
-        BarycentricVector flatEnd = new BarycentricVector(
-            flatStartBase,
-            new CartesianVector(end.BarycentricVector.Position).Project(flatStartBase));
-
-        BarycentricVector endInStartBase = new BarycentricVector(
-            start.BarycentricVector.Base,
-            flatEnd.BarycentricCoordinates);
-        BarycentricVector startToEnd = endInStartBase - start.BarycentricVector;
-
-        HashSet<TriangleVertexIdentifiers> changedCoordinates = new HashSet<TriangleVertexIdentifiers>();
-        foreach (TriangleVertexIdentifiers c in BarycentricCoordinates.Coordinates)
+        List<TriangleVertexIdentifiers> already0Coordinates = new List<TriangleVertexIdentifiers>();
+        foreach (TriangleVertexIdentifiers c in Triangle.Vertices)
         {
-            if (endInStartBase.BarycentricCoordinates.GetCoordinate(c) < 0) // TODO: Corner Case, <= 0 need refinement when starting at intersection
+            if (start.BarycentricVector.BarycentricCoordinates.GetCoordinate(c) <= 0.0f)
             {
-                changedCoordinates.Add(c);
+                already0Coordinates.Add(c);
             }
         }
 
-        if (changedCoordinates.Count == 0)
+
+        // TODO: exctract some ugliness to Vector.FlatProject or something
+        Triangle flatStartBase = ProjectOnPlane_Oy(start.BarycentricVector.Base);
+
+        BarycentricVector endInFlatStartBase = new BarycentricVector(
+            flatStartBase,
+            new CartesianVector(end.BarycentricVector.Position).Project(flatStartBase));
+
+        BarycentricVector flatEndInStartBase = new BarycentricVector(
+            start.BarycentricVector.Base,
+            endInFlatStartBase.BarycentricCoordinates);
+
+        BarycentricVector startToFlatEnd = flatEndInStartBase - start.BarycentricVector;
+
+        HashSet<TriangleVertexIdentifiers> coordinatesToCrossToReachEnd = new HashSet<TriangleVertexIdentifiers>();
+        foreach (TriangleVertexIdentifiers c in BarycentricCoordinates.Coordinates)
+        {
+            float cValue = flatEndInStartBase.BarycentricCoordinates.GetCoordinate(c);
+            if (cValue <= 0)
+            {
+                coordinatesToCrossToReachEnd.Add(c);
+            }
+        }
+
+        if (coordinatesToCrossToReachEnd.Count == 0)
         {
             return new Maybe<SurfacePoint>.Nothing();
         }
 
-        TriangleVertexIdentifiers changedCoordinate = changedCoordinates.First();
+        // if (crossedCoordinates.Count > 1) { Debug.Log("more than one coordinate changed"); }
+        List<TriangleVertexIdentifiers> actuallyCrossedCoordinates = // Tries not to cross edges if moving parallel
+                    coordinatesToCrossToReachEnd
+                    .Where(c => !already0Coordinates.Contains(c))
+                    .ToList();
 
-        float coefficient = -start.BarycentricVector.BarycentricCoordinates.GetCoordinate(changedCoordinate) / startToEnd.BarycentricCoordinates.GetCoordinate(changedCoordinate);
+        TriangleVertexIdentifiers crossedCoordinate = TriangleVertexIdentifiers.A; // FIXME: not int
+        float coefficient = float.MaxValue; // FIXME: min or max coeff? (min? abs min?)
+        foreach (TriangleVertexIdentifiers c in actuallyCrossedCoordinates)
+        {
+            float newCoefficient = -start.BarycentricVector
+                        .BarycentricCoordinates.GetCoordinate(c)
+                        / startToFlatEnd.BarycentricCoordinates.GetCoordinate(c);
+            if (Mathf.Abs(newCoefficient) < Mathf.Abs(coefficient))
+            {
+                coefficient = newCoefficient;
+                crossedCoordinate = c;
+            }
+
+        }
+
+        BarycentricCoordinates intersectionCoordinates = new BarycentricCoordinates(
+           /* crossedCoordinates2.Contains(TriangleVertexIdentifiers.A) ? 0 :*/
+           (start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).a,
+           /* crossedCoordinates2.Contains(TriangleVertexIdentifiers.B) ? 0 :*/
+           (start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).b,
+           /*crossedCoordinates2.Contains(TriangleVertexIdentifiers.C) ? 0 :*/
+           (start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).c
+        );
 
         BarycentricVector intersectionVector =
             new BarycentricVector(
                 start.Face,
-                (start.BarycentricVector.BarycentricCoordinates + coefficient * startToEnd.BarycentricCoordinates));
-        // Could check if this is normalized (must be if calc are correct)
+                intersectionCoordinates);
 
+        intersectionVector = intersectionVector.Normalize();
+
+        if (!intersectionVector.IsPointOnBaseTriangle())
+        {
+            Debug.Log("Before change, not norm");
+        }
 
         HashSet<TriangleVertexIdentifiers> sharedVertices = new HashSet<TriangleVertexIdentifiers>(BarycentricCoordinates.Coordinates);
-        sharedVertices.RemoveWhere(sv => changedCoordinates.Contains(sv));
+        // sharedVertices.RemoveWhere(sv => actuallyCrossedCoordinates.Contains(sv));
+        sharedVertices.Remove(crossedCoordinate);
 
         HashSet<Face> facesSharingChangedCoordinates = start.Face.GetFacesFromSharedVertices(sharedVertices);
+        facesSharingChangedCoordinates.Remove(start.Face);
         if (facesSharingChangedCoordinates.Count == 0)
+        {
+            facesSharingChangedCoordinates = start.Face.GetFacesFromAtLeastOneSharedVertex(sharedVertices);
+            facesSharingChangedCoordinates.Remove(start.Face);
+        }
+
+        if (facesSharingChangedCoordinates.Count == 0
+            || facesSharingChangedCoordinates
+                .Where(face => intersectionVector.ChangeBase(face).IsPointOnBaseTriangle())
+                .Count() == 0)
         {
             return new Maybe<SurfacePoint>.Nothing();
         }
 
-        Face nextFace = facesSharingChangedCoordinates.First(); // TODO: Corner Cases
+        Face nextFace = facesSharingChangedCoordinates
+            .Where(face => intersectionVector.ChangeBase(face).IsPointOnBaseTriangle())
+            .First();
 
         intersectionVector = intersectionVector.ChangeBase(nextFace);
+        intersectionVector = intersectionVector.Normalize();
+
+        if (!intersectionVector.IsPointOnBaseTriangle())
+        {
+            Debug.Log("After change, not norm");
+        }
 
         return new Maybe<SurfacePoint>.Just(new SurfacePoint(nextFace, intersectionVector));
+    }
+
+    private static Triangle ProjectOnPlane_Oy(Triangle triangle)
+    {
+        return new Triangle(
+            new CartesianVector(
+                new Vector3(triangle.A.Position.x, 0, triangle.A.Position.z)),
+            new CartesianVector(
+                new Vector3(triangle.B.Position.x, 0, triangle.B.Position.z)),
+            new CartesianVector(
+                new Vector3(triangle.C.Position.x, 0, triangle.C.Position.z)));
     }
 
     // Surface made of squares
