@@ -105,26 +105,27 @@ public class Surface
         allPoints.AddRange(crossingPoints);
         allPoints.Add(endPoint);
 
-        return new Maybe<SurfacePath>.Just(new SurfacePath(allPoints));
+        List<SurfacePoint> noDuplicatePositions = new List<SurfacePoint>();
+        noDuplicatePositions.Add(allPoints[0]);
+        for (int i = 1; i < allPoints.Count; i++)
+        {
+            SurfacePoint p1 = allPoints[i - 1], p2 = allPoints[i];
+            if (!(UnityEngine.Mathf.Abs(p1.Position.x - p2.Position.x) < 0.0001f
+                && UnityEngine.Mathf.Abs(p1.Position.y - p2.Position.y) < 0.0001f
+                && UnityEngine.Mathf.Abs(p1.Position.z - p2.Position.z) < 0.0001f))
+            {
+                noDuplicatePositions.Add(p2);
+            }
+        }
+
+        return new Maybe<SurfacePath>.Just(new SurfacePath(noDuplicatePositions));
     }
 
     public Maybe<SurfacePoint> GetIntersectionToward(SurfacePoint start, SurfacePoint end)
     {
-        // TODO: Corner Cases, if more than one intersection found, use furthest away from start 
-        // (so if start is an inters already its not automatically returned)
-
         if (start.Position == end.Position)
         {
-            if (start.BarycentricVector.BarycentricCoordinates.a == 0.0
-                || start.BarycentricVector.BarycentricCoordinates.b == 0.0
-                || start.BarycentricVector.BarycentricCoordinates.c == 0.0)
-            {
-                return new Maybe<SurfacePoint>.Just(start);
-            }
-            else
-            {
-                return new Maybe<SurfacePoint>.Nothing();
-            }
+           return new Maybe<SurfacePoint>.Just(start);
         }
 
         List<TriangleVertexIdentifiers> already0Coordinates = new List<TriangleVertexIdentifiers>();
@@ -136,8 +137,6 @@ public class Surface
             }
         }
 
-
-        // TODO: exctract some ugliness to Vector.FlatProject or something
         Triangle flatStartBase = ProjectOnPlane_Oy(start.BarycentricVector.Base);
 
         BarycentricVector endInFlatStartBase = new BarycentricVector(
@@ -165,33 +164,40 @@ public class Surface
             return new Maybe<SurfacePoint>.Nothing();
         }
 
-        // if (crossedCoordinates.Count > 1) { Debug.Log("more than one coordinate changed"); }
         List<TriangleVertexIdentifiers> actuallyCrossedCoordinates = // Tries not to cross edges if moving parallel
                     coordinatesToCrossToReachEnd
                     .Where(c => !already0Coordinates.Contains(c))
                     .ToList();
 
-        TriangleVertexIdentifiers crossedCoordinate = TriangleVertexIdentifiers.A; // FIXME: not int
-        float coefficient = float.MaxValue; // FIXME: min or max coeff? (min? abs min?)
+        if (actuallyCrossedCoordinates.Count == 0)
+        {
+            actuallyCrossedCoordinates = new List<TriangleVertexIdentifiers>(coordinatesToCrossToReachEnd);
+        }
+
+        List<TriangleVertexIdentifiers> crossedCoordinates = new List<TriangleVertexIdentifiers>(); 
+        float coefficient = float.MaxValue;
         foreach (TriangleVertexIdentifiers c in actuallyCrossedCoordinates)
         {
+            if (startToFlatEnd.BarycentricCoordinates.GetCoordinate(c) == 0)
+            {
+                coefficient = 0;
+                crossedCoordinates.Add(c);
+            }
+
             float newCoefficient = -start.BarycentricVector
                         .BarycentricCoordinates.GetCoordinate(c)
                         / startToFlatEnd.BarycentricCoordinates.GetCoordinate(c);
-            if (Mathf.Abs(newCoefficient) < Mathf.Abs(coefficient))
+            if (newCoefficient <= coefficient)
             {
                 coefficient = newCoefficient;
-                crossedCoordinate = c;
+                crossedCoordinates.Add(c);
             }
 
         }
 
         BarycentricCoordinates intersectionCoordinates = new BarycentricCoordinates(
-           /* crossedCoordinates2.Contains(TriangleVertexIdentifiers.A) ? 0 :*/
            (start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).a,
-           /* crossedCoordinates2.Contains(TriangleVertexIdentifiers.B) ? 0 :*/
            (start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).b,
-           /*crossedCoordinates2.Contains(TriangleVertexIdentifiers.C) ? 0 :*/
            (start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).c
         );
 
@@ -208,8 +214,7 @@ public class Surface
         }
 
         HashSet<TriangleVertexIdentifiers> sharedVertices = new HashSet<TriangleVertexIdentifiers>(BarycentricCoordinates.Coordinates);
-        // sharedVertices.RemoveWhere(sv => actuallyCrossedCoordinates.Contains(sv));
-        sharedVertices.Remove(crossedCoordinate);
+        sharedVertices.RemoveWhere(sv => crossedCoordinates.Contains(sv));
 
         HashSet<Face> facesSharingChangedCoordinates = start.Face.GetFacesFromSharedVertices(sharedVertices);
         facesSharingChangedCoordinates.Remove(start.Face);

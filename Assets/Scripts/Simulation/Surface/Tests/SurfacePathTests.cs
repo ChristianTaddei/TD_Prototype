@@ -226,7 +226,64 @@ namespace Tests
         [Test]
         public void CornerCases()
         {
-            AssertPathIsJustStartAndEnd(Square_ABCD.ADC_C, Square_ABCD.ACB_A); 
+            // AssertPathIsJustStartAndEnd(Square_ABCD.ADC_C, Square_ABCD.ACB_A);
+
+            SurfacePoint start = default;
+            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(1.0f, 0.0f, 5.2f), out start));
+
+            SurfacePoint end = default;
+            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(1.0f, 0, 0.8f), out end));
+
+            Maybe<SurfacePath> path = LargeSquare.Surface.MakeDirectPath(start, end);
+
+            Assert.True(path.HasValue());
+            Assert.AreEqual(7, path.Value.Points.Count);
+            Assert.AreEqual(start, path.Value.Start);
+            Assert.AreEqual(end, path.Value.End);
+
+            Vector3 intersection1 = new Vector3(1.0f, 0, 5.0f);
+            Vector3 intersection2 = new Vector3(1.0f, 0, 4.0f);
+            Vector3 intersection3 = new Vector3(1.0f, 0, 3.0f);
+            Vector3 intersection4 = new Vector3(1.0f, 0, 2.0f);
+            Vector3 intersection5 = new Vector3(1.0f, 0, 1.0f);
+
+            Assert.AreEqual(intersection1, path.Value.Points[1].Position);
+            Assert.AreEqual(intersection2, path.Value.Points[2].Position);
+            Assert.AreEqual(intersection3, path.Value.Points[3].Position);
+            Assert.AreEqual(intersection4, path.Value.Points[4].Position);
+            Assert.AreEqual(intersection5, path.Value.Points[5].Position);
+
+            start = default;
+            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(1.0f, 0.0f, 5.0f), out start));
+
+            end = default;
+            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(1.0f, 0, 1.0f), out end));
+
+            path = LargeSquare.Surface.MakeDirectPath(start, end);
+
+            Assert.True(path.HasValue());
+            Assert.AreEqual(5, path.Value.Points.Count);
+            Assert.AreEqual(start, path.Value.Start);
+            Assert.AreEqual(end, path.Value.End);
+
+            Assert.AreEqual(intersection1, path.Value.Points[0].Position);
+            Assert.AreEqual(intersection2, path.Value.Points[1].Position);
+            Assert.AreEqual(intersection3, path.Value.Points[2].Position);
+            Assert.AreEqual(intersection4, path.Value.Points[3].Position);
+            Assert.AreEqual(intersection5, path.Value.Points[4].Position);
+
+            start = default;
+            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(7.0f, 0.0f, 3.0f), out start));
+
+            end = default;
+            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(7.0f, 0, 9.0f), out end));
+
+            path = LargeSquare.Surface.MakeDirectPath(start, end);
+
+            Assert.True(path.HasValue());
+            Assert.AreEqual(7, path.Value.Points.Count);
+            Assert.AreEqual(start, path.Value.Start);
+            Assert.AreEqual(end, path.Value.End);
         }
     }
 }
