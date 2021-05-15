@@ -284,6 +284,35 @@ namespace Tests
             Assert.AreEqual(7, path.Value.Points.Count);
             Assert.AreEqual(start, path.Value.Start);
             Assert.AreEqual(end, path.Value.End);
+
+
+        }
+
+        [Test]
+        public void CornerCases2()
+        {
+            // TODO: NOT WORKING
+
+            // SurfacePoint start = default;
+            // Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(3.0f, 0.0f, 2.0f), out start));
+
+            // SurfacePoint end = default;
+            // Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(7.0f, 0, 9.0f), out end));
+
+            // Maybe<SurfacePath> path = LargeSquare.Surface.MakeDirectPath(start, end);
+
+            // Assert.True(path.HasValue());
+            // // Assert.AreEqual(7, path.Value.Points.Count);
+            // Assert.AreEqual(start, path.Value.Start);
+            // Assert.AreEqual(end, path.Value.End);
+        }
+
+        [Test]
+        public void PathFromVertexInAllDirections(){
+            // For the 6 faces containing centre, ensure it reaches all 5 extern points not on that face
+            // should be enough for 1 face? who cares which coordinates...
+
+           Assert.True(Square2x2.Surface.MakeDirectPath(Square2x2.centre_10_11_20, Square2x2._00on_00_01_10).HasValue()); 
         }
     }
 }

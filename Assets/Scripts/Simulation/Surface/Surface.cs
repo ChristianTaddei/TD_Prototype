@@ -125,7 +125,7 @@ public class Surface
     {
         if (start.Position == end.Position)
         {
-           return new Maybe<SurfacePoint>.Just(start);
+            return new Maybe<SurfacePoint>.Just(start);
         }
 
         List<TriangleVertexIdentifiers> already0Coordinates = new List<TriangleVertexIdentifiers>();
@@ -164,35 +164,57 @@ public class Surface
             return new Maybe<SurfacePoint>.Nothing();
         }
 
+        List<TriangleVertexIdentifiers> crossedCoordinates = new List<TriangleVertexIdentifiers>();
+        float coefficient = float.MaxValue;
         List<TriangleVertexIdentifiers> actuallyCrossedCoordinates = // Tries not to cross edges if moving parallel
-                    coordinatesToCrossToReachEnd
-                    .Where(c => !already0Coordinates.Contains(c))
-                    .ToList();
+                                coordinatesToCrossToReachEnd
+                                .Where(c => !already0Coordinates.Contains(c))
+                                .ToList();
 
         if (actuallyCrossedCoordinates.Count == 0)
         {
-            actuallyCrossedCoordinates = new List<TriangleVertexIdentifiers>(coordinatesToCrossToReachEnd);
+            TriangleVertexIdentifiers maxNegativeCoordinate = TriangleVertexIdentifiers.A; // FIXME
+            float maxNegCoordValue = float.MaxValue;
+            foreach (TriangleVertexIdentifiers c in Triangle.Vertices)
+            {
+                BarycentricVector startToEndDirection = startToFlatEnd.Normalize();
+
+                if (startToEndDirection.BarycentricCoordinates.GetCoordinate(c) < maxNegCoordValue)
+                {
+                    maxNegativeCoordinate = c;
+                    maxNegCoordValue = startToEndDirection.BarycentricCoordinates.GetCoordinate(c);
+                }
+            }
+
+            coefficient = 0;
+            crossedCoordinates.Add(maxNegativeCoordinate);
         }
-
-        List<TriangleVertexIdentifiers> crossedCoordinates = new List<TriangleVertexIdentifiers>(); 
-        float coefficient = float.MaxValue;
-        foreach (TriangleVertexIdentifiers c in actuallyCrossedCoordinates)
+        else
         {
-            if (startToFlatEnd.BarycentricCoordinates.GetCoordinate(c) == 0)
+            foreach (TriangleVertexIdentifiers c in actuallyCrossedCoordinates)
             {
-                coefficient = 0;
-                crossedCoordinates.Add(c);
-            }
+                if (startToFlatEnd.BarycentricCoordinates.GetCoordinate(c) == 0)
+                {
+                    coefficient = 0;
+                    crossedCoordinates.Add(c);
+                }
 
-            float newCoefficient = -start.BarycentricVector
-                        .BarycentricCoordinates.GetCoordinate(c)
-                        / startToFlatEnd.BarycentricCoordinates.GetCoordinate(c);
-            if (newCoefficient <= coefficient)
-            {
-                coefficient = newCoefficient;
-                crossedCoordinates.Add(c);
-            }
+                float newCoefficient = -start.BarycentricVector
+                            .BarycentricCoordinates.GetCoordinate(c)
+                            / startToFlatEnd.BarycentricCoordinates.GetCoordinate(c);
+                if (newCoefficient == coefficient)
+                {
+                    coefficient = newCoefficient;
+                    crossedCoordinates.Add(c);
+                }
+                else if (newCoefficient <= coefficient)
+                {
+                    crossedCoordinates.Clear();
+                    coefficient = newCoefficient;
+                    crossedCoordinates.Add(c);
+                }
 
+            }
         }
 
         BarycentricCoordinates intersectionCoordinates = new BarycentricCoordinates(
@@ -234,6 +256,10 @@ public class Surface
 
         Face nextFace = facesSharingChangedCoordinates
             .Where(face => intersectionVector.ChangeBase(face).IsPointOnBaseTriangle())
+            .OrderBy(face => Vector3.Distance(
+                new SurfacePoint(face,
+                new BarycentricVector(face, new Vector3(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f))).Position,
+                end.Position))
             .First();
 
         intersectionVector = intersectionVector.ChangeBase(nextFace);
