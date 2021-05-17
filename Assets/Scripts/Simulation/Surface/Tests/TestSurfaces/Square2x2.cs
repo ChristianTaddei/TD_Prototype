@@ -43,4 +43,10 @@ public class Square2x2
        new BarycentricVector(
            _00_01_10,
            new BarycentricCoordinates(1, 0, 0)));
+           
+    public static readonly SurfacePoint m_01_10 = new SurfacePoint(
+        _01_11_10,
+        new BarycentricVector(
+            _01_11_10,
+            new BarycentricCoordinates(.5f, 0, .5f)));
 }

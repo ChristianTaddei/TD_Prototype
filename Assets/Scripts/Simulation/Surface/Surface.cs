@@ -128,15 +128,6 @@ public class Surface
             return new Maybe<SurfacePoint>.Just(start);
         }
 
-        List<TriangleVertexIdentifiers> already0Coordinates = new List<TriangleVertexIdentifiers>();
-        foreach (TriangleVertexIdentifiers c in Triangle.Vertices)
-        {
-            if (start.BarycentricVector.BarycentricCoordinates.GetCoordinate(c) <= 0.0f)
-            {
-                already0Coordinates.Add(c);
-            }
-        }
-
         Triangle flatStartBase = ProjectOnPlane_Oy(start.BarycentricVector.Base);
 
         BarycentricVector endInFlatStartBase = new BarycentricVector(
@@ -149,73 +140,42 @@ public class Surface
 
         BarycentricVector startToFlatEnd = flatEndInStartBase - start.BarycentricVector;
 
-        HashSet<TriangleVertexIdentifiers> coordinatesToCrossToReachEnd = new HashSet<TriangleVertexIdentifiers>();
-        foreach (TriangleVertexIdentifiers c in BarycentricCoordinates.Coordinates)
-        {
-            float cValue = flatEndInStartBase.BarycentricCoordinates.GetCoordinate(c);
-            if (cValue <= 0)
-            {
-                coordinatesToCrossToReachEnd.Add(c);
-            }
-        }
-
-        if (coordinatesToCrossToReachEnd.Count == 0)
-        {
-            return new Maybe<SurfacePoint>.Nothing();
-        }
-
-        List<TriangleVertexIdentifiers> crossedCoordinates = new List<TriangleVertexIdentifiers>();
         float coefficient = float.MaxValue;
-        List<TriangleVertexIdentifiers> actuallyCrossedCoordinates = // Tries not to cross edges if moving parallel
-                                coordinatesToCrossToReachEnd
-                                .Where(c => !already0Coordinates.Contains(c))
-                                .ToList();
-
-        if (actuallyCrossedCoordinates.Count == 0)
+        foreach (TriangleVertexIdentifiers c in Triangle.Vertices)
         {
-            TriangleVertexIdentifiers maxNegativeCoordinate = TriangleVertexIdentifiers.A; // FIXME
-            float maxNegCoordValue = float.MaxValue;
-            foreach (TriangleVertexIdentifiers c in Triangle.Vertices)
+            if (start.BarycentricVector.BarycentricCoordinates.GetCoordinate(c) == 0.0f)
             {
-                BarycentricVector startToEndDirection = startToFlatEnd.Normalize();
-
-                if (startToEndDirection.BarycentricCoordinates.GetCoordinate(c) < maxNegCoordValue)
+                if (startToFlatEnd.BarycentricCoordinates.GetCoordinate(c) >= 0.0f)
                 {
-                    maxNegativeCoordinate = c;
-                    maxNegCoordValue = startToEndDirection.BarycentricCoordinates.GetCoordinate(c);
+                    continue;
                 }
             }
 
-            coefficient = 0;
-            crossedCoordinates.Add(maxNegativeCoordinate);
-        }
-        else
-        {
-            foreach (TriangleVertexIdentifiers c in actuallyCrossedCoordinates)
+            float denominator = startToFlatEnd.BarycentricCoordinates.GetCoordinate(c);
+            if (denominator == 0.0f)
             {
-                if (startToFlatEnd.BarycentricCoordinates.GetCoordinate(c) == 0)
-                {
-                    coefficient = 0;
-                    crossedCoordinates.Add(c);
-                }
+                coefficient = 0;
+                break; // not necessary
+            }
+            else
+            {
+                float partialCoefficient;
+                // if (denominator >= 0.0f)
+                // {
+                partialCoefficient = -start.BarycentricVector.BarycentricCoordinates.GetCoordinate(c) / denominator;
+                // }
+                // else
+                // {
+                //     partialCoefficient = (1 - start.BarycentricVector.BarycentricCoordinates.GetCoordinate(c)) / denominator;
+                // }
 
-                float newCoefficient = -start.BarycentricVector
-                            .BarycentricCoordinates.GetCoordinate(c)
-                            / startToFlatEnd.BarycentricCoordinates.GetCoordinate(c);
-                if (newCoefficient == coefficient)
+                if (partialCoefficient >= 0 && partialCoefficient < coefficient)
                 {
-                    coefficient = newCoefficient;
-                    crossedCoordinates.Add(c);
+                    coefficient = partialCoefficient;
                 }
-                else if (newCoefficient <= coefficient)
-                {
-                    crossedCoordinates.Clear();
-                    coefficient = newCoefficient;
-                    crossedCoordinates.Add(c);
-                }
-
             }
         }
+        // }
 
         BarycentricCoordinates intersectionCoordinates = new BarycentricCoordinates(
            (start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).a,
@@ -235,8 +195,20 @@ public class Surface
             Debug.Log("Before change, not norm");
         }
 
-        HashSet<TriangleVertexIdentifiers> sharedVertices = new HashSet<TriangleVertexIdentifiers>(BarycentricCoordinates.Coordinates);
-        sharedVertices.RemoveWhere(sv => crossedCoordinates.Contains(sv));
+        HashSet<TriangleVertexIdentifiers> sharedVertices = new HashSet<TriangleVertexIdentifiers>(Triangle.Vertices);
+        foreach (TriangleVertexIdentifiers c in Triangle.Vertices)
+        {
+            if (intersectionCoordinates.GetCoordinate(c) != 1.0f)
+            {
+                sharedVertices.Add(c);
+            }
+            // if (intersectionCoordinates.GetCoordinate(c) == 0.0f)
+            // {
+            //     HashSet<TriangleVertexIdentifiers> otherVertices = new HashSet<TriangleVertexIdentifiers>(Triangle.Vertices);
+            //     otherVertices.Remove(c);
+            //     sharedVertices.Union(otherVertices);
+            // }
+        }
 
         HashSet<Face> facesSharingChangedCoordinates = start.Face.GetFacesFromSharedVertices(sharedVertices);
         facesSharingChangedCoordinates.Remove(start.Face);
@@ -256,11 +228,16 @@ public class Surface
 
         Face nextFace = facesSharingChangedCoordinates
             .Where(face => intersectionVector.ChangeBase(face).IsPointOnBaseTriangle())
-            .OrderBy(face => Vector3.Distance(
-                new SurfacePoint(face,
-                new BarycentricVector(face, new Vector3(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f))).Position,
-                end.Position))
-            .First();
+            .ToArray()[
+                new System.Random().Next(
+                    facesSharingChangedCoordinates
+                    .Where(face => intersectionVector.ChangeBase(face).IsPointOnBaseTriangle())
+                    .ToArray().Length)];
+        // .OrderBy(face => Vector3.Distance(
+        //     new SurfacePoint(face,
+        //     new BarycentricVector(face, new Vector3(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f))).Position,
+        //     end.Position))
+        // .First();
 
         intersectionVector = intersectionVector.ChangeBase(nextFace);
         intersectionVector = intersectionVector.Normalize();
