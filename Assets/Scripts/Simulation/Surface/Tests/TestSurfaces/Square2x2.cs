@@ -26,7 +26,7 @@ public class Square2x2
     public static readonly Face _00_01_10 = Surface.AddFace(_00, _01, _10);
     public static readonly Face _01_11_10 = Surface.AddFace(_01, _11, _10);
     public static readonly Face _01_02_11 = Surface.AddFace(_01, _02, _11);
-    public static readonly Face _02_12_22 = Surface.AddFace(_02, _12, _22);
+    public static readonly Face _02_12_11 = Surface.AddFace(_02, _12, _11);
     public static readonly Face _10_11_20 = Surface.AddFace(_10, _11, _20);
     public static readonly Face _11_21_20 = Surface.AddFace(_11, _21, _20);
     public static readonly Face _11_12_21 = Surface.AddFace(_11, _12, _21);
@@ -49,4 +49,52 @@ public class Square2x2
         new BarycentricVector(
             _01_11_10,
             new BarycentricCoordinates(.5f, 0, .5f)));
+           
+    public static readonly SurfacePoint _02on_01_02_11 = new SurfacePoint(
+       _01_02_11,
+       new BarycentricVector(
+           _01_02_11,
+           new BarycentricCoordinates(0, 1, 0)));
+           
+    public static readonly SurfacePoint _22on_12_22_21 = new SurfacePoint(
+       _12_22_21,
+       new BarycentricVector(
+           _12_22_21,
+           new BarycentricCoordinates(0, 1, 0)));
+
+    public static readonly SurfacePoint m_12_21 = new SurfacePoint(
+        _11_12_21,
+        new BarycentricVector(
+            _11_12_21,
+            new BarycentricCoordinates(.0f, .5f, .5f)));
+
+    public static readonly SurfacePoint _20on_10_11_20 = new SurfacePoint(
+       _10_11_20,
+       new BarycentricVector(
+           _10_11_20,
+           new BarycentricCoordinates(0, 0, 1)));
+           
+    public static readonly SurfacePoint _12on_02_12_11 = new SurfacePoint(
+       _02_12_11,
+       new BarycentricVector(
+           _02_12_11,
+           new BarycentricCoordinates(0, 1, 0)));
+           
+    public static readonly SurfacePoint _01on_00_01_10 = new SurfacePoint(
+       _00_01_10,
+       new BarycentricVector(
+           _00_01_10,
+           new BarycentricCoordinates(0, 1, 0)));
+           
+    public static readonly SurfacePoint _10on_00_01_10 = new SurfacePoint(
+       _00_01_10,
+       new BarycentricVector(
+           _00_01_10,
+           new BarycentricCoordinates(0, 0, 1)));
+           
+    public static readonly SurfacePoint _21on_11_21_20 = new SurfacePoint(
+       _11_21_20,
+       new BarycentricVector(
+           _11_21_20,
+           new BarycentricCoordinates(0, 1, 0)));
 }

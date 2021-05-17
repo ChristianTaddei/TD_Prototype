@@ -76,15 +76,18 @@ public class Surface
 
         List<SurfacePoint> crossingPoints = new List<SurfacePoint>();
 
+        List<Face> alreadyVisitedFaces = new List<Face>();
+        alreadyVisitedFaces.Add(startPoint.Face);
         int tries = 0;
         SurfacePoint currentPoint = startPoint;
         while (currentPoint.Face != endPoint.Face)
         {
-            Maybe<SurfacePoint> intersection = GetIntersectionToward(currentPoint, endPoint);
+            Maybe<SurfacePoint> intersection = GetIntersectionToward(currentPoint, endPoint, alreadyVisitedFaces);
             if (intersection.HasValue())
             {
                 if (intersection.Value.Position == endPoint.Position) break;
 
+                alreadyVisitedFaces.Add(intersection.Value.Face);
                 crossingPoints.Add(intersection.Value);
                 currentPoint = intersection.Value;
             }
@@ -121,7 +124,7 @@ public class Surface
         return new Maybe<SurfacePath>.Just(new SurfacePath(noDuplicatePositions));
     }
 
-    public Maybe<SurfacePoint> GetIntersectionToward(SurfacePoint start, SurfacePoint end)
+    public Maybe<SurfacePoint> GetIntersectionToward(SurfacePoint start, SurfacePoint end, List<Face> alreadyVisitedFaces)
     {
         if (start.Position == end.Position)
         {
@@ -160,15 +163,7 @@ public class Surface
             else
             {
                 float partialCoefficient;
-                // if (denominator >= 0.0f)
-                // {
                 partialCoefficient = -start.BarycentricVector.BarycentricCoordinates.GetCoordinate(c) / denominator;
-                // }
-                // else
-                // {
-                //     partialCoefficient = (1 - start.BarycentricVector.BarycentricCoordinates.GetCoordinate(c)) / denominator;
-                // }
-
                 if (partialCoefficient >= 0 && partialCoefficient < coefficient)
                 {
                     coefficient = partialCoefficient;
@@ -227,7 +222,8 @@ public class Surface
         }
 
         Face nextFace = facesSharingChangedCoordinates
-            .Where(face => intersectionVector.ChangeBase(face).IsPointOnBaseTriangle())
+            .Where(face => intersectionVector.ChangeBase(face).IsPointOnBaseTriangle()
+                && !alreadyVisitedFaces.Contains(face))
             .OrderBy(face => Mathf.Min(Mathf.Min(
                 Vector3.Distance(face.A.Position, flatEndInStartBase.Position),
                 Vector3.Distance(face.B.Position, flatEndInStartBase.Position)),

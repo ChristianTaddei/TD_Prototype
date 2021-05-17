@@ -289,28 +289,70 @@ namespace Tests
         [Test]
         public void CornerCases2()
         {
-            // TODO: NOT WORKING
+            SurfacePoint start = default;
+            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(3.0f, 0.0f, 2.0f), out start));
 
-            // SurfacePoint start = default;
-            // Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(3.0f, 0.0f, 2.0f), out start));
+            SurfacePoint end = default;
+            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(7.0f, 0, 9.0f), out end));
 
-            // SurfacePoint end = default;
-            // Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(7.0f, 0, 9.0f), out end));
+            Maybe<SurfacePath> path = LargeSquare.Surface.MakeDirectPath(start, end);
 
-            // Maybe<SurfacePath> path = LargeSquare.Surface.MakeDirectPath(start, end);
-
-            // Assert.True(path.HasValue());
-            // // Assert.AreEqual(7, path.Value.Points.Count);
-            // Assert.AreEqual(start, path.Value.Start);
-            // Assert.AreEqual(end, path.Value.End);
+            Assert.True(path.HasValue());
+            Assert.AreEqual(21, path.Value.Points.Count);
+            Assert.AreEqual(start, path.Value.Start);
+            Assert.AreEqual(end, path.Value.End);
         }
 
         [Test]
-        public void PathFromVertexInAllDirections(){
+        public void PathFromVertexInAllDirections()
+        {
             // For the 6 faces containing centre, ensure it reaches all 5 extern points not on that face
             // should be enough for 1 face? who cares which coordinates...
 
-           AssertPathHasOnlyOneInstersection(Square2x2.centre_10_11_20, Square2x2.m_01_10 ,Square2x2._00on_00_01_10);
+            // Diagonals
+            //11->00
+            AssertPathHasOnlyOneInstersection(
+                Square2x2.centre_10_11_20,
+                Square2x2.m_01_10,
+                Square2x2._00on_00_01_10);
+
+            //11->02
+            AssertPathIsJustStartAndEnd(
+                Square2x2.centre_10_11_20,
+                Square2x2._02on_01_02_11);
+
+            //11->22
+            AssertPathHasOnlyOneInstersection(
+                Square2x2.centre_10_11_20,
+                Square2x2.m_12_21,
+                Square2x2._22on_12_22_21);
+
+            //11->20
+            AssertPathIsJustStartAndEnd(
+                Square2x2.centre_10_11_20,
+                Square2x2._20on_10_11_20);
+
+            // Verticals
+            //11->12
+            AssertPathIsJustStartAndEnd(
+                Square2x2.centre_10_11_20,
+                Square2x2._12on_02_12_11);
+
+            //11->10
+            AssertPathIsJustStartAndEnd(
+                Square2x2.centre_10_11_20,
+                Square2x2._10on_00_01_10);
+
+            //Horizontals
+            //11->01
+            AssertPathIsJustStartAndEnd(
+                Square2x2.centre_10_11_20,
+                Square2x2._01on_00_01_10);
+
+            //11->21
+            AssertPathIsJustStartAndEnd(
+                Square2x2.centre_10_11_20,
+                Square2x2._21on_11_21_20);
         }
     }
 }
