@@ -228,16 +228,11 @@ public class Surface
 
         Face nextFace = facesSharingChangedCoordinates
             .Where(face => intersectionVector.ChangeBase(face).IsPointOnBaseTriangle())
-            .ToArray()[
-                new System.Random().Next(
-                    facesSharingChangedCoordinates
-                    .Where(face => intersectionVector.ChangeBase(face).IsPointOnBaseTriangle())
-                    .ToArray().Length)];
-        // .OrderBy(face => Vector3.Distance(
-        //     new SurfacePoint(face,
-        //     new BarycentricVector(face, new Vector3(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f))).Position,
-        //     end.Position))
-        // .First();
+            .OrderBy(face => Mathf.Min(Mathf.Min(
+                Vector3.Distance(face.A.Position, flatEndInStartBase.Position),
+                Vector3.Distance(face.B.Position, flatEndInStartBase.Position)),
+                Vector3.Distance(face.C.Position, flatEndInStartBase.Position)))
+            .First();
 
         intersectionVector = intersectionVector.ChangeBase(nextFace);
         intersectionVector = intersectionVector.Normalize();
