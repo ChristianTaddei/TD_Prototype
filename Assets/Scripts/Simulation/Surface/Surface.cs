@@ -35,19 +35,18 @@ public class Surface
         return new Maybe<SurfacePoint>.Just(new SurfacePoint(faceContainingPoint, vector));
     }
 
-    public bool TryGetSurfacePointFromPosition(Vector3 point, out SurfacePoint sp)
+    public Maybe<SurfacePoint> GetSurfacePoint(Vector3 point)
     {
         foreach (Face face in faces)
         {
-            sp = new SurfacePoint(face, new BarycentricVector(face, new CartesianVector(point)));
-            if (sp.BarycentricVector.IsPointOnBaseTriangle())
+            BarycentricVector bc = new BarycentricVector(face, new CartesianVector(point));
+            if (bc.IsPointOnBaseTriangle())
             {
-                return true;
+                return new Maybe<SurfacePoint>.Just(new SurfacePoint(face, bc));
             }
         }
 
-        sp = default; // FIXME: monads here
-        return false;
+        return new Maybe<SurfacePoint>.Nothing();
     }
 
     public Face AddFace(CartesianVector cartesianPoint1, CartesianVector cartesianPoint2, CartesianVector cartesianPoint3)

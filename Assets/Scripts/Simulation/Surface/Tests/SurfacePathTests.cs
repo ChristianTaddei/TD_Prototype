@@ -21,27 +21,27 @@ namespace Tests
 
         # region Common assertions
         // TODO: when going for noncomplanars we need toleance, where to define it?
-        Action<SurfacePoint, SurfacePoint> AssertAreSamePosition =
-            (SurfacePoint a, SurfacePoint b) =>
+        static Action<Vector3, Vector3> AssertAreSamePosition =
+            (Vector3 p1, Vector3 p2) =>
                 {
-                    Assert.True(UnityEngine.Mathf.Abs(a.Position.x - b.Position.x) < 0.0001f);
-                    Assert.True(UnityEngine.Mathf.Abs(a.Position.y - b.Position.y) < 0.0001f);
-                    Assert.True(UnityEngine.Mathf.Abs(a.Position.z - b.Position.z) < 0.0001f);
+                    Assert.True(UnityEngine.Mathf.Abs(p1.x - p2.x) < 0.0001f);
+                    Assert.True(UnityEngine.Mathf.Abs(p1.y - p2.y) < 0.0001f);
+                    Assert.True(UnityEngine.Mathf.Abs(p1.z - p2.z) < 0.0001f);
                 };
 
-        Action<SurfacePoint, SurfacePoint, SurfacePoint> AssertPathHasOnlyOneInstersection =
-            (SurfacePoint start, SurfacePoint intersection, SurfacePoint end) =>
-                {
-                    Maybe<SurfacePath> path = start.Face.Surface.MakeDirectPath(start, end);
+        static Action<SurfacePoint, SurfacePoint, SurfacePoint> AssertPathHasOnlyOneInstersection =
+           (SurfacePoint start, SurfacePoint intersection, SurfacePoint end) =>
+               {
+                   Maybe<SurfacePath> path = start.Face.Surface.MakeDirectPath(start, end);
 
-                    Assert.True(path.HasValue());
-                    Assert.AreEqual(3, path.Value.Points.Count);
-                    Assert.AreEqual(start, path.Value.Start);
-                    Assert.AreEqual(end, path.Value.End);
-                    Assert.AreEqual(intersection.Position, path.Value.Points[1].Position);
-                };
+                   Assert.True(path.HasValue());
+                   Assert.AreEqual(3, path.Value.Points.Count);
+                   Assert.AreEqual(start, path.Value.Start);
+                   Assert.AreEqual(end, path.Value.End);
+                   Assert.AreEqual(intersection.Position, path.Value.Points[1].Position);
+               };
 
-        Action<SurfacePoint, SurfacePoint> AssertPathIsJustStartAndEnd =
+        static Action<SurfacePoint, SurfacePoint> AssertPathIsJustStartAndEnd =
             (SurfacePoint start, SurfacePoint end) =>
                 {
                     Maybe<SurfacePath> path = start.Face.Surface.MakeDirectPath(start, end);
@@ -50,6 +50,24 @@ namespace Tests
                     Assert.AreEqual(2, path.Value.Points.Count);
                     Assert.AreEqual(start, path.Value.Start);
                     Assert.AreEqual(end, path.Value.End);
+                };
+
+        static Func<Surface, Vector3, Vector3, SurfacePath> AssertPathCanBeMadeFromPositions =
+            (Surface surface, Vector3 p1, Vector3 p2) =>
+                {
+                    Maybe<SurfacePoint> start = surface.GetSurfacePoint(p1);
+                    Maybe<SurfacePoint> end = surface.GetSurfacePoint(p2);
+                    Maybe<SurfacePath> path = surface.MakeDirectPath(start.Value, end.Value);
+
+                    Assert.True(start.HasValue());
+                    AssertAreSamePosition(p1, start.Value.Position); 
+
+                    Assert.True(end.HasValue());
+                    AssertAreSamePosition(p2, end.Value.Position);
+
+                    Assert.True(path.HasValue());
+
+                    return path.Value;
                 };
         #endregion
 
@@ -161,7 +179,7 @@ namespace Tests
             Assert.AreEqual(FoldedRectangle_ABDE.FDC_C, path.Value.End);
             Assert.AreEqual(3, path.Value.Points.Count);
 
-            AssertAreSamePosition(FoldedRectangle_ABDE.m_FD_FDC, path.Value.Points[1]);
+            AssertAreSamePosition(FoldedRectangle_ABDE.m_FD_FDC.Position, path.Value.Points[1].Position);
         }
 
         [Test]
@@ -181,8 +199,8 @@ namespace Tests
                     FoldedRectangle_ABDE.FED,
                     new BarycentricCoordinates(2.0f / 3.0f, 0.0f, 1.0f / 3.0f)));
 
-            AssertAreSamePosition(intersection, path.Value.Points[1]);
-            AssertAreSamePosition(FoldedRectangle_ABDE.m_CF_AFC, path.Value.Points[2]);
+            AssertAreSamePosition(intersection.Position, path.Value.Points[1].Position);
+            AssertAreSamePosition(FoldedRectangle_ABDE.m_CF_AFC.Position, path.Value.Points[2].Position);
             // points[3]
         }
 
@@ -191,55 +209,35 @@ namespace Tests
         [Test]
         public void LargeSquareLongDiagonalBackUp()
         {
-            SurfacePoint start = default;
-            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(3.122f, 0, 2.05f), out start));
-            // Assert.AreEqual(new Vector3(3.1f, 0, 2.1f), start.Position);
 
-            SurfacePoint end = default;
-            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(0.8f, 0, 5.1f), out end));
-            // Assert.AreEqual(new Vector3(0.8f, 0, 5.1f), end.Position);
+            AssertPathCanBeMadeFromPositions(LargeSquare.Surface, new Vector3(3.122f, 0, 2.05f), new Vector3(0.8f, 0, 5.1f));
 
-            Maybe<SurfacePath> path = LargeSquare.Surface.MakeDirectPath(start, end);
-            Assert.True(path.HasValue());
-            // Assert.AreEqual(8, path.Value.Points.Count);
-
-            Assert.AreEqual(new HashSet<SurfacePoint>(path.Value.Points).Count, path.Value.Points.Count);
-            bool duplicates = false;
-            foreach (SurfacePoint p1 in path.Value.Points)
-            {
-                foreach (SurfacePoint p2 in path.Value.Points)
-                {
-                    if (
-                        p1 != p2 &&
-                        UnityEngine.Mathf.Abs(p1.Position.x - p2.Position.x) < 0.0001f
-                        && UnityEngine.Mathf.Abs(p1.Position.y - p2.Position.y) < 0.0001f
-                        && UnityEngine.Mathf.Abs(p1.Position.z - p2.Position.z) < 0.0001f)
-                    {
-                        duplicates = true;
-                    }
-                }
-            }
-            Assert.False(duplicates);
+            // Assert.AreEqual(new HashSet<SurfacePoint>(path.Value.Points).Count, path.Value.Points.Count);
+            // bool duplicates = false;
+            // foreach (SurfacePoint p1 in path.Value.Points)
+            // {
+            //     foreach (SurfacePoint p2 in path.Value.Points)
+            //     {
+            //         if (
+            //             p1 != p2 &&
+            //             UnityEngine.Mathf.Abs(p1.Position.x - p2.Position.x) < 0.0001f
+            //             && UnityEngine.Mathf.Abs(p1.Position.y - p2.Position.y) < 0.0001f
+            //             && UnityEngine.Mathf.Abs(p1.Position.z - p2.Position.z) < 0.0001f)
+            //         {
+            //             duplicates = true;
+            //         }
+            //     }
+            // }
+            // Assert.False(duplicates);
 
         }
 
         [Test]
         public void CornerCases()
         {
-            // AssertPathIsJustStartAndEnd(Square_ABCD.ADC_C, Square_ABCD.ACB_A);
+            SurfacePath path = AssertPathCanBeMadeFromPositions(LargeSquare.Surface, new Vector3(1.0f, 0.0f, 5.2f), new Vector3(1.0f, 0, 0.8f));
 
-            SurfacePoint start = default;
-            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(1.0f, 0.0f, 5.2f), out start));
-
-            SurfacePoint end = default;
-            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(1.0f, 0, 0.8f), out end));
-
-            Maybe<SurfacePath> path = LargeSquare.Surface.MakeDirectPath(start, end);
-
-            Assert.True(path.HasValue());
-            Assert.AreEqual(7, path.Value.Points.Count);
-            Assert.AreEqual(start, path.Value.Start);
-            Assert.AreEqual(end, path.Value.End);
+            Assert.AreEqual(7, path.Points.Count);
 
             Vector3 intersection1 = new Vector3(1.0f, 0, 5.0f);
             Vector3 intersection2 = new Vector3(1.0f, 0, 4.0f);
@@ -247,76 +245,43 @@ namespace Tests
             Vector3 intersection4 = new Vector3(1.0f, 0, 2.0f);
             Vector3 intersection5 = new Vector3(1.0f, 0, 1.0f);
 
-            Assert.AreEqual(intersection1, path.Value.Points[1].Position);
-            Assert.AreEqual(intersection2, path.Value.Points[2].Position);
-            Assert.AreEqual(intersection3, path.Value.Points[3].Position);
-            Assert.AreEqual(intersection4, path.Value.Points[4].Position);
-            Assert.AreEqual(intersection5, path.Value.Points[5].Position);
+            Assert.AreEqual(intersection1, path.Points[1].Position);
+            Assert.AreEqual(intersection2, path.Points[2].Position);
+            Assert.AreEqual(intersection3, path.Points[3].Position);
+            Assert.AreEqual(intersection4, path.Points[4].Position);
+            Assert.AreEqual(intersection5, path.Points[5].Position);
 
-            start = default;
-            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(1.0f, 0.0f, 5.0f), out start));
+            SurfacePath path2 = AssertPathCanBeMadeFromPositions(LargeSquare.Surface,new Vector3(1.0f, 0.0f, 5.0f), new Vector3(1.0f, 0, 1.0f));
 
-            end = default;
-            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(1.0f, 0, 1.0f), out end));
+            // Assert.AreEqual(5, path.Points.Count);
+            // TODO: rather than checking intersection check "path does not jump" and "all segments in the same direction"
 
-            path = LargeSquare.Surface.MakeDirectPath(start, end);
+            Assert.AreEqual(intersection1, path.Points[1].Position);
+            Assert.AreEqual(intersection2, path.Points[2].Position);
+            Assert.AreEqual(intersection3, path.Points[3].Position);
+            Assert.AreEqual(intersection4, path.Points[4].Position);
+            Assert.AreEqual(intersection5, path.Points[5].Position);
 
-            Assert.True(path.HasValue());
-            Assert.AreEqual(5, path.Value.Points.Count);
-            Assert.AreEqual(start, path.Value.Start);
-            Assert.AreEqual(end, path.Value.End);
 
-            Assert.AreEqual(intersection1, path.Value.Points[0].Position);
-            Assert.AreEqual(intersection2, path.Value.Points[1].Position);
-            Assert.AreEqual(intersection3, path.Value.Points[2].Position);
-            Assert.AreEqual(intersection4, path.Value.Points[3].Position);
-            Assert.AreEqual(intersection5, path.Value.Points[4].Position);
-
-            start = default;
-            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(7.0f, 0.0f, 3.0f), out start));
-
-            end = default;
-            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(7.0f, 0, 9.0f), out end));
-
-            path = LargeSquare.Surface.MakeDirectPath(start, end);
-
-            Assert.True(path.HasValue());
+            SurfacePath path3 = AssertPathCanBeMadeFromPositions(LargeSquare.Surface,new Vector3(7.0f, 0.0f, 3.0f), new Vector3(7.0f, 0, 9.0f));
             // Assert.AreEqual(7, path.Value.Points.Count);
-            Assert.AreEqual(start, path.Value.Start);
-            Assert.AreEqual(end, path.Value.End);
         }
 
         [Test]
         public void CornerCases2()
         {
-            SurfacePoint start = default;
-            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(3.0f, 0.0f, 2.0f), out start));
+            SurfacePath path = AssertPathCanBeMadeFromPositions(LargeSquare.Surface,new Vector3(3.0f, 0.0f, 2.0f), new Vector3(7.0f, 0, 9.0f));
 
-            SurfacePoint end = default;
-            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(7.0f, 0, 9.0f), out end));
-
-            Maybe<SurfacePath> path = LargeSquare.Surface.MakeDirectPath(start, end);
-
-            Assert.True(path.HasValue());
             // Assert.AreEqual(21, path.Value.Points.Count); // TODO: decide on number of crossings
-            Assert.AreEqual(start, path.Value.Start);
-            Assert.AreEqual(end, path.Value.End);
         }
 
         [Test]
         public void CornerCases3()
         {
-            SurfacePoint start = default;
-            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(6.141892f, 0.0f, 3.095632f), out start));
-
-            SurfacePoint end = default;
-            Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(new Vector3(3.124876f, 0.0f, 1.494868f), out end));
-
-            Maybe<SurfacePath> path = LargeSquare.Surface.MakeDirectPath(start, end);
-
-            Assert.True(path.HasValue());
-            Assert.AreEqual(start, path.Value.Start);
-            Assert.AreEqual(end, path.Value.End);
+            SurfacePath path2 = AssertPathCanBeMadeFromPositions(
+                LargeSquare.Surface,
+                new Vector3(6.141892f, 0.0f, 3.095632f),
+                new Vector3(3.124876f, 0.0f, 1.494868f));
         }
 
         [Test]
@@ -371,7 +336,7 @@ namespace Tests
         // TODO: some actual problematic floats on large and tilted squares
 
         [Test]
-        [Ignore("Long to run, only run manually")] // TODO: move in another assembly for long/random tests
+        [Ignore("Long to run")] // TODO: move in another assembly for long/random tests
         public void RandomPathsOnLargeSquare()
         {
             System.Random random = new System.Random();
@@ -379,29 +344,15 @@ namespace Tests
 
             for (int i = 0; i < 100; i++)
             {
-                SurfacePoint start = default;
-                Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(
-                    new Vector3(makeRandom(), 0.0f, makeRandom()), out start));
-
-                SurfacePoint end = default;
-                Assert.True(LargeSquare.Surface.TryGetSurfacePointFromPosition(
-                    new Vector3(makeRandom(), 0.0f, makeRandom()), out end));
-
-                Maybe<SurfacePath> path = LargeSquare.Surface.MakeDirectPath(start, end);
-
-                if (!path.HasValue())
-                {
-                    path = LargeSquare.Surface.MakeDirectPath(start, end);
-                }
-
-                Assert.True(path.HasValue());
-                Assert.AreEqual(start.Position, path.Value.Start.Position);
-                Assert.AreEqual(end.Position, path.Value.End.Position);
+                SurfacePath path = AssertPathCanBeMadeFromPositions(
+                    LargeSquare.Surface,
+                    new Vector3(makeRandom(), 0.0f, makeRandom()),
+                    new Vector3(makeRandom(), 0.0f, makeRandom()));
             }
         }
 
         [Test]
-        [Ignore("Long to run, only run manually")]
+        [Ignore("Long to run")]
         public void RandomPathsOnTiltedSquare()
         {
             System.Random random = new System.Random();
@@ -410,26 +361,11 @@ namespace Tests
             Surface TiltedSquare = new Surface(10.0f, 1.0f);
             for (int i = 0; i < 100; i++)
             {
-                SurfacePoint start = default;
-                float x = makeRandom(), z = makeRandom();
-                Assert.True(TiltedSquare.TryGetSurfacePointFromPosition(
-                    new Vector3(x, (x + z) / 2.0f, z), out start));
-
-                SurfacePoint end = default;
-                x = makeRandom(); z = makeRandom();
-                Assert.True(TiltedSquare.TryGetSurfacePointFromPosition(
-                    new Vector3(x, (x + z) / 2.0f, z), out end));
-
-                Maybe<SurfacePath> path = TiltedSquare.MakeDirectPath(start, end);
-
-                if (!path.HasValue())
-                {
-                    path = TiltedSquare.MakeDirectPath(start, end);
-                }
-
-                Assert.True(path.HasValue());
-                Assert.AreEqual(start.Position, path.Value.Start.Position);
-                Assert.AreEqual(end.Position, path.Value.End.Position);
+                float x1 = makeRandom(), z1 = makeRandom(), x2 = makeRandom(), z2 = makeRandom();
+                SurfacePath path = AssertPathCanBeMadeFromPositions(
+                    TiltedSquare,
+                  new Vector3(x1, (x1 + z1) / 2.0f, z1),
+                  new Vector3(x2, (x2 + z2) / 2.0f, z2));
             }
         }
     }
