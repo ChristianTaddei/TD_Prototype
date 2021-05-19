@@ -69,6 +69,8 @@ public class Surface
 
     public Maybe<SurfacePath> MakeDirectPath(SurfacePoint startPoint, SurfacePoint endPoint)
     {
+        Debug.Log("making path " + startPoint.Position + " to " + endPoint.Position);
+
         if (startPoint.Face.Surface != this || endPoint.Face.Surface != this)
         {
             return new Maybe<SurfacePath>.Nothing();
@@ -155,7 +157,7 @@ public class Surface
             }
 
             float denominator = startToFlatEnd.BarycentricCoordinates.GetCoordinate(c);
-            if (denominator == 0.0f)
+            if (Mathf.Abs(denominator) <= 0.0001f) // FIXME: epsilon
             {
                 coefficient = 0;
                 break; // not necessary
@@ -164,7 +166,7 @@ public class Surface
             {
                 float partialCoefficient;
                 partialCoefficient = -start.BarycentricVector.BarycentricCoordinates.GetCoordinate(c) / denominator;
-                if (partialCoefficient >= 0 && partialCoefficient < coefficient)
+                if (partialCoefficient >= 0.0f && partialCoefficient < coefficient)
                 {
                     coefficient = partialCoefficient;
                 }
@@ -172,10 +174,18 @@ public class Surface
         }
         // }
 
+        Func<float, float> snapIfZero = (float initialValue) => {
+            if(Mathf.Abs(initialValue) <= 0.0001f){
+                return 0.0f;
+            }
+
+            return initialValue;
+        };
+
         BarycentricCoordinates intersectionCoordinates = new BarycentricCoordinates(
-           (start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).a,
-           (start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).b,
-           (start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).c
+           snapIfZero((start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).a),
+           snapIfZero((start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).b),
+           snapIfZero((start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).c)
         );
 
         BarycentricVector intersectionVector =
