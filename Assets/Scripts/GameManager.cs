@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     void Start()
     {
-       Surface surface = new Surface(10.0f);
+       Surface surface = new Surface(10.0f, 1.0f);
        Board board = new Board(surface);
        BoardRepresentation.MakeFrom(board); 
     }

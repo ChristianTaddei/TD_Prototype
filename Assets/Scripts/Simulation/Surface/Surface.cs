@@ -174,8 +174,10 @@ public class Surface
         }
         // }
 
-        Func<float, float> snapIfZero = (float initialValue) => {
-            if(Mathf.Abs(initialValue) <= 0.0001f){
+        Func<float, float> snapIfZero = (float initialValue) =>
+        {
+            if (Mathf.Abs(initialValue) <= 0.0001f)
+            {
                 return 0.0f;
             }
 
@@ -284,4 +286,27 @@ public class Surface
         Face ACB = AddFace(_A, _C, _B);
         Face ADC = AddFace(_A, _D, _C);
     }
+
+    public Surface(float edgeSize, float maxH) : this()
+    {
+        for (int i = 0; i < edgeSize; i++)
+        {
+            for (int j = 0; j < edgeSize; j++)
+            {
+                addTiltedSquareAt(new Vector3(i, (i + j) / 2.0f, j));
+            }
+        }
+    }
+
+    public void addTiltedSquareAt(Vector3 point)
+    {
+        CartesianVector _A = point + new Vector3(1, .5f, 0);
+        CartesianVector _B = point + new Vector3(1, 1, 1);
+        CartesianVector _C = point + new Vector3(0, .5f, 1);
+        CartesianVector _D = point + new Vector3(0, 0, 0);
+
+        Face ACB = AddFace(_A, _C, _B);
+        Face ADC = AddFace(_A, _D, _C);
+    }
+
 }

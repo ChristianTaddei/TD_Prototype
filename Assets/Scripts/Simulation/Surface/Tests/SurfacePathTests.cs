@@ -369,6 +369,7 @@ namespace Tests
         }
 
         [Test]
+        [Ignore("Long to run, only run manually")] // TODO: move in another assembly for long/random tests
         public void RandomPathsOnLargeSquare()
         {
             System.Random random = new System.Random();
@@ -389,6 +390,39 @@ namespace Tests
                 if (!path.HasValue())
                 {
                     path = LargeSquare.Surface.MakeDirectPath(start, end);
+                }
+
+                Assert.True(path.HasValue());
+                Assert.AreEqual(start.Position, path.Value.Start.Position);
+                Assert.AreEqual(end.Position, path.Value.End.Position);
+            }
+        }
+
+        [Test]
+        [Ignore("Long to run, only run manually")]
+        public void RandomPathsOnTiltedSquare()
+        {
+            System.Random random = new System.Random();
+            Func<float> makeRandom = () => (float)(random.NextDouble() * 10.0);
+
+            Surface TiltedSquare = new Surface(10.0f, 1.0f);
+            for (int i = 0; i < 100; i++)
+            {
+                SurfacePoint start = default;
+                float x = makeRandom(), z = makeRandom();
+                Assert.True(TiltedSquare.TryGetSurfacePointFromPosition(
+                    new Vector3(x, (x + z) / 2.0f, z), out start));
+
+                SurfacePoint end = default;
+                x = makeRandom(); z = makeRandom();
+                Assert.True(TiltedSquare.TryGetSurfacePointFromPosition(
+                    new Vector3(x, (x + z) / 2.0f, z), out end));
+
+                Maybe<SurfacePath> path = TiltedSquare.MakeDirectPath(start, end);
+
+                if (!path.HasValue())
+                {
+                    path = TiltedSquare.MakeDirectPath(start, end);
                 }
 
                 Assert.True(path.HasValue());
