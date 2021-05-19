@@ -1,6 +1,5 @@
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Tests
@@ -18,58 +17,6 @@ namespace Tests
         {
 
         }
-
-        # region Common assertions
-        // TODO: when going for noncomplanars we need toleance, where to define it?
-        static Action<Vector3, Vector3> AssertAreSamePosition =
-            (Vector3 p1, Vector3 p2) =>
-                {
-                    Assert.True(UnityEngine.Mathf.Abs(p1.x - p2.x) < 0.0001f);
-                    Assert.True(UnityEngine.Mathf.Abs(p1.y - p2.y) < 0.0001f);
-                    Assert.True(UnityEngine.Mathf.Abs(p1.z - p2.z) < 0.0001f);
-                };
-
-        static Action<SurfacePoint, SurfacePoint, SurfacePoint> AssertPathHasOnlyOneInstersection =
-           (SurfacePoint start, SurfacePoint intersection, SurfacePoint end) =>
-               {
-                   Maybe<SurfacePath> path = start.Face.Surface.MakeDirectPath(start, end);
-
-                   Assert.True(path.HasValue());
-                   Assert.AreEqual(3, path.Value.Points.Count);
-                   Assert.AreEqual(start, path.Value.Start);
-                   Assert.AreEqual(end, path.Value.End);
-                   Assert.AreEqual(intersection.Position, path.Value.Points[1].Position);
-               };
-
-        static Action<SurfacePoint, SurfacePoint> AssertPathIsJustStartAndEnd =
-            (SurfacePoint start, SurfacePoint end) =>
-                {
-                    Maybe<SurfacePath> path = start.Face.Surface.MakeDirectPath(start, end);
-
-                    Assert.True(path.HasValue());
-                    Assert.AreEqual(2, path.Value.Points.Count);
-                    Assert.AreEqual(start, path.Value.Start);
-                    Assert.AreEqual(end, path.Value.End);
-                };
-
-        static Func<Surface, Vector3, Vector3, SurfacePath> AssertPathCanBeMadeFromPositions =
-            (Surface surface, Vector3 p1, Vector3 p2) =>
-                {
-                    Maybe<SurfacePoint> start = surface.GetSurfacePoint(p1);
-                    Maybe<SurfacePoint> end = surface.GetSurfacePoint(p2);
-                    Maybe<SurfacePath> path = surface.MakeDirectPath(start.Value, end.Value);
-
-                    Assert.True(start.HasValue());
-                    AssertAreSamePosition(p1, start.Value.Position); 
-
-                    Assert.True(end.HasValue());
-                    AssertAreSamePosition(p2, end.Value.Position);
-
-                    Assert.True(path.HasValue());
-
-                    return path.Value;
-                };
-        #endregion
 
         [Test]
         public void DisjointedFacesNoPath()
@@ -272,7 +219,7 @@ namespace Tests
         {
             SurfacePath path = AssertPathCanBeMadeFromPositions(LargeSquare.Surface,new Vector3(3.0f, 0.0f, 2.0f), new Vector3(7.0f, 0, 9.0f));
 
-            // Assert.AreEqual(21, path.Value.Points.Count); // TODO: decide on number of crossings
+            // Assert.AreEqual(21, path.Value.Points.Count); // TODO: decide if crossings should be uniques and therefore tested
         }
 
         [Test]
@@ -367,6 +314,58 @@ namespace Tests
                   new Vector3(x1, (x1 + z1) / 2.0f, z1),
                   new Vector3(x2, (x2 + z2) / 2.0f, z2));
             }
-        }
+        } 
+        
+        #region Common assertions
+        // TODO: when going for noncomplanars we need toleance, where to define it?
+        static Action<Vector3, Vector3> AssertAreSamePosition =
+            (Vector3 p1, Vector3 p2) =>
+                {
+                    Assert.True(UnityEngine.Mathf.Abs(p1.x - p2.x) < 0.0001f);
+                    Assert.True(UnityEngine.Mathf.Abs(p1.y - p2.y) < 0.0001f);
+                    Assert.True(UnityEngine.Mathf.Abs(p1.z - p2.z) < 0.0001f);
+                };
+
+        static Action<SurfacePoint, SurfacePoint, SurfacePoint> AssertPathHasOnlyOneInstersection =
+           (SurfacePoint start, SurfacePoint intersection, SurfacePoint end) =>
+               {
+                   Maybe<SurfacePath> path = start.Face.Surface.MakeDirectPath(start, end);
+
+                   Assert.True(path.HasValue());
+                   Assert.AreEqual(3, path.Value.Points.Count);
+                   Assert.AreEqual(start, path.Value.Start);
+                   Assert.AreEqual(end, path.Value.End);
+                   Assert.AreEqual(intersection.Position, path.Value.Points[1].Position); // TODO: would fail if using non-ints floats
+               };
+
+        static Action<SurfacePoint, SurfacePoint> AssertPathIsJustStartAndEnd =
+            (SurfacePoint start, SurfacePoint end) =>
+                {
+                    Maybe<SurfacePath> path = start.Face.Surface.MakeDirectPath(start, end);
+
+                    Assert.True(path.HasValue());
+                    Assert.AreEqual(2, path.Value.Points.Count);
+                    Assert.AreEqual(start, path.Value.Start);
+                    Assert.AreEqual(end, path.Value.End);
+                };
+
+        static Func<Surface, Vector3, Vector3, SurfacePath> AssertPathCanBeMadeFromPositions =
+            (Surface surface, Vector3 p1, Vector3 p2) =>
+                {
+                    Maybe<SurfacePoint> start = surface.GetSurfacePoint(p1);
+                    Maybe<SurfacePoint> end = surface.GetSurfacePoint(p2);
+                    Maybe<SurfacePath> path = surface.MakeDirectPath(start.Value, end.Value);
+
+                    Assert.True(start.HasValue());
+                    AssertAreSamePosition(p1, start.Value.Position);
+
+                    Assert.True(end.HasValue());
+                    AssertAreSamePosition(p2, end.Value.Position);
+
+                    Assert.True(path.HasValue());
+
+                    return path.Value;
+                };
+        #endregion
     }
 }
