@@ -212,16 +212,54 @@ public class Surface
             facesSharingChangedCoordinates.Remove(start.Face);
         }
 
-        if (facesSharingChangedCoordinates.Count == 0
-            || facesSharingChangedCoordinates
-                .Where(face => intersectionVector.ChangeBase(face).IsPointOnBaseTriangle())
-                .Count() == 0)
-        {
+        Func<IVector, IVector, bool> areSamePosition =
+            (IVector p1, IVector p2) =>
+                {
+                    return (UnityEngine.Mathf.Abs(p1.Position.x - p2.Position.x) < 0.0001f)
+                        && (UnityEngine.Mathf.Abs(p1.Position.y - p2.Position.y) < 0.0001f)
+                        && (UnityEngine.Mathf.Abs(p1.Position.z - p2.Position.z) < 0.0001f);
+                };
+
+        Func<TriangleVertexIdentifiers, Face, Maybe<TriangleVertexIdentifiers>> getCorrespondingCooridnateInStartFace =
+            (TriangleVertexIdentifiers v, Face face) =>
+                {
+                    foreach (TriangleVertexIdentifiers c in Triangle.Vertices)
+                    {
+                        if (areSamePosition(face.GetVertex(v), start.Face.GetVertex(c)))
+                        {
+                            return new Maybe<TriangleVertexIdentifiers>.Just(c);
+                        }
+                    }
+
+                    return new Maybe<TriangleVertexIdentifiers>.Nothing();
+                };
+
+        Func<Face, BarycentricVector> intersectionInBase =
+            (Face nextFace) =>
+               {
+                   Maybe<TriangleVertexIdentifiers> AinOldBase = getCorrespondingCooridnateInStartFace(TriangleVertexIdentifiers.A, nextFace);
+                   Maybe<TriangleVertexIdentifiers> BinOldBase = getCorrespondingCooridnateInStartFace(TriangleVertexIdentifiers.B, nextFace);
+                   Maybe<TriangleVertexIdentifiers> CinOldBase = getCorrespondingCooridnateInStartFace(TriangleVertexIdentifiers.C, nextFace);
+
+                   float a = AinOldBase.HasValue()
+                       ? intersectionVector.BarycentricCoordinates.GetCoordinate(AinOldBase.Value) : 0.0f;
+                   float b = BinOldBase.HasValue()
+                       ? intersectionVector.BarycentricCoordinates.GetCoordinate(BinOldBase.Value) : 0.0f;
+                   float c = CinOldBase.HasValue()
+                       ? intersectionVector.BarycentricCoordinates.GetCoordinate(CinOldBase.Value) : 0.0f;
+
+                   return new BarycentricVector(
+                       nextFace,
+                       new BarycentricCoordinates(a, b, c));
+               };
+
+        if (facesSharingChangedCoordinates
+            .Where(face => intersectionInBase(face).IsPointOnBaseTriangle()
+                && !alreadyVisitedFaces.Contains(face)).Count() == 0)
             return new Maybe<SurfacePoint>.Nothing();
-        }
 
         Face nextFace = facesSharingChangedCoordinates
-            .Where(face => intersectionVector.ChangeBase(face).IsPointOnBaseTriangle()
+            .Where(face => intersectionInBase(face).IsPointOnBaseTriangle()
                 && !alreadyVisitedFaces.Contains(face))
             .OrderBy(face => Mathf.Min(Mathf.Min(
                 Vector3.Distance(face.A.Position, flatEndInStartBase.Position),
@@ -229,15 +267,18 @@ public class Surface
                 Vector3.Distance(face.C.Position, flatEndInStartBase.Position)))
             .First();
 
-        intersectionVector = intersectionVector.ChangeBase(nextFace);
-        intersectionVector = intersectionVector.Normalize();
+        intersectionVector = intersectionInBase(nextFace);
 
         // if (!intersectionVector.IsPointOnBaseTriangle())
         // {
         //     Debug.Log("After change, not norm");
         // }
 
+        intersectionVector = intersectionVector.Normalize();
+
         return new Maybe<SurfacePoint>.Just(new SurfacePoint(nextFace, intersectionVector));
+
+
     }
 
     private static Triangle ProjectOnPlane_Oy(Triangle triangle)

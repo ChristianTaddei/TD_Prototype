@@ -283,7 +283,7 @@ namespace Tests
         // TODO: some actual problematic floats on large and tilted squares
 
         [Test]
-        [Ignore("Long to run")] // TODO: move in another assembly for long/random tests
+        // [Ignore("Long to run")] // TODO: move in another assembly for long/random tests
         public void RandomPathsOnLargeSquare()
         {
             System.Random random = new System.Random();
@@ -299,7 +299,7 @@ namespace Tests
         }
 
         [Test]
-        [Ignore("Long to run")]
+        // [Ignore("Long to run")]
         public void RandomPathsOnTiltedSquare()
         {
             System.Random random = new System.Random();
