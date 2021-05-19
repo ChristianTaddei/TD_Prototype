@@ -31,8 +31,8 @@ public class Board
         }
     }
 
-    public bool TryGetSurfacePointFromPosition(int triangleIndex, Vector3 point, out SurfacePoint sp)
+    public Maybe<SurfacePoint> GetSurfacePoint(int triangleIndex, Vector3 point)
     {
-        return surface.TryGetSurfacePointFromPosition(triangleIndex, point, out sp);
+        return surface.GetSurfacePoint(triangleIndex, point);
     }
 }

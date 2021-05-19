@@ -20,30 +20,19 @@ public class Surface
         Faces.Add(face);
     }
 
-    internal List<Face> neighboursOf(Face startingFace)
+    public Maybe<SurfacePoint> GetSurfacePoint(int triangleIndex, Vector3 position)
     {
-        List<Face> neighbours = new List<Face>();
-        Faces.Where(candidateNeighbour => areNeighbours(candidateNeighbour, startingFace));
-        return neighbours;
-    }
+        Face faceContainingPoint = faces[triangleIndex];
+        BarycentricVector vector =
+                new BarycentricVector(faceContainingPoint,
+                new CartesianVector(position));
 
-    private bool areNeighbours(Face f1, Face f2)
-    {
-        foreach (TriangleVertexIdentifiers v1 in Triangle.Vertices)
+        if (!vector.IsPointOnBaseTriangle())
         {
-            foreach (TriangleVertexIdentifiers v2 in Triangle.Vertices)
-            {
-                if (f1.GetVertex(v1) == f1.GetVertex(v2)) return true;
-            }
+            return new Maybe<SurfacePoint>.Nothing();
         }
 
-        return false;
-    }
-
-    public bool TryGetSurfacePointFromPosition(int triangleIndex, Vector3 point, out SurfacePoint sp)
-    {
-        sp = new SurfacePoint(faces[triangleIndex], new BarycentricVector(faces[triangleIndex], new CartesianVector(point)));
-        return true;
+        return new Maybe<SurfacePoint>.Just(new SurfacePoint(faceContainingPoint, vector));
     }
 
     public bool TryGetSurfacePointFromPosition(Vector3 point, out SurfacePoint sp)

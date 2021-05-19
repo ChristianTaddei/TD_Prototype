@@ -30,9 +30,10 @@ public class InputManager : MonoBehaviour
 
         if (LeftClick())
         {
-            SurfacePoint newP;
-            if (TryGetSurfacePointUnderCursor(out newP))
+            Maybe<SurfacePoint> maybeSurfacePoint = GetSurfacePointUnderCursor();
+            if (maybeSurfacePoint.HasValue())
             {
+                SurfacePoint newP = maybeSurfacePoint.Value;
                 if (oldP == null)
                 {
                     oldP = newP;
@@ -60,6 +61,8 @@ public class InputManager : MonoBehaviour
 
                     oldP = null;
                 }
+            } else {
+                Debug.Log("Failed to make SP under cursor");
             }
         }
     }
@@ -95,7 +98,7 @@ public class InputManager : MonoBehaviour
     // }
 
 
-    public bool TryGetSurfacePointUnderCursor(out SurfacePoint surfacePoint)
+    public Maybe<SurfacePoint> GetSurfacePointUnderCursor()
     {
         RaycastHit hit;
         if (TryGetClickHit(out hit))
@@ -105,11 +108,10 @@ public class InputManager : MonoBehaviour
                 BoardRepresentation br = hit.collider.gameObject
                     .GetComponent<BoardRepresentation>();
 
-                return br.TryGetSurfacePointFromPosition(hit.triangleIndex, hit.point, out surfacePoint);
+                return br.GetSurfacePoint(hit.triangleIndex, hit.point);
             }
         }
 
-        surfacePoint = default;
-        return false;
+        return new Maybe<SurfacePoint>.Nothing();
     }
 }
