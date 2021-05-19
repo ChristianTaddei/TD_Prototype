@@ -38,7 +38,7 @@ public class BarycentricCoordinates
 
     public bool CheckSumToOne()
     {
-        if (a + b + c > 1.0001f // TODO: steamline float tolerance
+        if (a + b + c > 1.0001f // TODO: streamline float tolerance
             || a + b + c < 0.9999f)
         {
             // Debug.LogWarning("Barycentric does not sum to 1: "

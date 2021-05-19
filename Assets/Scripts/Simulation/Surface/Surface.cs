@@ -69,7 +69,6 @@ public class Surface
 
     public Maybe<SurfacePath> MakeDirectPath(SurfacePoint startPoint, SurfacePoint endPoint)
     {
-        Debug.Log("making path " + startPoint.Position + " to " + endPoint.Position);
 
         if (startPoint.Face.Surface != this || endPoint.Face.Surface != this)
         {
@@ -197,10 +196,10 @@ public class Surface
 
         intersectionVector = intersectionVector.Normalize();
 
-        if (!intersectionVector.IsPointOnBaseTriangle())
-        {
-            Debug.Log("Before change, not norm");
-        }
+        // if (!intersectionVector.IsPointOnBaseTriangle())
+        // {
+        //     Debug.Log("Before change, not norm");
+        // }
 
         HashSet<TriangleVertexIdentifiers> sharedVertices = new HashSet<TriangleVertexIdentifiers>(Triangle.Vertices);
         foreach (TriangleVertexIdentifiers c in Triangle.Vertices)
@@ -245,10 +244,10 @@ public class Surface
         intersectionVector = intersectionVector.ChangeBase(nextFace);
         intersectionVector = intersectionVector.Normalize();
 
-        if (!intersectionVector.IsPointOnBaseTriangle())
-        {
-            Debug.Log("After change, not norm");
-        }
+        // if (!intersectionVector.IsPointOnBaseTriangle())
+        // {
+        //     Debug.Log("After change, not norm");
+        // }
 
         return new Maybe<SurfacePoint>.Just(new SurfacePoint(nextFace, intersectionVector));
     }

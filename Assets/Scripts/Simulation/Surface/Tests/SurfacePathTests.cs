@@ -368,6 +368,8 @@ namespace Tests
                 Square2x2._21on_11_21_20);
         }
 
+        // TODO: some actual problematic floats on large and tilted squares
+
         [Test]
         [Ignore("Long to run, only run manually")] // TODO: move in another assembly for long/random tests
         public void RandomPathsOnLargeSquare()
