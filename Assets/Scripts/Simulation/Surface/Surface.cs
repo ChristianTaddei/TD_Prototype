@@ -8,220 +8,304 @@ public class Surface
 {
     private List<Face> faces;
 
+    public List<Face> Faces { get => faces; set => faces = value; }
+
     public Surface()
     {
-        this.faces = new List<Face>();
+        this.Faces = new List<Face>();
     }
 
     internal void AddFace(Face face)
     {
-        faces.Add(face);
+        Faces.Add(face);
     }
 
     internal List<Face> neighboursOf(Face startingFace)
     {
         List<Face> neighbours = new List<Face>();
-        faces.Where(candidateNeighbour => areNeighbours(candidateNeighbour, startingFace));
+        Faces.Where(candidateNeighbour => areNeighbours(candidateNeighbour, startingFace));
         return neighbours;
     }
 
     private bool areNeighbours(Face f1, Face f2)
     {
-        foreach (IPoint v1 in f1.Triangle.Vertices)
+        foreach (TriangleVertexIdentifiers v1 in Triangle.Vertices)
         {
-            foreach (IPoint v2 in f2.Triangle.Vertices)
+            foreach (TriangleVertexIdentifiers v2 in Triangle.Vertices)
             {
-                if (v1 == v2) return true;
+                if (f1.GetVertex(v1) == f1.GetVertex(v2)) return true;
             }
         }
 
         return false;
     }
 
-    // public List<Vertex> Vertices;
-    // public int[] Triangles { get; private set; }
-    // private List<Face> faces;
+    public bool TryGetSurfacePointFromPosition(int triangleIndex, Vector3 point, out SurfacePoint sp)
+    {
+        sp = new SurfacePoint(faces[triangleIndex], new BarycentricVector(faces[triangleIndex], new CartesianVector(point)));
+        return true;
+    }
 
-    // public Surface(int edgeSize)
-    // {
-    //     // Vertices
-    //     Vertices = new Vertex[edgeSize * edgeSize].ToList();
+    public bool TryGetSurfacePointFromPosition(Vector3 point, out SurfacePoint sp)
+    {
+        foreach (Face face in faces)
+        {
+            sp = new SurfacePoint(face, new BarycentricVector(face, new CartesianVector(point)));
+            if (sp.BarycentricVector.IsPointOnBaseTriangle())
+            {
+                return true;
+            }
+        }
 
-    //     // Create a vertex at every (i,j) integer position
-    //     int vc = 0;
-    //     for (int z = 0; z < edgeSize; z++)
-    //     {
-    //         for (int x = 0; x < edgeSize; x++)
-    //         {
-    //             Vertex newVertex = new Vertex();
-    //             Vertices[x + (edgeSize * z)] = newVertex;
+        sp = default; // FIXME: monads here
+        return false;
+    }
 
-    //             // InitalState.VertexStates.Add(newVertex, new VertexState(new Vector3(x, 0, z)));
-    //         }
-    //     }
+    public Face AddFace(CartesianVector cartesianPoint1, CartesianVector cartesianPoint2, CartesianVector cartesianPoint3)
+    {
+        Face newFace = new Face(this, new Triangle(cartesianPoint1, cartesianPoint2, cartesianPoint3));
+        return newFace;
+    }
 
-    //     // Connect all vertices closer than 2.0f
-    //     foreach (Vertex vertex in Vertices)
-    //     {
-    //         foreach (Vertex otherVertex in Vertices)
-    //         {
-    //             // if (Vector3.Distance(
-    //             //         InitalState.VertexStates[vertex].Position,
-    //             //         InitalState.VertexStates[otherVertex].Position) < 2.0f
-    //             //     && !vertex.Equals(otherVertex))
-    //             // {
-    //             //     vertex.AddNeighbour(otherVertex);
-    //             // }
-    //         }
-    //     }
+    public Maybe<SurfacePath> MakeDirectPath(SurfacePoint startPoint, SurfacePoint endPoint)
+    {
 
-    //     // Mesh and faces
-    //     Triangles = new int[(edgeSize - 1) * (edgeSize - 1) * 6];
-    //     faces = new List<Face>();
+        if (startPoint.Face.Surface != this || endPoint.Face.Surface != this)
+        {
+            return new Maybe<SurfacePath>.Nothing();
+        }
 
-    //     for (int i = 0; i < Vertices.Count; i++)
-    //     {
-    //         int row = i % edgeSize;
-    //         int col = i / edgeSize;
+        List<SurfacePoint> crossingPoints = new List<SurfacePoint>();
 
-    //         if (row < edgeSize - 1 && col < edgeSize - 1)
-    //         {
-    //             int triangleStartingIndex = (row + (col * (edgeSize - 1))) * 6;
+        List<Face> alreadyVisitedFaces = new List<Face>();
+        alreadyVisitedFaces.Add(startPoint.Face);
+        int tries = 0;
+        SurfacePoint currentPoint = startPoint;
+        while (currentPoint.Face != endPoint.Face)
+        {
+            Maybe<SurfacePoint> intersection = GetIntersectionToward(currentPoint, endPoint, alreadyVisitedFaces);
+            if (intersection.HasValue())
+            {
+                if (intersection.Value.Position == endPoint.Position) break;
 
-    //             faces.Add(new Face(
-    //                         Vertices[i],
-    //                         Vertices[i + 1],
-    //                         Vertices[i + edgeSize]));
+                alreadyVisitedFaces.Add(intersection.Value.Face);
+                crossingPoints.Add(intersection.Value);
+                currentPoint = intersection.Value;
+            }
+            else
+            {
+                return new Maybe<SurfacePath>.Nothing();
+            }
 
-    //             Triangles[triangleStartingIndex] = i;
-    //             Triangles[triangleStartingIndex + 1] = i + edgeSize;
-    //             Triangles[triangleStartingIndex + 2] = i + 1; 
+            tries++;
+            if (tries > 1000)
+            {
+                throw new Exception("Too many tries to get intersection");
+            }
+        }
 
-    //             faces.Add(new Face(
-    //                         Vertices[i + 1 + edgeSize],
-    //                         Vertices[i + edgeSize],
-    //                         Vertices[i + 1]));
+        List<SurfacePoint> allPoints = new List<SurfacePoint>();
+        allPoints.Add(startPoint);
+        allPoints.AddRange(crossingPoints);
+        allPoints.Add(endPoint);
 
-    //             Triangles[triangleStartingIndex + 3] = i + 1 + edgeSize;
-    //             Triangles[triangleStartingIndex + 4] = i + 1;
-    //             Triangles[triangleStartingIndex + 5] = i + edgeSize; 
-    //         }
-    //     }
-    // }
+        List<SurfacePoint> noDuplicatePositions = new List<SurfacePoint>();
+        noDuplicatePositions.Add(allPoints[0]);
+        for (int i = 1; i < allPoints.Count; i++)
+        {
+            SurfacePoint p1 = allPoints[i - 1], p2 = allPoints[i];
+            if (!(UnityEngine.Mathf.Abs(p1.Position.x - p2.Position.x) < 0.0001f
+                && UnityEngine.Mathf.Abs(p1.Position.y - p2.Position.y) < 0.0001f
+                && UnityEngine.Mathf.Abs(p1.Position.z - p2.Position.z) < 0.0001f))
+            {
+                noDuplicatePositions.Add(p2);
+            }
+        }
 
-    // // internal SurfacePoint MakeBPFrom2d(Vector3 destination2d)
-    // // {
-    // //     foreach (Face face in faces)
-    // //     {
-    // //         SurfacePoint candidate = new SurfacePoint(
-    // //             InitalState,
-    // //             face,
-    // //             destination2d);
+        return new Maybe<SurfacePath>.Just(new SurfacePath(noDuplicatePositions));
+    }
 
-    // //         if (candidate.Barycentrics.CheckInternal())
-    // //         {
-    // //             if(Vector3.Distance(destination2d, candidate.GetCartesians(InitalState)) > 0.1f){
-    // //                 // Debug.Log("makebp broke vector");
-    // //             }
-    // //             return candidate;
-    // //         }
-    // //     }
+    public Maybe<SurfacePoint> GetIntersectionToward(SurfacePoint start, SurfacePoint end, List<Face> alreadyVisitedFaces)
+    {
+        if (start.Position == end.Position)
+        {
+            return new Maybe<SurfacePoint>.Just(start);
+        }
 
-    // //     Debug.Log("makeBP failed");
-    // //     return null;
-    // // }
+        Triangle flatStartBase = ProjectOnPlane_Oy(start.BarycentricVector.Base);
 
-    // public bool TryGetFaceFromIndex(int triangleIndex, out Face face)
-    // {
-    //     // FIXME: what if faces does not have a value?
-    //     if (triangleIndex < faces.Count)
-    //     {
-    //         face = faces[triangleIndex];
-    //         return true;
-    //     }
+        BarycentricVector endInFlatStartBase = new BarycentricVector(
+            flatStartBase,
+            new CartesianVector(end.BarycentricVector.Position).Project(flatStartBase));
 
-    //     face = default;
-    //     return false;
-    // }
+        BarycentricVector flatEndInStartBase = new BarycentricVector(
+            start.BarycentricVector.Base,
+            endInFlatStartBase.BarycentricCoordinates);
 
-    // // public SurfacePoint SumBarAndCart(BoardState boardState, SurfacePoint boardPosition, Vector3 movementVector)
-    // // {
-    // //     // Face face2d = ProjectFaceOn2D(boardPosition.Face);
-    // //     Vector3 destination = boardPosition.GetCartesians(boardState) + movementVector;
-    // //     Vector3 destination2d = new Vector3(
-    // //         destination.x, 0, destination.z);
+        BarycentricVector startToFlatEnd = flatEndInStartBase - start.BarycentricVector;
 
-    // //     // BoardPosition flatBP = new BoardPosition(simState, face2d, destination2d);
-    // //     SurfacePoint flatBP = new SurfacePoint(SimulationManager.Instance.Board.InitalState, boardPosition.Face, destination2d);
-    // //     if (flatBP.Barycentrics.CheckInternal())
-    // //     {
-    // //         return new SurfacePoint(boardPosition.Face, flatBP.Barycentrics);
-    // //     }
+        float coefficient = float.MaxValue;
+        foreach (TriangleVertexIdentifiers c in Triangle.Vertices)
+        {
+            if (start.BarycentricVector.BarycentricCoordinates.GetCoordinate(c) == 0.0f)
+            {
+                if (startToFlatEnd.BarycentricCoordinates.GetCoordinate(c) >= 0.0f)
+                {
+                    continue;
+                }
+            }
 
-    // //     List<Face> farNeighbours = new List<Face>();
-    // //     foreach (Face nextFace in boardPosition.Face.GetNeighbourFaces())
-    // //     {
-    // //         // Face nextFace2d = ProjectFaceOn2D(nextFace);
-    // //         // flatBP = new BoardPosition(simState, nextFace2d, destination2d);
-    // //         flatBP = new SurfacePoint(SimulationManager.Instance.Board.InitalState, nextFace, destination2d);
-    // //         if (flatBP.Barycentrics.CheckInternal())
-    // //         {
-    // //             return new SurfacePoint(nextFace, flatBP.Barycentrics);
-    // //         }
+            float denominator = startToFlatEnd.BarycentricCoordinates.GetCoordinate(c);
+            if (Mathf.Abs(denominator) <= 0.0001f) // FIXME: epsilon
+            {
+                coefficient = 0;
+                break; // not necessary
+            }
+            else
+            {
+                float partialCoefficient;
+                partialCoefficient = -start.BarycentricVector.BarycentricCoordinates.GetCoordinate(c) / denominator;
+                if (partialCoefficient >= 0.0f && partialCoefficient < coefficient)
+                {
+                    coefficient = partialCoefficient;
+                }
+            }
+        }
+        // }
 
-    // //         farNeighbours.AddRange(nextFace.GetNeighbourFaces());
-    // //     }
+        Func<float, float> snapIfZero = (float initialValue) =>
+        {
+            if (Mathf.Abs(initialValue) <= 0.0001f)
+            {
+                return 0.0f;
+            }
 
-    // //     foreach (Face nextFace in farNeighbours)
-    // //     {
-    // //         // Face nextFace2d = ProjectFaceOn2D(nextFace);
-    // //         // flatBP = new BoardPosition(simState, nextFace2d, destination2d);
-    // //         flatBP = new SurfacePoint(SimulationManager.Instance.Board.InitalState, nextFace, destination2d);
-    // //         if (flatBP.Barycentrics.CheckInternal())
-    // //         {
-    // //             return new SurfacePoint(nextFace, flatBP.Barycentrics);
-    // //         }
-    // //     }
+            return initialValue;
+        };
 
-    // //     // TODO: make like tryGet
-    // //     Debug.Log("find next face failed");
-    // //     return null;
-    // // }
+        BarycentricCoordinates intersectionCoordinates = new BarycentricCoordinates(
+           snapIfZero((start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).a),
+           snapIfZero((start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).b),
+           snapIfZero((start.BarycentricVector.BarycentricCoordinates + coefficient * startToFlatEnd.BarycentricCoordinates).c)
+        );
 
-    // // private Face ProjectFaceOn2D(Face face)
-    // // {
-    // //     return new Face(
-    // //                  new Vertex(
-    // //                      new Vector3(
-    // //                         face.a.Position.x,
-    // //                         0,
-    // //                         face.a.Position.z)),
-    // //                  new Vertex(
-    // //                      new Vector3(
-    // //                         face.b.Position.x,
-    // //                         0,
-    // //                         face.b.Position.z)),
-    // //                  new Vertex(
-    // //                      new Vector3(
-    // //                         face.c.Position.x,
-    // //                         0,
-    // //                         face.c.Position.z)));
-    // // }
+        BarycentricVector intersectionVector =
+            new BarycentricVector(
+                start.Face,
+                intersectionCoordinates);
 
-    // // private static Vector3 ProjectVectorOnFace(Face face, Vector3 vector)
-    // // {
-    // //     Vector3 op = vector;
-    // //     Vector3 ap = face.a.Position;
-    // //     Vector3 n = Vector3.Cross(
-    // //         face.b.Position - face.a.Position,
-    // //         face.c.Position - face.a.Position);
-    // //     Vector3 projectedDest = op - (Vector3.Dot(ap, n) / n.sqrMagnitude) * n;
-    // //     return projectedDest;
-    // // }
+        intersectionVector = intersectionVector.Normalize();
 
-    // // public BoardPosition ToBoardPosition(Vertex vertex)
-    // // {
-    // //     Face foundFace = faces.First(face => face.a == vertex || face.b == vertex || face.c == vertex);
-    // //     return new BoardPosition(foundFace, vertex.Position);
-    // // }
+        // if (!intersectionVector.IsPointOnBaseTriangle())
+        // {
+        //     Debug.Log("Before change, not norm");
+        // }
+
+        HashSet<TriangleVertexIdentifiers> sharedVertices = new HashSet<TriangleVertexIdentifiers>(Triangle.Vertices);
+        foreach (TriangleVertexIdentifiers c in Triangle.Vertices)
+        {
+            if (intersectionCoordinates.GetCoordinate(c) != 1.0f)
+            {
+                sharedVertices.Add(c);
+            }
+            // if (intersectionCoordinates.GetCoordinate(c) == 0.0f)
+            // {
+            //     HashSet<TriangleVertexIdentifiers> otherVertices = new HashSet<TriangleVertexIdentifiers>(Triangle.Vertices);
+            //     otherVertices.Remove(c);
+            //     sharedVertices.Union(otherVertices);
+            // }
+        }
+
+        HashSet<Face> facesSharingChangedCoordinates = start.Face.GetFacesFromSharedVertices(sharedVertices);
+        facesSharingChangedCoordinates.Remove(start.Face);
+        if (facesSharingChangedCoordinates.Count == 0)
+        {
+            facesSharingChangedCoordinates = start.Face.GetFacesFromAtLeastOneSharedVertex(sharedVertices);
+            facesSharingChangedCoordinates.Remove(start.Face);
+        }
+
+        if (facesSharingChangedCoordinates.Count == 0
+            || facesSharingChangedCoordinates
+                .Where(face => intersectionVector.ChangeBase(face).IsPointOnBaseTriangle())
+                .Count() == 0)
+        {
+            return new Maybe<SurfacePoint>.Nothing();
+        }
+
+        Face nextFace = facesSharingChangedCoordinates
+            .Where(face => intersectionVector.ChangeBase(face).IsPointOnBaseTriangle()
+                && !alreadyVisitedFaces.Contains(face))
+            .OrderBy(face => Mathf.Min(Mathf.Min(
+                Vector3.Distance(face.A.Position, flatEndInStartBase.Position),
+                Vector3.Distance(face.B.Position, flatEndInStartBase.Position)),
+                Vector3.Distance(face.C.Position, flatEndInStartBase.Position)))
+            .First();
+
+        intersectionVector = intersectionVector.ChangeBase(nextFace);
+        intersectionVector = intersectionVector.Normalize();
+
+        // if (!intersectionVector.IsPointOnBaseTriangle())
+        // {
+        //     Debug.Log("After change, not norm");
+        // }
+
+        return new Maybe<SurfacePoint>.Just(new SurfacePoint(nextFace, intersectionVector));
+    }
+
+    private static Triangle ProjectOnPlane_Oy(Triangle triangle)
+    {
+        return new Triangle(
+            new CartesianVector(
+                new Vector3(triangle.A.Position.x, 0, triangle.A.Position.z)),
+            new CartesianVector(
+                new Vector3(triangle.B.Position.x, 0, triangle.B.Position.z)),
+            new CartesianVector(
+                new Vector3(triangle.C.Position.x, 0, triangle.C.Position.z)));
+    }
+
+    // Surface made of squares
+    public Surface(float edgeSize) : this()
+    {
+        for (int i = 0; i < edgeSize; i++)
+        {
+            for (int j = 0; j < edgeSize; j++)
+            {
+                addSquareAt(new Vector3(i, 0, j));
+            }
+        }
+    }
+
+    public void addSquareAt(Vector3 point)
+    {
+        CartesianVector _A = point + new Vector3(1, 0, 0);
+        CartesianVector _B = point + new Vector3(1, 0, 1);
+        CartesianVector _C = point + new Vector3(0, 0, 1);
+        CartesianVector _D = point + new Vector3(0, 0, 0);
+
+        Face ACB = AddFace(_A, _C, _B);
+        Face ADC = AddFace(_A, _D, _C);
+    }
+
+    public Surface(float edgeSize, float maxH) : this()
+    {
+        for (int i = 0; i < edgeSize; i++)
+        {
+            for (int j = 0; j < edgeSize; j++)
+            {
+                addTiltedSquareAt(new Vector3(i, (i + j) / 2.0f, j));
+            }
+        }
+    }
+
+    public void addTiltedSquareAt(Vector3 point)
+    {
+        CartesianVector _A = point + new Vector3(1, .5f, 0);
+        CartesianVector _B = point + new Vector3(1, 1, 1);
+        CartesianVector _C = point + new Vector3(0, .5f, 1);
+        CartesianVector _D = point + new Vector3(0, 0, 0);
+
+        Face ACB = AddFace(_A, _C, _B);
+        Face ADC = AddFace(_A, _D, _C);
+    }
+
 }

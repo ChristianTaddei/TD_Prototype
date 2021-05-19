@@ -10,16 +10,16 @@ namespace Tests
 {
     public class BarycentricVectorTests
     {
-        CartesianTriangle regularBase =
-            new CartesianTriangle(
-                Vector3.right,
-                Vector3.up,
-                Vector3.forward);
-        CartesianTriangle randomBase =
-            new CartesianTriangle(
-                new Vector3(12.3643634f, -2.124f, -55.123f),
-                new Vector3(3.0f, 1.5f, -0.124f),
-                new Vector3(22.2f, 123.8f, 48.566666666f));
+        Triangle regularBase =
+            new Triangle(
+                new CartesianVector(Vector3.right),
+                new CartesianVector(Vector3.up),
+                new CartesianVector(Vector3.forward));
+        Triangle randomBase =
+            new Triangle(
+                new CartesianVector(new Vector3(12.3643634f, -2.124f, -55.123f)),
+                new CartesianVector(new Vector3(3.0f, 1.5f, -0.124f)),
+                new CartesianVector(new Vector3(22.2f, 123.8f, 48.566666666f)));
 
         BarycentricCoordinates originBC = new BarycentricCoordinates(0.0f, 0.0f, 0.0f);
         BarycentricCoordinates aBC = new BarycentricCoordinates(1.0f, 0.0f, 0.0f);
@@ -76,20 +76,20 @@ namespace Tests
             Assert.Throws<Exception>(delegate { originRegBase.Normalize(); });
 
             AssertAreComponentWiseEquals(
-                aRegBase.Coordinates,
-                aRegBase.Normalize().Coordinates,
+                aRegBase.Position,
+                aRegBase.Normalize().Position,
                 0.0001f);
             AssertAreComponentWiseEquals(
-                aRandomBase.Coordinates,
-                aRandomBase.Normalize().Coordinates,
+                aRandomBase.Position,
+                aRandomBase.Normalize().Position,
                 0.0001f);
             AssertAreComponentWiseEquals(
-                centerRegBase.Coordinates,
-                centerRegBase.Normalize().Coordinates,
+                centerRegBase.Position,
+                centerRegBase.Normalize().Position,
                 0.0001f);
             AssertAreComponentWiseEquals(
-                centerRandomBase.Coordinates,
-                centerRandomBase.Normalize().Coordinates,
+                centerRandomBase.Position,
+                centerRandomBase.Normalize().Position,
                 0.0001f);
         }
 
@@ -160,32 +160,27 @@ namespace Tests
         }
 
         [Test]
-        public void FromPointTest()
+        public void ConstructFromCartesian()
         {
-            BarycentricVector bv;
-
-            Assert.False(BarycentricVector.FromPoint(regularBase, new Vector3(1, 2, 3), out bv));
-            Assert.False(BarycentricVector.FromPoint(randomBase, new Vector3(1, 2, 3), out bv));
-
-            BarycentricVector.FromPoint(regularBase, new Vector3(1, 0, 0), out bv);
-            Assert.AreEqual(new Vector3(1, 0, 0), bv.Coordinates);
+            BarycentricVector bv = new BarycentricVector(regularBase, new Vector3(1, 0, 0));
+            Assert.AreEqual(new Vector3(1, 0, 0), bv.Position);
 
             Vector3 cartesianRegularBaseCentre = new Vector3(1, 1, 1) / 3.0f;
-            BarycentricVector.FromPoint(regularBase, new Vector3(1, 0, 0), out bv);
+            bv = new BarycentricVector(regularBase, new Vector3(1, 0, 0));
             AssertAreComponentWiseEquals(
                 new Vector3(1, 0, 0),
-                bv.Coordinates,
+                bv.Position,
                 0.001f
              );
 
             Vector3 cartesianRandomBaseCentre =
-                randomBase.a.Coordinates / 3.0f +
-                randomBase.b.Coordinates / 3.0f +
-                randomBase.c.Coordinates / 3.0f;
-            BarycentricVector.FromPoint(randomBase, cartesianRandomBaseCentre, out bv);
+                randomBase.A.Position / 3.0f +
+                randomBase.B.Position / 3.0f +
+                randomBase.C.Position / 3.0f;
+            bv = new BarycentricVector(randomBase, cartesianRandomBaseCentre);
             AssertAreComponentWiseEquals(
                 cartesianRandomBaseCentre,
-                bv.Coordinates,
+                bv.Position,
                 0.001f
             );
         }
@@ -197,31 +192,31 @@ namespace Tests
         }
 
         [Test]
-        public void ChangeBaseDoesNotChangePointTest()
+        public void CoordinatesStayTheSame()
         {
-            Action<BarycentricVector, CartesianTriangle> assertionsToTest = (bv, otherBase) =>
+            Action<BarycentricVector, Triangle> AssertCoordinatesStayTheSame = (bv, otherBase) =>
             {
                 Assert.AreEqual( // Change base to itself
-                    bv.Coordinates,
-                    bv.ChangeBase(bv.Base).Coordinates);
+                    bv.Position,
+                    bv.ChangeBase(bv.Base).Position);
                 Assert.AreEqual( // Change to other base
-                    bv.Coordinates,
-                    bv.ChangeBase(otherBase).Coordinates);
+                    bv.Position,
+                    bv.ChangeBase(otherBase).Position);
                 Assert.AreEqual( // To other base and back
-                    bv.Coordinates,
-                    bv.ChangeBase(otherBase).ChangeBase(bv.Base).Coordinates);
+                    bv.Position,
+                    bv.ChangeBase(otherBase).ChangeBase(bv.Base).Position);
             };
 
-            CartesianTriangle otherRegBase =
-                new CartesianTriangle(
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0)
+            Triangle otherRegBase =
+                new Triangle(
+                    new CartesianVector(new Vector3(0, 1, 0)),
+                    new CartesianVector(new Vector3(0, 0, 1)),
+                    new CartesianVector(new Vector3(1, 0, 0))
                 );
 
-            assertionsToTest(aRegBase, otherRegBase);
+            AssertCoordinatesStayTheSame(aRegBase, otherRegBase);
 
-            assertionsToTest(centerRegBase, otherRegBase);
+            AssertCoordinatesStayTheSame(centerRegBase, otherRegBase);
 
             // what happens when using planes that contains origin?
             // assertionsToTest(originRegBase, otherRegBase);

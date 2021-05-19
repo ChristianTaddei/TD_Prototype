@@ -1,40 +1,21 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
-public class SurfacePoint : IPoint
+public class SurfacePoint : IVector
 {
-    private BarycentricVector barycentricVector;
+    public BarycentricVector BarycentricVector;
 
-    public Vector3 Coordinates => barycentricVector.Coordinates;
+    public Vector3 Position => BarycentricVector.Position;
+    public Face Face { get; private set; }
 
-    public SurfacePoint(BarycentricVector barycentricVector)
+    public SurfacePoint(Face face, BarycentricVector barycentricVector)
     {
-        this.barycentricVector = barycentricVector;
+        this.Face = face;
+        this.BarycentricVector = barycentricVector;
     }
 
     private SurfacePoint() { }
-
-
-    public static bool MakeFrom(Face face, CartesianPoint cp, out SurfacePoint newSurfacePoint)
-    {
-        BarycentricVector bv;
-
-        if (BarycentricVector.FromPoint(face.Triangle, cp, out bv))
-        {
-            newSurfacePoint = new SurfacePoint(bv);
-            return true;
-        }
-        
-        newSurfacePoint = new SurfacePoint();
-        return false;
-    }
-
-    // public SurfacePoint(Vertex spawningPosition)
-    // // TODO: tryGet 
-    //     : this(boardState, spawningPosition.Faces.First(), boardState.VertexStates[spawningPosition].Position)
-    // {
-
-    // }
 
     // public static BarycentricCoordinates FromFaceAndPoint(Face face, Vector3 p)
     // {

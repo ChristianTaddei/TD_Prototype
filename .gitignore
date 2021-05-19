@@ -75,3 +75,5 @@ Assets/Externals.meta
 .vscode/launch.json
 
 .vscode/settings.json
+
+CodeCoverage/

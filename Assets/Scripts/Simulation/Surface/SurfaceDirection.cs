@@ -11,6 +11,6 @@ public class SurfaceDirection
     {
         this.direction =
             new CartesianVector(
-                end.Coordinates - start.Coordinates);
+                end.Position - start.Position);
     }
 }
