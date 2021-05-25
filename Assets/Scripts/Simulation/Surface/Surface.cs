@@ -146,8 +146,7 @@ public class Surface
             float denominator = startToFlatEnd.BarycentricCoordinates.GetCoordinate(c);
             if (Mathf.Abs(denominator) <= 0.0001f) // FIXME: epsilon
             {
-                coefficient = 0;
-                break; // not necessary
+                continue;
             }
             else
             {
