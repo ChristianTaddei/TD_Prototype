@@ -159,11 +159,10 @@ public class Surface
                 }
             }
         }
-        // }
 
         Func<float, float> snapIfZero = (float initialValue) =>
         {
-            if (Mathf.Abs(initialValue) <= 0.0001f)
+            if (Mathf.Abs(initialValue) <= 0.0001f) // gives problems with "horizontalPath" test (0.1f works but shows huge artifacts)
             {
                 return 0.0f;
             }
@@ -196,12 +195,6 @@ public class Surface
             {
                 sharedVertices.Add(c);
             }
-            // if (intersectionCoordinates.GetCoordinate(c) == 0.0f)
-            // {
-            //     HashSet<TriangleVertexIdentifiers> otherVertices = new HashSet<TriangleVertexIdentifiers>(Triangle.Vertices);
-            //     otherVertices.Remove(c);
-            //     sharedVertices.Union(otherVertices);
-            // }
         }
 
         HashSet<Face> facesSharingChangedCoordinates = start.Face.GetFacesFromSharedVertices(sharedVertices);

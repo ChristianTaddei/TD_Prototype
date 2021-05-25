@@ -198,7 +198,7 @@ namespace Tests
             Assert.AreEqual(intersection4, path.Points[4].Position);
             Assert.AreEqual(intersection5, path.Points[5].Position);
 
-            SurfacePath path2 = AssertPathCanBeMadeFromPositions(LargeSquare.Surface,new Vector3(1.0f, 0.0f, 5.0f), new Vector3(1.0f, 0, 1.0f));
+            SurfacePath path2 = AssertPathCanBeMadeFromPositions(LargeSquare.Surface, new Vector3(1.0f, 0.0f, 5.0f), new Vector3(1.0f, 0, 1.0f));
 
             // Assert.AreEqual(5, path.Points.Count);
             // TODO: rather than checking intersection check "path does not jump" and "all segments in the same direction"
@@ -210,14 +210,14 @@ namespace Tests
             Assert.AreEqual(intersection5, path.Points[5].Position);
 
 
-            SurfacePath path3 = AssertPathCanBeMadeFromPositions(LargeSquare.Surface,new Vector3(7.0f, 0.0f, 3.0f), new Vector3(7.0f, 0, 9.0f));
+            SurfacePath path3 = AssertPathCanBeMadeFromPositions(LargeSquare.Surface, new Vector3(7.0f, 0.0f, 3.0f), new Vector3(7.0f, 0, 9.0f));
             // Assert.AreEqual(7, path.Value.Points.Count);
         }
 
         [Test]
         public void CornerCases2()
         {
-            SurfacePath path = AssertPathCanBeMadeFromPositions(LargeSquare.Surface,new Vector3(3.0f, 0.0f, 2.0f), new Vector3(7.0f, 0, 9.0f));
+            SurfacePath path = AssertPathCanBeMadeFromPositions(LargeSquare.Surface, new Vector3(3.0f, 0.0f, 2.0f), new Vector3(7.0f, 0, 9.0f));
 
             // Assert.AreEqual(21, path.Value.Points.Count); // TODO: decide if crossings should be uniques and therefore tested
         }
@@ -230,6 +230,7 @@ namespace Tests
                 new Vector3(6.141892f, 0.0f, 3.095632f),
                 new Vector3(3.124876f, 0.0f, 1.494868f));
         }
+
 
         [Test]
         public void PathFromVertexInAllDirections()
@@ -280,7 +281,40 @@ namespace Tests
                 Square2x2._21on_11_21_20);
         }
 
-        // TODO: some actual problematic floats on large and tilted squares
+        [Test]
+        public void HorizontalPath()
+        {
+            // 2.953491/3.238368 to 7.790686/3.238368
+            SurfacePath path2 = AssertPathCanBeMadeFromPositions(
+                LargeSquare.Surface,
+                new Vector3(2.953491f, 0.0f, 3.238368f),
+                new Vector3(7.790686f, 0.0f, 3.238368f));
+        }
+
+        [Test]
+        [Ignore("Way too long to run")]
+        public void PathsFromAllVertices()
+        {
+            for (float x1 = 0.0f; x1 <= 10.0f; x1++)
+            {
+                for (float z1 = 0.0f; z1 <= 10.0f; z1++)
+                {
+                    for (float x2 = 0.0f; x2 <= 10.0f; x2++)
+                    {
+                        for (float z2 = 0.0f; z2 <= 10.0f; z2++)
+                        {
+                            {
+                                AssertPathCanBeMadeFromPositions(
+                               LargeSquare.Surface,
+                               new Vector3(x1, 0.0f, z1),
+                               new Vector3(x2, 0.0f, z2));
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
 
         [Test]
         [Ignore("Long to run")] // TODO: move in another assembly for long/random tests
@@ -314,10 +348,10 @@ namespace Tests
                   new Vector3(x1, (x1 + z1) / 2.0f, z1),
                   new Vector3(x2, (x2 + z2) / 2.0f, z2));
             }
-        } 
-        
+        }
+
         #region Common assertions
-        // TODO: when going for noncomplanars we need toleance, where to define it?
+        // TODO: toleance, where to define it?
         static Action<Vector3, Vector3> AssertAreSamePosition =
             (Vector3 p1, Vector3 p2) =>
                 {
