@@ -17,6 +17,7 @@ public class ModifyTerrainHeight : Command
 
     public void Execute()
     {
+        Debug.Log("click");
         // for(Vertex v in new Brush(BrushCenter, BrushRadius).Vertices){
 
         // }

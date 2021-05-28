@@ -16,14 +16,17 @@ public class UIElement
 
     public UIElement(string name)
     {
-        mainGameObject = (GameObject)GameObject.Instantiate(interfacePrefab);
+        mainGameObject = (GameObject)GameObject.Instantiate(interfacePrefab/*, GameObject.Find("UI").transform*/);
+        // mainGameObject.transform.SetParent(GameObject.Find("UICanvas").transform, false);
+        // mainGameObject.transform.localPosition = Vector3.zero;
         mainGameObject.name = name;
 
         canvas = mainGameObject.transform.Find("Canvas");
 
         rectTransform = canvas.GetComponent<RectTransform>();
-        canvas.position = new Vector2(0,0);
         InterfaceFactory.setAnchor(rectTransform, Anchor.TOP_LEFT);
+        canvas.localPosition = new Vector2(0,0);
+        canvas.localScale = new Vector3(1,1,1);
     }
 
     public void show(bool show){

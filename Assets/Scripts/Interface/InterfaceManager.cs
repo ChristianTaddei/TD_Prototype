@@ -4,51 +4,65 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InterfaceManager
+public class InterfaceManager : MonoBehaviour
 {
-    private TopBar topBar;
-    private EditToolBar editToolBar;
-    private PlayToolBar playToolBar;
+    public static InterfaceManager Instance;
 
-    public InterfaceManager(Command modifyTerrainHeight)
+    private InputManager inputManager;
+
+    private ModifyTerrainHeight modifyTerrainHeight;
+
+    void Start()
     {
-        topBar = new TopBar();
+        Instance = this;
 
-        editToolBar = new EditToolBar(modifyTerrainHeight);
-        editToolBar.show(false);
-
-        playToolBar = new PlayToolBar();
-        playToolBar.show(false);
+        inputManager = GameObject.Find("GameManager").GetComponent<InputManager>();
     }
 
-    // Actions
-    public void EnterEditMode()
+    public void SetModifyTerrainCommand(ModifyTerrainHeight modifyTerrainHeight)
     {
-        // RepresentationManager.Instance.RepresentationRunning = false;
-        // RepresentationManager.Instance.RepresentationPaused = true;
-
-        editToolBar.show(true);
-        topBar.EditButton.GetComponent<Button>().GetComponent<Image>().color = Color.yellow;
-
-        playToolBar.show(false);
-        topBar.PlayButton.GetComponent<Button>().GetComponent<Image>().color = Color.white;
+        this.modifyTerrainHeight = modifyTerrainHeight; 
+        inputManager.ClickCommand = modifyTerrainHeight; // TODO: start actions order
     }
 
-    public void EnterPlayMode()
+    private void MakePath()
     {
-        // RepresentationManager.Instance.RepresentationRunning = true;
-        // RepresentationManager.Instance.RepresentationPaused = false;
-        // SimulationManager.Instance.CurrentStateModified();
+        // Maybe<SurfacePoint> maybeSurfacePoint = GetSurfacePointUnderCursor();
+        // if (maybeSurfacePoint.HasValue())
+        // {
+        //     SurfacePoint newP = maybeSurfacePoint.Value;
+        //     if (oldP == null)
+        //     {
+        //         oldP = newP;
+        //     }
 
-        playToolBar.show(true);
-        topBar.PlayButton.GetComponent<Button>().GetComponent<Image>().color = Color.yellow;
+        //     else
+        //     {
+        //         foreach (GameObject m in markers)
+        //         {
+        //             GameObject.Destroy(m);
+        //         }
+        //         markers.Clear();
 
-        editToolBar.show(false);
-        topBar.EditButton.GetComponent<Button>().GetComponent<Image>().color = Color.white;
-    }
+        //         Maybe<SurfacePath> path = newP.Face.Surface.MakeDirectPath(oldP, newP);
+        //         if (path.HasValue())
+        //         {
+        //             foreach (SurfacePoint pathPoint in path.Value.Points)
+        //             {
+        //                 markers.Add(Instantiate(marker, pathPoint.Position, Quaternion.identity));
+        //             }
+        //         }
+        //         else
+        //         {
+        //             Debug.Log("failed to make path");
+        //         }
 
-    internal void ShowSaveAsPopup()
-    {
-        SaveAsPopup popup = new SaveAsPopup();
+        //         oldP = null;
+        //     }
+        // }
+        // else
+        // {
+        //     Debug.Log("Failed to make SP under cursor");
+        // }
     }
 }

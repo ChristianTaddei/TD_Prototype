@@ -32,7 +32,7 @@ public static class InterfaceFactory
     {
         GameObject button = (GameObject)GameObject.Instantiate(
             buttonPrefab,
-            canvas.transform);
+            canvas.transform, true);
 
         button.name = name;
         button.GetComponentInChildren<Text>().text = name;

@@ -2,7 +2,8 @@
     "name": "Interface",
     "rootNamespace": "",
     "references": [
-        "Commands"
+        "Commands",
+        "Input"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

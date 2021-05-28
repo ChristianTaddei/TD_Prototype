@@ -5,17 +5,19 @@ using UnityEngine.EventSystems;
 public class InputManager : MonoBehaviour
 {
     public static InputManager Instance;
-
     private CameraController mainCameraController;
+
+    public Command ClickCommand;
 
     private GameObject marker;
     void Start()
     {
         Instance = this;
+
         mainCameraController = Camera.main.GetComponent<CameraController>();
 
         marker = (GameObject)Resources.Load("Prefabs/marker");
-        marker.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
+        marker.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
     }
 
     private SurfacePoint oldP = null;
@@ -30,40 +32,7 @@ public class InputManager : MonoBehaviour
 
         if (LeftClick())
         {
-            Maybe<SurfacePoint> maybeSurfacePoint = GetSurfacePointUnderCursor();
-            if (maybeSurfacePoint.HasValue())
-            {
-                SurfacePoint newP = maybeSurfacePoint.Value;
-                if (oldP == null)
-                {
-                    oldP = newP;
-                }
-
-                else
-                {
-                    foreach (GameObject m in markers)
-                    {
-                        GameObject.Destroy(m);
-                    }
-                    markers.Clear();
-
-                    Maybe<SurfacePath> path = newP.Face.Surface.MakeDirectPath(oldP, newP);
-                    if (path.HasValue())
-                    {
-                        foreach (SurfacePoint pathPoint in path.Value.Points)
-                        {
-                            markers.Add(Instantiate(marker, pathPoint.Position, Quaternion.identity));
-                        }
-                    }
-                    else {
-                        Debug.Log("failed to make path");
-                    }
-
-                    oldP = null;
-                }
-            } else {
-                Debug.Log("Failed to make SP under cursor");
-            }
+            ClickCommand.Execute();
         }
     }
 
