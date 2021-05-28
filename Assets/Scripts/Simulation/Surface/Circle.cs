@@ -7,19 +7,19 @@ public class Circle : Shape
     public SurfacePoint Centre { get; set; }
     public float Radius { get; set; }
 
-    // public Circle(BoardState boardState, SurfacePoint centre, float radius)
-    // {
-    //     this.Centre = centre;
-    //     this.Radius = radius;
+    public Circle(SurfacePoint centre, float radius)
+    {
+        this.Centre = centre;
+        this.Radius = radius;
         
-    //     HashSet<Vertex> coveredCells = new HashSet<Vertex>();
+        HashSet<SurfacePoint> coveredCells = new HashSet<SurfacePoint>();
 
-    //     recursiveExplore(boardState, Radius, Centre.Face.a, coveredCells);
-    //     recursiveExplore(boardState, Radius, Centre.Face.b, coveredCells);
-    //     recursiveExplore(boardState, Radius, Centre.Face.c, coveredCells);
+        // recursiveExplore(boardState, Radius, Centre.Face.a, coveredCells);
+        // recursiveExplore(boardState, Radius, Centre.Face.b, coveredCells);
+        // recursiveExplore(boardState, Radius, Centre.Face.c, coveredCells);
 
-    //     Cells = coveredCells;
-    // }
+        Cells = coveredCells;
+    }
 
     // public void recursiveExplore(
     //     BoardState boardState,

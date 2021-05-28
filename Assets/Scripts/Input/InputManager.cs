@@ -7,8 +7,6 @@ public class InputManager : MonoBehaviour
     public static InputManager Instance;
     private CameraController mainCameraController;
 
-    public Command ClickCommand;
-
     private GameObject marker;
     void Start()
     {
@@ -29,11 +27,6 @@ public class InputManager : MonoBehaviour
             Input.GetAxis("Vertical") * Time.deltaTime);
         mainCameraController.ZoomCamera(
             Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime);
-
-        if (LeftClick())
-        {
-            ClickCommand.Execute();
-        }
     }
 
     public bool LeftClick()

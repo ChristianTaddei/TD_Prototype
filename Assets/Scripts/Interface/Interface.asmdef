@@ -2,11 +2,14 @@
     "name": "Interface",
     "rootNamespace": "",
     "references": [
-        "Commands",
         "Input",
+        "Monads",
+        "Commands",
         "UnityEngine.UIElementsGameObjectsModule",
         "UnityEngine.UIElementsInputSystemModule",
-        "UnityEngine.UIElementsModule"
+        "UnityEngine.UIElementsModule",
+        "Surface",
+        "Representation"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

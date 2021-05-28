@@ -1,68 +1,73 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class InterfaceManager : MonoBehaviour
+public class InterfaceManager
 {
-    public static InterfaceManager Instance;
+    private InterfaceState defaultInterfaceState;
 
-    private InputManager inputManager;
+    private InterfaceState activeInterfaceState;
 
-    private ModifyTerrainHeight modifyTerrainHeight;
+    private readonly ModifyTerrainState modifyTerrainState;
+    private readonly MakePathState makePathState;
 
-    void Start()
+    public InterfaceManager(ModifyTerrainCommand modifyTerrainCommand)
     {
-        Instance = this;
+        makePathState = new MakePathState();
+        modifyTerrainState = new ModifyTerrainState(modifyTerrainCommand);
 
-        inputManager = GameObject.Find("GameManager").GetComponent<InputManager>();
+        defaultInterfaceState = makePathState;
+        SetState(defaultInterfaceState);
+    }
+    
+    public void Update(){
+        activeInterfaceState.Update();
     }
 
-    public void SetModifyTerrainCommand(ModifyTerrainHeight modifyTerrainHeight)
+    internal void ResetDefaultState()
     {
-        this.modifyTerrainHeight = modifyTerrainHeight; 
-        inputManager.ClickCommand = modifyTerrainHeight; // TODO: start actions order
+        this.SetState(defaultInterfaceState);
     }
 
-    private void MakePath()
+    // TODO: Property instead?
+    public void SetState(InterfaceState state)
     {
-        // Maybe<SurfacePoint> maybeSurfacePoint = GetSurfacePointUnderCursor();
-        // if (maybeSurfacePoint.HasValue())
-        // {
-        //     SurfacePoint newP = maybeSurfacePoint.Value;
-        //     if (oldP == null)
-        //     {
-        //         oldP = newP;
-        //     }
+        if (activeInterfaceState != state)
+        {
+            if (activeInterfaceState != null) activeInterfaceState.Unmount();
+            activeInterfaceState = state;
+            state.Mount();
+        }
+    }
 
-        //     else
-        //     {
-        //         foreach (GameObject m in markers)
-        //         {
-        //             GameObject.Destroy(m);
-        //         }
-        //         markers.Clear();
+    private List<GameObject> debugLines = new List<GameObject>();
 
-        //         Maybe<SurfacePath> path = newP.Face.Surface.MakeDirectPath(oldP, newP);
-        //         if (path.HasValue())
-        //         {
-        //             foreach (SurfacePoint pathPoint in path.Value.Points)
-        //             {
-        //                 markers.Add(Instantiate(marker, pathPoint.Position, Quaternion.identity));
-        //             }
-        //         }
-        //         else
-        //         {
-        //             Debug.Log("failed to make path");
-        //         }
+    // Actions
+    public void EnterEditMode()
+    {
+        ResetDefaultState();
+        // RepresentationManager.Instance.RepresentationRunning = false;
+        // RepresentationManager.Instance.RepresentationPaused = true;
 
-        //         oldP = null;
-        //     }
-        // }
-        // else
-        // {
-        //     Debug.Log("Failed to make SP under cursor");
-        // }
+        // editToolBar.show(true);
+        // topBar.EditButton.GetComponent<Button>().GetComponent<Image>().color = Color.yellow;
+
+        // playToolBar.show(false);
+        // topBar.PlayButton.GetComponent<Button>().GetComponent<Image>().color = Color.white;
+    }
+
+    public void EnterPlayMode()
+    {
+        ResetDefaultState();
+        // RepresentationManager.Instance.RepresentationRunning = true;
+        // RepresentationManager.Instance.RepresentationPaused = false;
+        // SimulationManager.Instance.CurrentStateModified();
+
+        // playToolBar.show(true);
+        // topBar.PlayButton.GetComponent<Button>().GetComponent<Image>().color = Color.yellow;
+
+        // editToolBar.show(false);
+        // topBar.EditButton.GetComponent<Button>().GetComponent<Image>().color = Color.white;
     }
 }

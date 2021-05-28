@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    InterfaceManager interfaceManager;
+    private InterfaceManager interfaceManager;
 
     void Start()
     {
-        interfaceManager = GetComponent<InterfaceManager>();
-
         Surface surface = new Surface(10.0f);
-        
-        ModifyTerrainHeight modifyTerrainHeight = new ModifyTerrainHeight(surface);
-        interfaceManager.SetModifyTerrainCommand(modifyTerrainHeight);
+
+        interfaceManager = new InterfaceManager(
+            new ModifyTerrainCommand(surface)
+            );
 
         Board board = new Board(surface);
         BoardRepresentation.MakeFrom(board);
@@ -21,6 +20,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-
+        interfaceManager.Update();
     }
 }

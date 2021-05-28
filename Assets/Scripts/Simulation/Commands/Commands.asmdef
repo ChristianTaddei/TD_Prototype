@@ -2,6 +2,7 @@
     "name": "Commands",
     "rootNamespace": "",
     "references": [
+        "GUID:491343a114641d745ae0ed6166257cdd",
         "GUID:a0928ef796871704cadefbb57dafda43"
     ],
     "includePlatforms": [],

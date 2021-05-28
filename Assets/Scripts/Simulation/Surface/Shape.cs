@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class Shape
 {
-    public HashSet<Vertex> Cells;
+    public HashSet<SurfacePoint> Cells;
 }

@@ -15,7 +15,8 @@ public class Menu : MonoBehaviour
 
         pathButton.clickable = new Clickable(() =>
         {
-            Debug.Log("path clicked");
+            Debug.Log("path mode on");
+            // InterfaceManager.OnClick = InterfaceManager.MakePath;
         });
     }
 

@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Surface
 {
+    // Modify surface: make immutable and boardManager?
     private List<Face> faces;
 
     public List<Face> Faces { get => faces; set => faces = value; }
