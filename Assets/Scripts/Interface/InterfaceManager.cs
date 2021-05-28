@@ -5,23 +5,28 @@ using UnityEngine;
 
 public class InterfaceManager
 {
+    public static InterfaceManager Instance;
+
     private InterfaceState defaultInterfaceState;
 
     private InterfaceState activeInterfaceState;
 
-    private readonly ModifyTerrainState modifyTerrainState;
-    private readonly MakePathState makePathState;
+    public readonly ModifyTerrainState ModifyTerrainState;
+    public readonly MakePathState MakePathState;
 
     public InterfaceManager(ModifyTerrainCommand modifyTerrainCommand)
     {
-        makePathState = new MakePathState();
-        modifyTerrainState = new ModifyTerrainState(modifyTerrainCommand);
+        Instance = this;
 
-        defaultInterfaceState = makePathState;
+        MakePathState = new MakePathState();
+        ModifyTerrainState = new ModifyTerrainState(modifyTerrainCommand);
+
+        defaultInterfaceState = MakePathState;
         SetState(defaultInterfaceState);
     }
-    
-    public void Update(){
+
+    public void Update()
+    {
         activeInterfaceState.Update();
     }
 

@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private InterfaceManager interfaceManager;
+    public InterfaceManager InterfaceManager;
 
     void Start()
     {
         Surface surface = new Surface(10.0f);
 
-        interfaceManager = new InterfaceManager(
+        InterfaceManager = new InterfaceManager(
             new ModifyTerrainCommand(surface)
             );
 
@@ -20,6 +20,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        interfaceManager.Update();
+        InterfaceManager.Update();
     }
 }

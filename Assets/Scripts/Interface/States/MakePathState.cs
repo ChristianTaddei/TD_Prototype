@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MakePathState : InterfaceState
 {
-
     private RepresentationManager representationManager;
     // private SimulationManager simulationManager;
     private InputManager inputManager;

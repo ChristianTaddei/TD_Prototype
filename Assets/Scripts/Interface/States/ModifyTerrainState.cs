@@ -4,8 +4,8 @@ using UnityEngine;
 public class ModifyTerrainState : InterfaceState
 {
     // private SimulationManager simulationManager;
-    // private RepresentationManager representationManager;
-    // private InputManager inputManager;
+    private RepresentationManager representationManager;
+    private InputManager inputManager;
 
     private ModifyTerrainCommand modifyTerrainCommand;
 
@@ -17,9 +17,10 @@ public class ModifyTerrainState : InterfaceState
     public ModifyTerrainState(ModifyTerrainCommand modifyTerrainCommand)
     {
         this.modifyTerrainCommand = modifyTerrainCommand;
+
         // simulationManager = GameObject.Find("GameManager").GetComponent<SimulationManager>();
-        // representationManager = GameObject.Find("GameManager").GetComponent<RepresentationManager>();
-        // inputManager = GameObject.Find("GameManager").GetComponent<InputManager>();
+        representationManager = GameObject.Find("GameManager").GetComponent<RepresentationManager>();
+        inputManager = GameObject.Find("GameManager").GetComponent<InputManager>();
     }
 
     public override void Update()
@@ -28,7 +29,7 @@ public class ModifyTerrainState : InterfaceState
         Maybe<SurfacePoint> sp = InputManager.Instance.GetSurfacePointUnderCursor();
         if (sp.HasValue())
         {
-            // List<Vector3> faceVertices = sp.Value.Face.
+            // List<Vector3> faceVertices
             // selectionMarkers.AddRange(
             //     representationManager.HighlightBoardVertices(
             //         cellsInRange,
@@ -37,11 +38,12 @@ public class ModifyTerrainState : InterfaceState
             //     )
             // );
 
-            // if (InputManager.Instance.LeftClick())
-            // {
-            //     simulationManager.Board.RaiseCells(cellsInRange, HeightChange);
-            //     // SimulationManager.Instance.CurrentStateModified();
-            // }
+            if (InputManager.Instance.LeftClick())
+            {
+                Debug.Log("clicked sp: " + sp.Value.Position);
+                // simulationManager.Board.RaiseCells(cellsInRange, HeightChange);
+                // SimulationManager.Instance.CurrentStateModified();
+            }
         }
     }
 
