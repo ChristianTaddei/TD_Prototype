@@ -1,0 +1,6 @@
+.button1 {
+    min-width: 150px;
+    min-height: 50px;
+    -unity-text-align: middle-center;
+    font-size: 20px;
+}

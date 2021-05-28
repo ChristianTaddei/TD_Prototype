@@ -3,7 +3,10 @@
     "rootNamespace": "",
     "references": [
         "Commands",
-        "Input"
+        "Input",
+        "UnityEngine.UIElementsGameObjectsModule",
+        "UnityEngine.UIElementsInputSystemModule",
+        "UnityEngine.UIElementsModule"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
