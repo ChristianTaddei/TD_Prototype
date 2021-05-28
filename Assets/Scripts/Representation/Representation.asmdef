@@ -1,13 +1,10 @@
 {
-    "name": "Game",
+    "name": "Representation",
     "rootNamespace": "",
     "references": [
-        "GUID:a0928ef796871704cadefbb57dafda43",
-        "GUID:20bd8ddd5d9c04d409b8dc12fccee760",
-        "GUID:491343a114641d745ae0ed6166257cdd",
-        "GUID:c2c4e24fc26af024fa5e37b55c5f1a2a",
-        "GUID:f51555bfd512c0541abfac96632d8ea2",
-        "GUID:1f5e1462a9ca4054b9e50d48785f1d76"
+        "Monads",
+        "Surface",
+        "Geometry"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

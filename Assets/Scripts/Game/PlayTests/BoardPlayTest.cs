@@ -14,7 +14,7 @@ public class BoardPlayTest
     }
 
     [UnityTest]
-    public IEnumerator BoardPlayTestWithEnumeratorPasses()
+    public IEnumerator TerrainIsCreated()
     {
         GameObject terrain = GameObject.Find("Terrain");
 

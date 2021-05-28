@@ -161,7 +161,7 @@ public class Surface
 
         Func<float, float> snapIfZero = (float initialValue) =>
         {
-            if (Mathf.Abs(initialValue) <= 0.0001f) // gives problems with "horizontalPath" test (0.1f works but shows huge artifacts)
+            if (Mathf.Abs(initialValue) <= 0.0001f) 
             {
                 return 0.0f;
             }
