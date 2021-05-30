@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CartesianVector : IVector
 {
-    public Vector3 Position =>
+    public override Vector3 Position =>
         new Vector3(
             cartesianCoordinates.x,
             cartesianCoordinates.y,

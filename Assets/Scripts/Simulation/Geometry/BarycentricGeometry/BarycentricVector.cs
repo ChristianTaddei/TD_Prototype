@@ -6,7 +6,7 @@ using UnityEngine;
 // A base and 3 cooridnates specifying a point in space
 public class BarycentricVector : IVector
 {
-    public Vector3 Position =>
+    public override Vector3 Position =>
         BarycentricCoordinates.a * _base.A.Position
         + BarycentricCoordinates.b * _base.B.Position
         + BarycentricCoordinates.c * _base.C.Position;

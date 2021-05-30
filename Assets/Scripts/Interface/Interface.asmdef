@@ -9,7 +9,8 @@
         "UnityEngine.UIElementsInputSystemModule",
         "UnityEngine.UIElementsModule",
         "Surface",
-        "Representation"
+        "Representation",
+        "Geometry"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

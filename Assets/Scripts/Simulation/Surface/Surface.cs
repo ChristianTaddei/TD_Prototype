@@ -1,24 +1,25 @@
 using System;
-using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Surface
 {
-    // Modify surface: make immutable and boardManager?
+    public List<SurfaceVertex> vertices;
+
     private List<Face> faces;
 
-    public List<Face> Faces { get => faces; set => faces = value; }
+    public List<Face> Faces { get => faces; }
 
     public Surface()
     {
-        this.Faces = new List<Face>();
+        this.vertices = new List<SurfaceVertex>();
+        this.faces = new List<Face>();
     }
 
     internal void AddFace(Face face)
     {
-        Faces.Add(face);
+        faces.Add(face);
     }
 
     public Maybe<SurfacePoint> GetSurfacePoint(int triangleIndex, Vector3 position)
@@ -52,7 +53,7 @@ public class Surface
 
     public Face AddFace(CartesianVector cartesianPoint1, CartesianVector cartesianPoint2, CartesianVector cartesianPoint3)
     {
-        Face newFace = new Face(this, new Triangle(cartesianPoint1, cartesianPoint2, cartesianPoint3));
+        Face newFace = new Face(this, new CartesianTriangle(cartesianPoint1, cartesianPoint2, cartesianPoint3));
         return newFace;
     }
 
@@ -235,7 +236,7 @@ public class Surface
 
     private static Triangle ProjectOnPlane_Oy(Triangle triangle)
     {
-        return new Triangle(
+        return new CartesianTriangle(
             new CartesianVector(
                 new Vector3(triangle.A.Position.x, 0, triangle.A.Position.z)),
             new CartesianVector(

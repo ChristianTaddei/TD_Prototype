@@ -24,7 +24,7 @@ namespace Tests
         [Test]
         public void TestProject()
         {
-            Triangle Plane_Oz = new Triangle(
+            CartesianTriangle Plane_Oz = new CartesianTriangle(
                 new CartesianVector(new Vector3(0, 0, 0)), // TODO: this should be automatic, other way rather than specific CV constructor?
                 new CartesianVector(new Vector3(1, 0, 0)),
                 new CartesianVector(new Vector3(0, 1, 0)));
@@ -33,7 +33,7 @@ namespace Tests
 
             Assert.AreEqual(new Vector3(0, 0, 0), cv.Project(Plane_Oz).Position);
 
-            Triangle ShiftedPlane_Oz = new Triangle(
+            CartesianTriangle ShiftedPlane_Oz = new CartesianTriangle(
                 new CartesianVector(new Vector3(0, 0, 1)),
                 new CartesianVector(new Vector3(1, 0, 1)),
                 new CartesianVector(new Vector3(0, 1, 1)));
@@ -42,7 +42,7 @@ namespace Tests
            
             Assert.AreEqual(new Vector3(0, 0, 1), cv.Project(ShiftedPlane_Oz).Position);
             
-            Triangle ShiftedPlane_Oy = new Triangle(
+            CartesianTriangle ShiftedPlane_Oy = new CartesianTriangle(
                 new CartesianVector(new Vector3(1, 1, 0)),
                 new CartesianVector(new Vector3(0, 1, 1)),
                 new CartesianVector(new Vector3(0, 1, 0)));
@@ -55,7 +55,7 @@ namespace Tests
 
             Assert.AreEqual(new Vector3(-3, 1, -3), cv.Project(ShiftedPlane_Oy).Position);
 
-            Triangle Plane_45degs = new Triangle(
+            CartesianTriangle Plane_45degs = new CartesianTriangle(
                 new CartesianVector(new Vector3(0, 0, 0)),
                 new CartesianVector(new Vector3(1, 0, 1)),
                 new CartesianVector(new Vector3(0, 1, 1)));
