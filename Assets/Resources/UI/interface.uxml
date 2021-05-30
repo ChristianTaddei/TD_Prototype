@@ -3,7 +3,7 @@
     <ui:VisualElement style="flex-direction: row; justify-content: space-between; height: 73px;">
         <ui:GroupBox>
             <ui:Button text="Path" display-tooltip-when-elided="true" name="PathButton" class="button1" />
-            <ui:Button text="Raise" display-tooltip-when-elided="true" class="button1" />
+            <ui:Button text="Raise" display-tooltip-when-elided="true" name="RaiseButton" class="button1" />
         </ui:GroupBox>
         <ui:GroupBox style="flex-direction: column;">
             <ui:Button text="Play" display-tooltip-when-elided="true" class="button1" />

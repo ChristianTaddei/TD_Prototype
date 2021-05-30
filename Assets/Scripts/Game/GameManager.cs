@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // TODO: add components here to have correct order
+
         Surface surface = new Surface(10.0f);
 
         InterfaceManager = new InterfaceManager(
@@ -16,6 +18,7 @@ public class GameManager : MonoBehaviour
 
         Board board = new Board(surface);
         BoardRepresentation.MakeFrom(board);
+
     }
 
     void Update()

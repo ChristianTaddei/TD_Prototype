@@ -8,7 +8,6 @@ public class InterfaceManager
     public static InterfaceManager Instance;
 
     private InterfaceState defaultInterfaceState;
-
     private InterfaceState activeInterfaceState;
 
     public readonly ModifyTerrainState ModifyTerrainState;
