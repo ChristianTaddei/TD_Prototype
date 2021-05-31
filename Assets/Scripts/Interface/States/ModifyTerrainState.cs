@@ -29,18 +29,19 @@ public class ModifyTerrainState : InterfaceState
         Maybe<SurfacePoint> sp = InputManager.Instance.GetSurfacePointUnderCursor();
         if (sp.HasValue())
         {
-            // List<Vector3> faceVertices
-            // selectionMarkers.AddRange(
-            //     representationManager.HighlightBoardVertices(
-            //         cellsInRange,
-            //         HighlightSize.VerySmall,
-            //         Color.green
-            //     )
-            // );
-
+            selectionMarkers.Add(
+                representationManager.HighlightSurfacePoint(
+                    sp.Value,
+                    HighlightSize.VerySmall,
+                    Color.green
+                )
+            );
             if (InputManager.Instance.LeftClick())
             {
                 Debug.Log("clicked sp: " + sp.Value.Position);
+                
+                modifyTerrainCommand.TargetFace = sp.Value.Face;
+                modifyTerrainCommand.Execute();
                 // simulationManager.Board.RaiseCells(cellsInRange, HeightChange);
                 // SimulationManager.Instance.CurrentStateModified();
             }

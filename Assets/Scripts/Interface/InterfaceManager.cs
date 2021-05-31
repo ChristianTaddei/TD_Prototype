@@ -20,7 +20,7 @@ public class InterfaceManager
         MakePathState = new MakePathState();
         ModifyTerrainState = new ModifyTerrainState(modifyTerrainCommand);
 
-        defaultInterfaceState = MakePathState;
+        defaultInterfaceState = ModifyTerrainState;
         SetState(defaultInterfaceState);
     }
 

@@ -26,6 +26,9 @@ public class BoardRepresentation : MonoBehaviour
 
     public void Sync()
     {
+        board.UpdateVertices();
+        vertices = board.Vertices.ToArray<Vector3>();
+
         terrainMesh.vertices = vertices;
         meshCollider.sharedMesh = terrainMesh;
 

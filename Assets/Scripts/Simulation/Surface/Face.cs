@@ -6,9 +6,13 @@ using UnityEngine;
 
 public class Face : Triangle
 {
-    private SurfaceVertex svA;
-    private SurfaceVertex svB;
-    private SurfaceVertex svC;
+    private int svAIndex;
+    private int svBIndex;
+    private int svCIndex;
+
+    public SurfaceVertex svA => Surface.vertices[svAIndex];
+    public SurfaceVertex svB => Surface.vertices[svBIndex];
+    public SurfaceVertex svC => Surface.vertices[svCIndex];
 
     public override IVector A => svA;
     public override IVector B => svB;
@@ -21,11 +25,11 @@ public class Face : Triangle
         foreach (TriangleVertexIdentifiers vId in Triangle.Vertices)
         {
             bool alreadyInVertices = false;
-            foreach (SurfaceVertex sv in s.vertices)
+            for(int i = 0; i < s.vertices.Count; i++)
             {
-                if (t.GetVertex(vId).Equals(sv))
+                if (s.vertices[i].Equals(t.GetVertex(vId)))
                 {
-                    SetVertex(vId, sv);
+                    SetVertexId(vId, i);
                     alreadyInVertices = true;
                     break;
                 }
@@ -34,7 +38,7 @@ public class Face : Triangle
             if (!alreadyInVertices)
             {
                 SurfaceVertex nsv = new SurfaceVertex(t.GetVertex(vId));
-                SetVertex(vId, nsv);
+                SetVertexId(vId, s.vertices.Count);
                 s.vertices.Add(nsv);
             }
         }
@@ -43,18 +47,18 @@ public class Face : Triangle
         this.Surface.AddFace(this);
     }
 
-    public void SetVertex(TriangleVertexIdentifiers v, SurfaceVertex sv)
+    public void SetVertexId(TriangleVertexIdentifiers v, int i)
     {
         switch (v)
         {
             case TriangleVertexIdentifiers.A:
-                svA = sv;
+                svAIndex = i;
                 break;
             case TriangleVertexIdentifiers.B:
-                svB = sv;
+                svBIndex = i;
                 break;
             case TriangleVertexIdentifiers.C:
-                svC = sv;
+                svCIndex = i;
                 break;
             default:
                 throw new Exception("Coordinate name does not exist");

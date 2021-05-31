@@ -17,6 +17,12 @@ public class Surface
         this.faces = new List<Face>();
     }
 
+    // public void Raise(Face targetFace)
+    // {
+    //     List<SurfaceVertex> verticesToRaise = new List<SurfaceVertex>();
+    //     verticesToRaise.Add(targetFace.A);
+    // }
+
     internal void AddFace(Face face)
     {
         faces.Add(face);

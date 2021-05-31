@@ -16,6 +16,12 @@ public class Board
         Vertices = new List<Vector3>();
         Triangles = new List<int>();
 
+        UpdateVertices();
+    }
+
+    internal void UpdateVertices()
+    {
+        Vertices.Clear();
         foreach (Face f in surface.Faces)
         {
             foreach (TriangleVertexIdentifiers vName in Triangle.Vertices)

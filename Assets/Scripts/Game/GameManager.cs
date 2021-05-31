@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public InterfaceManager InterfaceManager;
+    BoardRepresentation br;
 
     void Start()
     {
@@ -17,12 +18,13 @@ public class GameManager : MonoBehaviour
             );
 
         Board board = new Board(surface);
-        BoardRepresentation.MakeFrom(board);
+        br = BoardRepresentation.MakeFrom(board);
 
     }
 
     void Update()
     {
         InterfaceManager.Update();
+        br.Sync();
     }
 }

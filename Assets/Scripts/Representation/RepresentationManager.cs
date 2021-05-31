@@ -49,18 +49,18 @@ public class RepresentationManager : MonoBehaviour
 
         foreach (SurfacePoint sp in sps)
         {
-            gos.Add(MakeHighlight(sp, size, color));
+            gos.Add(HighlightSurfacePoint(sp, size, color));
         }
         
         return gos;
     }
 
-    public GameObject MakeHighlight(SurfacePoint sp, HighlightSize size, Color color)
+    public GameObject HighlightSurfacePoint(SurfacePoint sp, HighlightSize size, Color color)
     {
-        return MakeHighlight(sp.Position, size, color);
+        return HighlightPoint(sp.Position, size, color);
     }
 
-    public GameObject MakeHighlight(Vector3 position, HighlightSize size, Color color)
+    public GameObject HighlightPoint(Vector3 position, HighlightSize size, Color color)
     {
         GameObject representationGameObject = (GameObject)GameObject
             .Instantiate((GameObject)Resources.Load("Prefabs/Marker"));
@@ -79,10 +79,5 @@ public class RepresentationManager : MonoBehaviour
         representationGameObject.GetComponent<Renderer>().material.color = color;
 
         return representationGameObject;
-    }
-
-    internal void MakeMarker(Vector3 point)
-    {
-        MakeMarker(point);
     }
 }
