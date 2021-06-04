@@ -292,16 +292,16 @@ namespace Tests
         }
 
         [Test]
-        [Ignore("Way too long to run")]
         public void PathsFromAllVertices()
         {
-            for (float x1 = 0.0f; x1 <= 10.0f; x1++)
+            Surface smallSquare = new Surface (2.0f);
+            for (float x1 = 0.0f; x1 <= 2.0f; x1++)
             {
-                for (float z1 = 0.0f; z1 <= 10.0f; z1++)
+                for (float z1 = 0.0f; z1 <= 2.0f; z1++)
                 {
-                    for (float x2 = 0.0f; x2 <= 10.0f; x2++)
+                    for (float x2 = 0.0f; x2 <= 2.0f; x2++)
                     {
-                        for (float z2 = 0.0f; z2 <= 10.0f; z2++)
+                        for (float z2 = 0.0f; z2 <= 2.0f; z2++)
                         {
                             {
                                 AssertPathCanBeMadeFromPositions(
@@ -317,13 +317,12 @@ namespace Tests
         }
 
         [Test]
-        [Ignore("Long to run")] // TODO: move in another assembly for long/random tests
         public void RandomPathsOnLargeSquare()
         {
             System.Random random = new System.Random();
             Func<float> makeRandom = () => (float)(random.NextDouble() * 10.0);
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 10; i++)
             {
                 SurfacePath path = AssertPathCanBeMadeFromPositions(
                     LargeSquare.Surface,
@@ -333,14 +332,13 @@ namespace Tests
         }
 
         [Test]
-        [Ignore("Long to run")]
         public void RandomPathsOnTiltedSquare()
         {
             System.Random random = new System.Random();
             Func<float> makeRandom = () => (float)(random.NextDouble() * 10.0);
 
             Surface TiltedSquare = new Surface(10.0f, 1.0f);
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 10; i++)
             {
                 float x1 = makeRandom(), z1 = makeRandom(), x2 = makeRandom(), z2 = makeRandom();
                 SurfacePath path = AssertPathCanBeMadeFromPositions(
