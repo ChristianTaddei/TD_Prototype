@@ -1,0 +1,16 @@
+{
+    "name": "Simulation",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a0928ef796871704cadefbb57dafda43"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
