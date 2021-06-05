@@ -7,11 +7,13 @@ public class GameManager : MonoBehaviour
     public InterfaceManager InterfaceManager;
     public SimulationManager SimulationManager;
 
-    BoardRepresentation br;
+    private BoardRepresentation br;
 
     void Start()
     {
         // TODO: add components here to have correct order
+
+        // TODO: Add inputMan here even if mono?
 
         Surface surface = new Surface(10.0f);
         SimulationManager = new SimulationManager(surface);
@@ -20,11 +22,12 @@ public class GameManager : MonoBehaviour
             new ModifyTerrainCommand(surface)
         );
 
-        // TODO: make into repres & manager
+        // TODO: make into repres & manager (repMan is mono?)
         Board board = new Board(surface);
         br = BoardRepresentation.MakeFrom(board);
 
         // Register observers/observables
+
     }
 
     void Update()

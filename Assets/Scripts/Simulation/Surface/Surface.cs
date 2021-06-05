@@ -3,13 +3,31 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Surface
+public class Surface : Observable
 {
     public List<SurfaceVertex> vertices;
 
     private List<Face> faces;
 
     public List<Face> Faces { get => faces; }
+    
+    private IList<Observer> observers = new List<Observer>();
+    public IList<Observer> Observers { get => observers; }
+
+    public void Notify()
+    {
+        
+    }
+
+    public IDisposable Subscribe(Observer observer)
+    {
+        // TODO: update runtime env and put this in inteface?
+        if (!Observers.Contains(observer))
+            {
+                Observers.Add(observer);
+            }
+            return new Unsubscriber(Observers, observer);
+    }
 
     public Surface()
     {
