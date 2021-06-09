@@ -54,26 +54,26 @@ public class BoardRepresentation : MonoBehaviour
 
 
         // Debug.Log("made terrain");
-        GameObject representationGameObject = new GameObject("Terrain");
+        GameObject SimulationRepresentationGameObject = new GameObject("Terrain");
 
-        BoardRepresentation terrainRepresentation = representationGameObject
+        BoardRepresentation terrainRepresentation = SimulationRepresentationGameObject
             .AddComponent<BoardRepresentation>();
 
         terrainRepresentation.board = board;
 
-        representationGameObject.tag = "Terrain";
+        SimulationRepresentationGameObject.tag = "Terrain";
 
         terrainRepresentation.SetupComponents(
-            representationGameObject.AddComponent<MeshFilter>(),
-            representationGameObject.AddComponent<MeshRenderer>(),
-            representationGameObject.AddComponent<MeshCollider>());
+            SimulationRepresentationGameObject.AddComponent<MeshFilter>(),
+            SimulationRepresentationGameObject.AddComponent<MeshRenderer>(),
+            SimulationRepresentationGameObject.AddComponent<MeshCollider>());
 
         // have to initialize vertices (cant wait sync) to initialize triangles
         terrainRepresentation.vertices = board.Vertices.ToArray<Vector3>();
         terrainRepresentation.terrainMesh.vertices = terrainRepresentation.vertices;
         terrainRepresentation.terrainMesh.triangles = board.Triangles.ToArray<int>();
 
-        // TODO: material from representationManager?
+        // TODO: material from SimulationRepresentation?
         terrainRepresentation.SetupMaterial(Resources.Load("Materials/GroundMaterial", typeof(Material)) as Material);
 
         terrainRepresentation.terrainMesh.MarkDynamic();
@@ -103,9 +103,9 @@ public class BoardRepresentation : MonoBehaviour
     // internal bool TryGetBoardPositionFromHit(RaycastHit hit, out BoardPosition boardPosition)
     // {
     //     Face face;
-    //     if (SimulationManager.Instance.Board.TryGetFaceFromIndex(hit.triangleIndex, out face))
+    //     if (Simulation.Instance.Board.TryGetFaceFromIndex(hit.triangleIndex, out face))
     //     {
-    //         boardPosition = new BoardPosition(SimulationManager.Instance.CurrentState.BoardState, face, hit.point);
+    //         boardPosition = new BoardPosition(Simulation.Instance.CurrentState.BoardState, face, hit.point);
     //         return true;
     //     }
 

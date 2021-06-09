@@ -148,10 +148,9 @@ namespace Tests
 
             AssertAreSamePosition(intersection.Position, path.Value.Points[1].Position);
             AssertAreSamePosition(FoldedRectangle_ABDE.m_CF_AFC.Position, path.Value.Points[2].Position);
-            // points[3]
         }
 
-        // TODO: auto project, so check proj on high surfaces{
+        // TODO: auto project, so check proj on high surfaces -> test projects?
 
         [Test]
         public void LargeSquareLongDiagonalBackUp()

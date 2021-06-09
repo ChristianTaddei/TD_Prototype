@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class MakePathState : InterfaceState
 {
-    private RepresentationManager representationManager;
-    // private SimulationManager simulationManager;
-    private InputManager inputManager;
+    private SimulationRepresentation SimulationRepresentation;
+    // private Simulation simulation;
+    private InputManager input;
 
     private SurfacePoint start, destination;
     private bool pathChanged = false;
@@ -15,9 +15,10 @@ public class MakePathState : InterfaceState
 
     public MakePathState()
     {
-        representationManager = GameObject.Find("GameManager").GetComponent<RepresentationManager>();
-        // simulationManager = GameObject.Find("GameManager").GetComponent<SimulationManager>();
-        inputManager = GameObject.Find("GameManager").GetComponent<InputManager>();
+        // TODO: dont use find, get commands/controllers down here
+        SimulationRepresentation = GameObject.Find("Game").GetComponent<SimulationRepresentation>();
+        // simulation = GameObject.Find("Game").GetComponent<Simulation>();
+        input = GameObject.Find("Game").GetComponent<InputManager>();
     }
 
     public override void Mount()
@@ -34,9 +35,9 @@ public class MakePathState : InterfaceState
 
     public override void Update()
     {
-        if (inputManager.LeftClick())
+        if (input.LeftClick())
         {
-            Maybe<SurfacePoint> sp = inputManager.GetSurfacePointUnderCursor();
+            Maybe<SurfacePoint> sp = input.GetSurfacePointUnderCursor();
             if (sp.HasValue())
             {
                 if (start == null)
@@ -45,7 +46,7 @@ public class MakePathState : InterfaceState
                     List<SurfacePoint> tmp = new List<SurfacePoint>();
                     tmp.Add(start);
                     selectionMarkers.AddRange(
-                            representationManager.HighlightSurfacePoints(
+                            RepresentationFactory.HighlightSurfacePoints(
                                 tmp,
                                 HighlightSize.Small,
                                 Color.green
@@ -58,7 +59,7 @@ public class MakePathState : InterfaceState
                     List<SurfacePoint> tmp = new List<SurfacePoint>();
                     tmp.Add(destination);
                     selectionMarkers.AddRange(
-                            representationManager.HighlightSurfacePoints(
+                            RepresentationFactory.HighlightSurfacePoints(
                                 tmp,
                                 HighlightSize.Small,
                                 Color.red
@@ -70,7 +71,7 @@ public class MakePathState : InterfaceState
                     if (path.HasValue())
                     {
                         selectionMarkers.AddRange(
-                                    representationManager.HighlightSurfacePoints(
+                                    RepresentationFactory.HighlightSurfacePoints(
                                         path.Value.Points,
                                         HighlightSize.VerySmall,
                                         Color.green

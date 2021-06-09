@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class ModifyTerrainState : InterfaceState
 {
-    // private SimulationManager simulationManager;
-    private RepresentationManager representationManager;
-    private InputManager inputManager;
+    // private Simulation simulation;
+    private SimulationRepresentation SimulationRepresentation;
+    private InputManager input;
 
     private ModifyTerrainCommand modifyTerrainCommand;
 
@@ -18,9 +18,9 @@ public class ModifyTerrainState : InterfaceState
     {
         this.modifyTerrainCommand = modifyTerrainCommand;
 
-        // simulationManager = GameObject.Find("GameManager").GetComponent<SimulationManager>();
-        representationManager = GameObject.Find("GameManager").GetComponent<RepresentationManager>();
-        inputManager = GameObject.Find("GameManager").GetComponent<InputManager>();
+        // simulation = GameObject.Find("Game").GetComponent<Simulation>();
+        SimulationRepresentation = GameObject.Find("Game").GetComponent<SimulationRepresentation>();
+        input = GameObject.Find("Game").GetComponent<InputManager>();
     }
 
     public override void Update()
@@ -30,7 +30,7 @@ public class ModifyTerrainState : InterfaceState
         if (sp.HasValue())
         {
             selectionMarkers.Add(
-                representationManager.HighlightSurfacePoint(
+                RepresentationFactory.HighlightSurfacePoint(
                     sp.Value,
                     HighlightSize.VerySmall,
                     Color.green
@@ -42,8 +42,8 @@ public class ModifyTerrainState : InterfaceState
                 
                 modifyTerrainCommand.TargetFace = sp.Value.Face;
                 modifyTerrainCommand.Execute();
-                // simulationManager.Board.RaiseCells(cellsInRange, HeightChange);
-                // SimulationManager.Instance.CurrentStateModified();
+                // simulation.Board.RaiseCells(cellsInRange, HeightChange);
+                // Simulation.Instance.CurrentStateModified();
             }
         }
     }

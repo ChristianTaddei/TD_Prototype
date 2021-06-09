@@ -7,23 +7,23 @@ public class MakePathCommand : Command
     // {
     //     ClearSelectionMarkers();
     //     BoardPosition boardPosition;
-    //     if (inputManager.TryGetBoardPositionUnderCursor(out boardPosition))
+    //     if (input.TryGetBoardPositionUnderCursor(out boardPosition))
     //     {
     //         Circle selection = new Circle(boardPosition, Radius);
     //         HashSet<Vertex> cellsInRange = selection.Cells;
 
     //         selectionMarkers.AddRange(
-    //             representationManager.HighlightBoardVertices(
+    //             SimulationRepresentation.HighlightBoardVertices(
     //                 cellsInRange,
     //                 HighlightSize.VerySmall,
     //                 Color.green
     //             )
     //         );
 
-    //         if (inputManager.LeftClick())
+    //         if (input.LeftClick())
     //         {
-    //             simulationManager.Board.RaiseCells(cellsInRange, HeightChange);
-    //             // SimulationManager.Instance.CurrentStateModified();
+    //             simulation.Board.RaiseCells(cellsInRange, HeightChange);
+    //             // Simulation.Instance.CurrentStateModified();
     //         }
     //     }
     // }

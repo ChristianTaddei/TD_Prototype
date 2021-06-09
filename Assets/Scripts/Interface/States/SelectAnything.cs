@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class SelectAnything : InterfaceState
 {
-    // private SimulationManager simulationManager;
-    // private RepresentationManager representationManager;
-    // private InputManager inputManager;
+    // private Simulation simulation;
+    // private SimulationRepresentation SimulationRepresentation;
+    // private Input input;
 
     // private List<GameObject> selectionMarkers;
 
     public SelectAnything()
     {
-        // simulationManager = GameObject.Find("GameManager").GetComponent<SimulationManager>();
-        // representationManager = GameObject.Find("GameManager").GetComponent<RepresentationManager>();
-        // inputManager = GameObject.Find("GameManager").GetComponent<InputManager>();
+        // simulation = GameObject.Find("Game").GetComponent<Simulation>();
+        // SimulationRepresentation = GameObject.Find("Game").GetComponent<Representation>();
+        // input = GameObject.Find("Game").GetComponent<Input>();
     }
 
 //     public override void Mount()
@@ -29,15 +29,15 @@ public class SelectAnything : InterfaceState
 
 //     public override void Update()
 //     {
-//         if (inputManager.LeftClick())
+//         if (input.LeftClick())
 //         {
 //             ClearSelectionMarkers();
 //             BoardPosition boardPosition;
 //             IRepresentable token;
-//             if (inputManager.TryGetBoardPositionUnderCursor(out boardPosition))
+//             if (input.TryGetBoardPositionUnderCursor(out boardPosition))
 //             {
 //                 selectionMarkers.Add(
-//                                 representationManager.HighlightBoardPosition(
+//                                 SimulationRepresentation.HighlightBoardPosition(
 //                                     boardPosition,
 //                                     HighlightSize.VerySmall,
 //                                     Color.green
@@ -57,13 +57,13 @@ public class SelectAnything : InterfaceState
 //                                 }
 //                 */
 //             }
-//             else if (inputManager.TryGetTokenUnderCursor(out token))
+//             else if (input.TryGetTokenUnderCursor(out token))
 //             {
 //                 if (token is Tower)
 //                 {/*
 //                     Tower selectedTower = token as Tower;
 //                     selectionMarkers.AddRange(
-//                         representationManager.HighlightBoardVertices(
+//                         SimulationRepresentation.HighlightBoardVertices(
 //                             selectedTower.CellsInRange,
 //                             HighlightSize.VerySmall,
 //                             Color.red
@@ -75,14 +75,14 @@ public class SelectAnything : InterfaceState
 //                 if (token is Objective)
 //                 {
 //                     /*
-//                     foreach (AttackPlan attackPlan in simulationManager.AttackPlans)
+//                     foreach (AttackPlan attackPlan in simulation.AttackPlans)
 //                     {
 //                         if (attackPlan.Objective == token as Objective)
 //                         {
 //                             foreach (Path pathToObjective in attackPlan.PathsToObjective)
 //                             {
 //                                 selectionMarkers.AddRange(
-//                                     representationManager.HighlightBoardVertices(
+//                                     SimulationRepresentation.HighlightBoardVertices(
 //                                         pathToObjective.TraversedVertexs,
 //                                         HighlightSize.Small,
 //                                         Color.red
@@ -106,7 +106,7 @@ public class SelectAnything : InterfaceState
 //                                                             }
 
 //                                                             selectionMarkers.Add(
-//                                                                 representationManager.HighlightBoardVertex(
+//                                                                 SimulationRepresentation.HighlightBoardVertex(
 //                                                                     vertex,
 //                                                                     HighlightSize.VerySmall,
 //                                                                     color

@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class FindPathToBorder : InterfaceState
 {
-//     private RepresentationManager representationManager;
+//     private SimulationRepresentation SimulationRepresentation;
 
 //     private Vertex start;
 //     private bool pathChanged = false;
 
 //     //private List<Token> pathMarkers = new List<Token>();
 
-//     public FindPathToBorder(RepresentationManager representationManager)
+//     public FindPathToBorder(Representation SimulationRepresentation)
 //     {
-//         this.representationManager = representationManager;
+//         this.representation = SimulationRepresentation;
 //     }
 
 //     public void Mount()
@@ -49,7 +49,7 @@ public class FindPathToBorder : InterfaceState
 //                     Unit go = new Unit(pathCell);
 //                     pathMarkers.Add(go);
 
-//                     representationManager.MakeRepresentation(go);
+//                     SimulationRepresentation.MakeRepresentation(go);
 //                 }
 
 //             }

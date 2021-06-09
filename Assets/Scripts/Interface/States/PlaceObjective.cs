@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class PlaceObjective : InterfaceState
 {
-    // private SimulationManager simulationManager;
-    // private RepresentationManager representationManager;
-    // private InputManager inputManager;
+    // private Simulation simulation;
+    // private SimulationRepresentation SimulationRepresentation;
+    // private Input input;
 
     // GameObject objectivePlaceholder = null;
 
     public PlaceObjective()
     {
-    //     simulationManager = GameObject.Find("GameManager").GetComponent<SimulationManager>();
-    //     inputManager = GameObject.Find("GameManager").GetComponent<InputManager>();
-    //     representationManager = GameObject.Find("GameManager").GetComponent<RepresentationManager>();
+    //     simulation = GameObject.Find("Game").GetComponent<Simulation>();
+    //     input = GameObject.Find("Game").GetComponent<Input>();
+    //     SimulationRepresentation = GameObject.Find("Game").GetComponent<Representation>();
     }
 
     // public override void Mount() { }
@@ -23,15 +23,15 @@ public class PlaceObjective : InterfaceState
     // {
     //     ClearPlaceholder();
     //     BoardPosition clickedBoardPosition;
-    //     if (InputManager.Instance.TryGetBoardPositionUnderCursor(out clickedBoardPosition))
+    //     if (Input.Instance.TryGetBoardPositionUnderCursor(out clickedBoardPosition))
     //     {
-    //         if (InputManager.Instance.LeftClick())
+    //         if (Input.Instance.LeftClick())
     //         {
-    //             SimulationManager.Instance.AddToCurrent(new ObjectiveState(clickedBoardPosition));
+    //             Simulation.Instance.AddToCurrent(new ObjectiveState(clickedBoardPosition));
     //         }
     //         else
     //         {
-    //             objectivePlaceholder = RepresentationManager.Instance.HighlightBoardPosition(
+    //             objectivePlaceholder = SimulationRepresentation.Instance.HighlightBoardPosition(
     //                         clickedBoardPosition,
     //                         HighlightSize.Small,
     //                         Color.green

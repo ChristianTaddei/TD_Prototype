@@ -10,7 +10,7 @@ public class DestroyCell : InterfaceState
 /* FIX
     public void OnCellSelected(Vertex selectedCell)
     {
-        // TODO: move to simulationManager
+        // TODO: move to simulation
         GameObject.Destroy(selectedCell.representation);
         board.Cells.Remove(selectedCell.BoardPosition);
         //board.updateDistances();

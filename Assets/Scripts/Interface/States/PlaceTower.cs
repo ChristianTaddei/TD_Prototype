@@ -15,11 +15,11 @@ public class PlaceTower : InterfaceState
     {
         // ClearPlaceholder();
         // BoardPosition clickedBoardPosition;
-        // if (InputManager.Instance.TryGetBoardPositionUnderCursor(out clickedBoardPosition))
+        // if (Input.Instance.TryGetBoardPositionUnderCursor(out clickedBoardPosition))
         // {
-        //     if (InputManager.Instance.LeftClick())
+        //     if (Input.Instance.LeftClick())
         //     {
-        //         SimulationManager.Instance.AddToCurrent(new TowerState(
+        //         Simulation.Instance.AddToCurrent(new TowerState(
         //              clickedBoardPosition,
         //              Vector3.forward,
         //              Vector3.zero,
@@ -27,7 +27,7 @@ public class PlaceTower : InterfaceState
         //     }
         //     else
         //     {
-        //         towerPlaceholder = RepresentationManager.Instance.HighlightBoardPosition(
+        //         towerPlaceholder = SimulationRepresentation.Instance.HighlightBoardPosition(
         //                     clickedBoardPosition,
         //                     HighlightSize.Small,
         //                     Color.green

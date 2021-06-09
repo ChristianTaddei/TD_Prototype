@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InterfaceManager
+public class Interface
 {
-    public static InterfaceManager Instance;
+    public static Interface Instance;
 
     private InterfaceState defaultInterfaceState;
     private InterfaceState activeInterfaceState;
@@ -13,7 +13,7 @@ public class InterfaceManager
     public readonly ModifyTerrainState ModifyTerrainState;
     public readonly MakePathState MakePathState;
 
-    public InterfaceManager(ModifyTerrainCommand modifyTerrainCommand)
+    public Interface(ModifyTerrainCommand modifyTerrainCommand)
     {
         Instance = this;
 
@@ -51,8 +51,8 @@ public class InterfaceManager
     public void EnterEditMode()
     {
         ResetDefaultState();
-        // RepresentationManager.Instance.RepresentationRunning = false;
-        // RepresentationManager.Instance.RepresentationPaused = true;
+        // SimulationRepresentation.Instance.RepresentationRunning = false;
+        // SimulationRepresentation.Instance.RepresentationPaused = true;
 
         // editToolBar.show(true);
         // topBar.EditButton.GetComponent<Button>().GetComponent<Image>().color = Color.yellow;
@@ -64,9 +64,9 @@ public class InterfaceManager
     public void EnterPlayMode()
     {
         ResetDefaultState();
-        // RepresentationManager.Instance.RepresentationRunning = true;
-        // RepresentationManager.Instance.RepresentationPaused = false;
-        // SimulationManager.Instance.CurrentStateModified();
+        // SimulationRepresentation.Instance.RepresentationRunning = true;
+        // SimulationRepresentation.Instance.RepresentationPaused = false;
+        // Simulation.Instance.CurrentStateModified();
 
         // playToolBar.show(true);
         // topBar.PlayButton.GetComponent<Button>().GetComponent<Image>().color = Color.yellow;
