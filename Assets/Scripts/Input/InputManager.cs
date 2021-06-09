@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -5,6 +6,7 @@ using UnityEngine.EventSystems;
 public class InputManager : MonoBehaviour
 {
     public static InputManager Instance;
+
     private CameraController mainCameraController;
 
     private GameObject marker;
@@ -13,20 +15,24 @@ public class InputManager : MonoBehaviour
         Instance = this;
 
         mainCameraController = Camera.main.GetComponent<CameraController>();
-
-        marker = (GameObject)Resources.Load("Prefabs/marker");
-        marker.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
     }
 
-    private SurfacePoint oldP = null;
-    private List<GameObject> markers = new List<GameObject>();
     void Update()
     {
-        mainCameraController.MoveCamera(
-            Input.GetAxis("Horizontal") * Time.deltaTime,
-            Input.GetAxis("Vertical") * Time.deltaTime);
-        mainCameraController.ZoomCamera(
-            Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime);
+        Bind<float>(Input.GetAxis("Horizontal") * Time.deltaTime,
+            mainCameraController.MoveCameraLeftRight);
+        Bind<float>(Input.GetAxis("Vertical") * Time.deltaTime,
+            mainCameraController.MoveCameraForwardBack);
+
+        Bind<float>(Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime,
+                mainCameraController.ZoomCamera);
+                
+        // Bind<bool>(Input.GetMouseButtonDown(0), interface.Select);
+    }
+
+    private void Bind<T>(T v, Action<T> action)
+    {
+        action(v);
     }
 
     public bool LeftClick()
@@ -39,26 +45,6 @@ public class InputManager : MonoBehaviour
         return (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
             /*&& !EventSystem.current.IsPointerOverGameObject()*/;
     }
-
-    // public bool TryGetTokenUnderCursor(out IRepresentable hitToken)
-    // {
-    //     RaycastHit hit;
-    //     if (TryGetClickHit(out hit))
-    //     {
-    //         IRepresentation hitRepresentation = hit.collider.gameObject
-    //                 .GetComponentInParent<IRepresentation>();
-
-    //         if (hitRepresentation != null )
-    //         {
-    //             hitToken = hitRepresentation.RepresentedObject;
-    //             return true;
-    //         } 
-    //     }
-
-    //     hitToken = default;
-    //     return false;
-    // }
-
 
     public Maybe<SurfacePoint> GetSurfacePointUnderCursor()
     {

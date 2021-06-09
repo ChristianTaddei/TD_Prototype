@@ -3,10 +3,6 @@ using UnityEngine;
 
 public class ModifyTerrainState : InterfaceState
 {
-    // private Simulation simulation;
-    private SimulationRepresentation SimulationRepresentation;
-    private InputManager input;
-
     private ModifyTerrainCommand modifyTerrainCommand;
 
     private List<GameObject> selectionMarkers;
@@ -17,10 +13,6 @@ public class ModifyTerrainState : InterfaceState
     public ModifyTerrainState(ModifyTerrainCommand modifyTerrainCommand)
     {
         this.modifyTerrainCommand = modifyTerrainCommand;
-
-        // simulation = GameObject.Find("Game").GetComponent<Simulation>();
-        SimulationRepresentation = GameObject.Find("Game").GetComponent<SimulationRepresentation>();
-        input = GameObject.Find("Game").GetComponent<InputManager>();
     }
 
     public override void Update()
@@ -42,8 +34,6 @@ public class ModifyTerrainState : InterfaceState
                 
                 modifyTerrainCommand.TargetFace = sp.Value.Face;
                 modifyTerrainCommand.Execute();
-                // simulation.Board.RaiseCells(cellsInRange, HeightChange);
-                // Simulation.Instance.CurrentStateModified();
             }
         }
     }
