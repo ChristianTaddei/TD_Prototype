@@ -90,7 +90,7 @@ public class RepresentationFactory
     //     return HighlightPoint(sp.Position, size, color);
     // }
 
-    public static GameObject HighlightPoint(Vector3 position, HighlightSize size, Color color)
+    public  GameObject HighlightPoint(Vector3 position, HighlightSize size = HighlightSize.Small)
     {
         GameObject instantiatedMarker = (GameObject)GameObject
             .Instantiate((GameObject)Resources.Load("Prefabs/Marker"));
@@ -106,7 +106,7 @@ public class RepresentationFactory
             instantiatedMarker.transform.localScale = new Vector3(.2f, .2f, .2f);
         }
 
-        instantiatedMarker.GetComponent<Renderer>().material.color = color;
+        instantiatedMarker.GetComponent<Renderer>().material.color = Color.gray;
 
         return instantiatedMarker;
     }

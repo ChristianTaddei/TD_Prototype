@@ -4,75 +4,61 @@ using UnityEngine;
 
 public class ModifyTerrainState : InterfaceState
 {
-    private Interface _interface;
+	private Interface _interface;
 
-    private ModifyTerrainCommand modifyTerrainCommand;
-    private HighlightCommand highlightCommand;
+	private ModifyTerrainCommand modifyTerrainCommand;
 
-    // public float BrushRadius { get; set; } = 2.0f;
-    public float HeightChange { get; set; } = 1.0f;
+	private RaycastMediator raycastMediator;
+	private HighlightMediator highlightMediator;
 
-    private List<GameObject> selectionMarkers;
-
-    public ModifyTerrainState(Interface _interface, ModifyTerrainCommand modifyTerrainCommand)
-    {
-        this._interface = _interface;
-
-        this.modifyTerrainCommand = modifyTerrainCommand;
-        updateCommand();
-    }
+	// public float BrushRadius { get; set; } = 2.0f;
+	public float HeightChange { get; set; } = 1.0f;
 
 
-    public override void Mount()
-    {
-        selectionMarkers = new List<GameObject>();
+	public ModifyTerrainState(Interface _interface, ModifyTerrainCommand modifyTerrainCommand, RaycastMediator raycastMediator, HighlightMediator highlightMediator)
+	{
+		this._interface = _interface;
 
-        _interface.OnSelectCommand = modifyTerrainCommand;
-        _interface.OnHoverCommand = highlightCommand;
-    }
+		this.modifyTerrainCommand = modifyTerrainCommand;
 
-    public override void Update()
-    {
-        updateCommand();
+		this.raycastMediator = raycastMediator;
+		this.highlightMediator = highlightMediator;
 
-        ClearSelectionMarkers();
-        // Maybe<SurfacePoint> sp = InputManager.GetSurfacePointUnderCursor();
-        // if (sp.HasValue())
-        // {
-        //     selectionMarkers.Add(
-        //         RepresentationFactory.HighlightSurfacePoint(
-        //             sp.Value,
-        //             HighlightSize.VerySmall,
-        //             Color.green
-        //         )
-        //     );
-        //     if (InputManager.Instance.LeftClick())
-        //     {
-        //         Debug.Log("clicked sp: " + sp.Value.Position);
+		updateCommand();
+	}
 
-        //         modifyTerrainCommand.TargetFace = sp.Value.Face;
-        //         modifyTerrainCommand.Execute();
-        //     }
-        // }
-    }
 
-    public override void Unmount()
-    {
-        ClearSelectionMarkers();
-    }
+	public override void Mount()
+	{
 
-    private void updateCommand()
-    {
-        modifyTerrainCommand.HeightChange = HeightChange;
-    }
 
-    private void ClearSelectionMarkers()
-    {
-        foreach (GameObject selectionMarker in selectionMarkers)
-        {
-            GameObject.Destroy(selectionMarker);
-        }
+		// _interface.OnSelect = modifyTerrainCommand;
+		_interface.OnHover = () =>
+		{
+			// Debug.Log("hovering from modify terrain");
 
-        selectionMarkers.Clear();
-    }
+			Maybe<SurfacePoint> targetSP = raycastMediator.GetSurfacePointUnderCursor();
+			if (targetSP.HasValue())
+			{
+				highlightMediator.Highlight(targetSP.Value.Position);
+			}
+		};
+	}
+
+	public override void Update()
+	{
+		updateCommand();
+
+		highlightMediator.ClearHighlights();
+	}
+
+	public override void Unmount()
+	{
+		highlightMediator.ClearHighlights();
+	}
+
+	private void updateCommand()
+	{
+		modifyTerrainCommand.HeightChange = HeightChange;
+	}
 }

@@ -28,25 +28,12 @@ public class InputManager : MonoBehaviour
 		// Execute<bool>(Input.GetMouseButtonDown(0), forwardIfClickedRepresentation); // the alternative (clicked interface) is part of UI
 	}
 
-	// private void forwardIfClickedRepresentation(bool pressed)
-	// {
-	// 	RaycastHit hit;
-	// 	if (pressed
-	// 	    && !EventSystem.current.IsPointerOverGameObject()
-	// 	    && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
-	// 	{
-	// 		if (hit.collider.gameObject.tag == "Terrain")
-	// 		{
-	// 			// BoardRepresentation br = hit.collider.gameObject
-	// 			//     .GetComponent<BoardRepresentation>();
+	public bool TryGetRaycastHit(out RaycastHit hit)
+	{
+		return (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+		   /* && !EventSystem.current.IsPointerOverGameObject()*/;
+	}
 
-	// 			// Maybe<SurfacePoint> msp = br.GetSurfacePoint(hit.triangleIndex, hit.point);
-    //             // if(msp.HasValue()){
-
-    //             // }
-	// 		}
-	// 	}
-	// }
 
 	private void Execute<T>(T v, Action<T> action)
 	{

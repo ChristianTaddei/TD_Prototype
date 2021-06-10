@@ -7,13 +7,11 @@ public class Interface
 {
 	public static Interface Instance; // Only used to quickly bind from UIBuilder
 
-	// TODO: Extract this to class that deals with clicks outside interface
-	public Command OnSelectCommand { get; set; }
-	public Command OnHoverCommand { get; set; }
-	// private Command onActionCommand;
+	public Action OnSelect { get; set; }
+	public Action OnHover { get; set; }
 
-	private readonly SelectUnitsCommand selectUnitsCommand;
-	private readonly MoveUnitsCommand moveUnitsCommand;
+	// private readonly SelectUnitsCommand selectUnitsCommand;
+	// private readonly MoveUnitsCommand moveUnitsCommand;
 
 	public readonly ModifyTerrainState ModifyTerrainState; // TODO: create "Menu" here and pass fields like the rest
 	public readonly MakePathState MakePathState;
@@ -21,12 +19,12 @@ public class Interface
 	private InterfaceState defaultInterfaceState;
 	private InterfaceState activeInterfaceState;
 
-	public Interface(RaycastMediator raycastMediator, ModifyTerrainCommand modifyTerrainCommand)
+	public Interface(RaycastMediator raycastMediator, HighlightMediator highlightMediator, ModifyTerrainCommand modifyTerrainCommand)
 	{
 		Instance = this;
 
-		OnSelectCommand = selectUnitsCommand;
-		// onActionCommand = moveUnitsCommand;
+		OnSelect = () => {Debug.Log("Empty select called");};
+		OnHover = () => {Debug.Log("Empty hover called");};
 
 		// MakePathState = new MakePathState(
 		//     this,
@@ -35,7 +33,9 @@ public class Interface
 
 		ModifyTerrainState = new ModifyTerrainState(
 		    this,
-		    modifyTerrainCommand
+		    modifyTerrainCommand,
+            raycastMediator,
+            highlightMediator // TODO: not shared, to each state his?
 		);
 
 		defaultInterfaceState = ModifyTerrainState;
@@ -45,6 +45,8 @@ public class Interface
 	public void Update()
 	{
 		activeInterfaceState.Update();
+
+        OnHover();
 	}
 
 	internal void ResetDefaultState()

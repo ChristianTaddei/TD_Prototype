@@ -2,9 +2,11 @@
     "name": "Mediators",
     "rootNamespace": "",
     "references": [
+        "GUID:491343a114641d745ae0ed6166257cdd",
         "GUID:bf21bd3801f577f4286553c89c3ef935",
         "GUID:1f5e1462a9ca4054b9e50d48785f1d76",
-        "GUID:ff1d8cfa66d3ae04ab8f11bd5a0ba80c"
+        "GUID:ff1d8cfa66d3ae04ab8f11bd5a0ba80c",
+        "GUID:a0928ef796871704cadefbb57dafda43"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
