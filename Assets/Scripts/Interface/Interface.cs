@@ -5,20 +5,41 @@ using UnityEngine;
 
 public class Interface
 {
-    public static Interface Instance;
+    public static Interface Instance; // Only used to quickly bind from UIBuilder
+
+    // TODO: Extract this to class that deals with clicks outside interface
+    public Command OnSelectCommand { get; set; }
+    public Command OnHoverCommand { get; set; }
+    // private Command onActionCommand;
+
+    private readonly SelectUnitsCommand selectUnitsCommand;
+    private readonly MoveUnitsCommand moveUnitsCommand;
+
+    public readonly ModifyTerrainState ModifyTerrainState; // TODO: create "Menu" here and pass fields like the rest
+    public readonly MakePathState MakePathState;
 
     private InterfaceState defaultInterfaceState;
     private InterfaceState activeInterfaceState;
 
-    public readonly ModifyTerrainState ModifyTerrainState;
-    public readonly MakePathState MakePathState;
-
-    public Interface(ModifyTerrainCommand modifyTerrainCommand)
+    public Interface(
+        ModifyTerrainCommand modifyTerrainCommand,
+        HighlightCommand highlightCommand)
     {
         Instance = this;
 
-        MakePathState = new MakePathState();
-        ModifyTerrainState = new ModifyTerrainState(modifyTerrainCommand);
+        OnSelectCommand = selectUnitsCommand;
+        // onActionCommand = moveUnitsCommand;
+
+        // MakePathState = new MakePathState(
+        //     this,
+        //     highlightCommand
+        // );
+
+        ModifyTerrainState = new ModifyTerrainState(
+            this,
+            modifyTerrainCommand,
+            highlightCommand
+        );
 
         defaultInterfaceState = ModifyTerrainState;
         SetState(defaultInterfaceState);

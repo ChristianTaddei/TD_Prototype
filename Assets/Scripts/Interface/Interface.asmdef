@@ -4,13 +4,17 @@
     "references": [
         "Input",
         "Monads",
-        "Commands",
         "UnityEngine.UIElementsGameObjectsModule",
         "UnityEngine.UIElementsInputSystemModule",
         "UnityEngine.UIElementsModule",
         "Surface",
         "Representation",
-        "Geometry"
+        "Geometry",
+        "Commands",
+        "InputCommands",
+        "SurfaceCommands",
+        "RepresentationCommands",
+        "SimulationCommands"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -4,40 +4,41 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
-    public Interface Interface;
-    public Simulation Simulation;
+	[HideInInspector] public Interface Interface;
+	[HideInInspector] public Simulation Simulation;
 
-    public SimulationRepresentation simulationRepresentation;
+	[HideInInspector] public RepresentationManager representationManager;
 
-    public InputManager inputManager;
+	[HideInInspector] public InputManager inputManager;
 
-    BoardRepresentation br;
+	BoardRepresentation br;
 
-    void Start()
-    {
-        inputManager = this.gameObject.AddComponent<InputManager>();
+	void Start()
+	{
+		inputManager = this.gameObject.AddComponent<InputManager>();
 
-        Surface surface = new Surface(10.0f);
-        Simulation = new Simulation(surface);
+		Surface surface = new Surface(10.0f);
+		Simulation = new Simulation(surface);
 
-        simulationRepresentation = this.gameObject.AddComponent<SimulationRepresentation>();
+		representationManager = this.gameObject.AddComponent<RepresentationManager>();
 
-        Interface = new Interface(
-            new ModifyTerrainCommand(surface)
-        );
+		Interface = new Interface(
+		    new ModifyTerrainCommand(surface),
+		    new HighlightCommand(representationManager)
+		);
 
-        // TODO: make into repres & manager
-        Board board = new Board(surface);
-        br = BoardRepresentation.MakeFrom(board);
+		// TODO: make into repres & manager
+		Board board = new Board(surface);
+		br = BoardRepresentation.MakeFrom(board);
 
-        // Register observers/observables
-    }
+		// Register observers/observables
+	}
 
-    void Update()
-    {
-        Interface.Update();
-        Simulation.Update();
+	void Update()
+	{
+		Interface.Update();
+		Simulation.Update();
 
-        br.Sync();
-    }
+		br.Sync();
+	}
 }

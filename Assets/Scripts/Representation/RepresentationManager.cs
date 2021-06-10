@@ -13,9 +13,9 @@ public enum HighlightSize
     VerySmall,
 }
 
-public class SimulationRepresentation : MonoBehaviour
+public class RepresentationManager : MonoBehaviour
 {
-    public static SimulationRepresentation Instance;
+    public static RepresentationManager Instance;
 
     // private HashSet<IRepresentable> representedObjects;
 

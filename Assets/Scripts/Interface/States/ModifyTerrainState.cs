@@ -1,41 +1,69 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ModifyTerrainState : InterfaceState
 {
+    private Interface _interface;
+
     private ModifyTerrainCommand modifyTerrainCommand;
+    private HighlightCommand highlightCommand;
+
+    // public float BrushRadius { get; set; } = 2.0f;
+    public float HeightChange { get; set; } = 1.0f;
 
     private List<GameObject> selectionMarkers;
 
-    public float BrushRadius { get; set; } = 2.0f;
-    public float HeightChange { get; set; } = 1.0f;
-
-    public ModifyTerrainState(ModifyTerrainCommand modifyTerrainCommand)
+    public ModifyTerrainState(Interface _interface, ModifyTerrainCommand modifyTerrainCommand, HighlightCommand highlightCommand)
     {
+        this._interface = _interface;
+
         this.modifyTerrainCommand = modifyTerrainCommand;
+        updateCommand();
+    }
+
+
+    public override void Mount()
+    {
+        selectionMarkers = new List<GameObject>();
+
+        _interface.OnSelectCommand = modifyTerrainCommand;
+        _interface.OnHoverCommand = highlightCommand;
     }
 
     public override void Update()
     {
+        updateCommand();
+
+        // ClearSelectionMarkers();
+        // Maybe<SurfacePoint> sp = InputManager.Instance.GetSurfacePointUnderCursor();
+        // if (sp.HasValue())
+        // {
+        //     selectionMarkers.Add(
+        //         RepresentationFactory.HighlightSurfacePoint(
+        //             sp.Value,
+        //             HighlightSize.VerySmall,
+        //             Color.green
+        //         )
+        //     );
+        //     if (InputManager.Instance.LeftClick())
+        //     {
+        //         Debug.Log("clicked sp: " + sp.Value.Position);
+
+        //         modifyTerrainCommand.TargetFace = sp.Value.Face;
+        //         modifyTerrainCommand.Execute();
+        //     }
+        // }
+    }
+
+    public override void Unmount()
+    {
         ClearSelectionMarkers();
-        Maybe<SurfacePoint> sp = InputManager.Instance.GetSurfacePointUnderCursor();
-        if (sp.HasValue())
-        {
-            selectionMarkers.Add(
-                RepresentationFactory.HighlightSurfacePoint(
-                    sp.Value,
-                    HighlightSize.VerySmall,
-                    Color.green
-                )
-            );
-            if (InputManager.Instance.LeftClick())
-            {
-                Debug.Log("clicked sp: " + sp.Value.Position);
-                
-                modifyTerrainCommand.TargetFace = sp.Value.Face;
-                modifyTerrainCommand.Execute();
-            }
-        }
+    }
+
+    private void updateCommand()
+    {
+        modifyTerrainCommand.HeightChange = HeightChange;
     }
 
     private void ClearSelectionMarkers()
@@ -46,15 +74,5 @@ public class ModifyTerrainState : InterfaceState
         }
 
         selectionMarkers.Clear();
-    }
-
-    public override void Mount()
-    {
-        selectionMarkers = new List<GameObject>();
-    }
-
-    public override void Unmount()
-    {
-        ClearSelectionMarkers();
     }
 }

@@ -5,32 +5,29 @@ using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour
 {
-    public static InputManager Instance;
-
     private CameraController mainCameraController;
 
-    private GameObject marker;
     void Start()
     {
-        Instance = this;
-
         mainCameraController = Camera.main.GetComponent<CameraController>();
     }
 
     void Update()
     {
-        Bind<float>(Input.GetAxis("Horizontal") * Time.deltaTime,
+        // Forward axis
+        Execute<float>(Input.GetAxis("Horizontal") * Time.deltaTime,
             mainCameraController.MoveCameraLeftRight);
-        Bind<float>(Input.GetAxis("Vertical") * Time.deltaTime,
+        Execute<float>(Input.GetAxis("Vertical") * Time.deltaTime,
             mainCameraController.MoveCameraForwardBack);
 
-        Bind<float>(Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime,
+        Execute<float>(Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime,
                 mainCameraController.ZoomCamera);
                 
+        // Forward keys and buttons
         // Bind<bool>(Input.GetMouseButtonDown(0), interface.Select);
     }
 
-    private void Bind<T>(T v, Action<T> action)
+    private void Execute<T>(T v, Action<T> action)
     {
         action(v);
     }
