@@ -6,16 +6,11 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-public enum HighlightSize
+public class SimulationRepresentation : MonoBehaviour
 {
-    Small,
-    Large,
-    VerySmall,
-}
+    public static SimulationRepresentation Instance;
 
-public class RepresentationManager : MonoBehaviour
-{
-    public static RepresentationManager Instance;
+	public Simulation RepresentedSimulation {get; set;} // FIXME: how to make final when this is mono?
 
     // private HashSet<IRepresentable> representedObjects;
 
@@ -27,7 +22,7 @@ public class RepresentationManager : MonoBehaviour
     public float SimulationRepresentationStepTotalTime = 0.5f;
     private float SimulationRepresentationStepCurrentTime = 0.0f;
 
-    void Start()
+	void Start()
     {
         Instance = this;
         SimulationRepresentationRunning = false;

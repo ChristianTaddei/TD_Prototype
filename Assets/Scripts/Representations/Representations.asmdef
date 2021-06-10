@@ -2,9 +2,7 @@
     "name": "Representation",
     "rootNamespace": "",
     "references": [
-        "Monads",
-        "Surface",
-        "Geometry"
+        "Monads"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

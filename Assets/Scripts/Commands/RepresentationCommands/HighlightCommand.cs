@@ -1,8 +1,8 @@
 public class HighlightCommand : Command
 {
-    private RepresentationManager representationManager;
+    private SimulationRepresentation representationManager;
 
-    public HighlightCommand(RepresentationManager representationManager)
+    public HighlightCommand(SimulationRepresentation representationManager)
     {
         this.representationManager = representationManager;
     }

@@ -5,58 +5,51 @@ using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour
 {
-    private CameraController mainCameraController;
+	private CameraController mainCameraController;
 
-    void Start()
-    {
-        mainCameraController = Camera.main.GetComponent<CameraController>();
-    }
+	void Start()
+	{
+		mainCameraController = Camera.main.GetComponent<CameraController>();
+	}
 
-    void Update()
-    {
-        // Forward axis
-        Execute<float>(Input.GetAxis("Horizontal") * Time.deltaTime,
-            mainCameraController.MoveCameraLeftRight);
-        Execute<float>(Input.GetAxis("Vertical") * Time.deltaTime,
-            mainCameraController.MoveCameraForwardBack);
+	void Update()
+	{
+		// Forward axis
+		Execute<float>(Input.GetAxis("Horizontal") * Time.deltaTime,
+		    mainCameraController.MoveCameraLeftRight);
+		Execute<float>(Input.GetAxis("Vertical") * Time.deltaTime,
+		    mainCameraController.MoveCameraForwardBack);
 
-        Execute<float>(Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime,
-                mainCameraController.ZoomCamera);
-                
-        // Forward keys and buttons
-        // Bind<bool>(Input.GetMouseButtonDown(0), interface.Select);
-    }
+		Execute<float>(Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime,
+			mainCameraController.ZoomCamera);
 
-    private void Execute<T>(T v, Action<T> action)
-    {
-        action(v);
-    }
+		// Forward keys and buttons
 
-    public bool LeftClick()
-    {
-        return Input.GetMouseButtonDown(0);
-    }
+		// Execute<bool>(Input.GetMouseButtonDown(0), forwardIfClickedRepresentation); // the alternative (clicked interface) is part of UI
+	}
 
-    private bool TryGetClickHit(out RaycastHit hit)
-    {
-        return (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
-            /*&& !EventSystem.current.IsPointerOverGameObject()*/;
-    }
+	// private void forwardIfClickedRepresentation(bool pressed)
+	// {
+	// 	RaycastHit hit;
+	// 	if (pressed
+	// 	    && !EventSystem.current.IsPointerOverGameObject()
+	// 	    && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+	// 	{
+	// 		if (hit.collider.gameObject.tag == "Terrain")
+	// 		{
+	// 			// BoardRepresentation br = hit.collider.gameObject
+	// 			//     .GetComponent<BoardRepresentation>();
 
-    public Maybe<SurfacePoint> GetSurfacePointUnderCursor()
-    {
-        RaycastHit hit;
-        if (TryGetClickHit(out hit))
-        {
-            if (hit.collider.gameObject.tag == "Terrain")
-            {
-                BoardRepresentation br = hit.collider.gameObject
-                    .GetComponent<BoardRepresentation>();
+	// 			// Maybe<SurfacePoint> msp = br.GetSurfacePoint(hit.triangleIndex, hit.point);
+    //             // if(msp.HasValue()){
 
-                return br.GetSurfacePoint(hit.triangleIndex, hit.point);
-            }
-        }
+    //             // }
+	// 		}
+	// 	}
+	// }
 
-        return new Maybe<SurfacePoint>.Nothing();
-    }
+	private void Execute<T>(T v, Action<T> action)
+	{
+		action(v);
+	}
 }

@@ -2,6 +2,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum HighlightSize
+{
+    Small,
+    Large,
+    VerySmall,
+}
+
 public class RepresentationFactory
 {
     private static Dictionary<Type, GameObject> loadedPrefabs = new Dictionary<Type, GameObject>();
@@ -66,22 +73,22 @@ public class RepresentationFactory
 
     //     }
 
-    public static IEnumerable<GameObject> HighlightSurfacePoints(List<SurfacePoint> sps, HighlightSize size, Color color)
-    {
-        List<GameObject> gos = new List<GameObject>();
+    // public static IEnumerable<GameObject> HighlightSurfacePoints(List<SurfacePoint> sps, HighlightSize size, Color color)
+    // {
+    //     List<GameObject> gos = new List<GameObject>();
 
-        foreach (SurfacePoint sp in sps)
-        {
-            gos.Add(HighlightSurfacePoint(sp, size, color));
-        }
+    //     foreach (SurfacePoint sp in sps)
+    //     {
+    //         gos.Add(HighlightSurfacePoint(sp, size, color));
+    //     }
 
-        return gos;
-    }
+    //     return gos;
+    // }
 
-    public static GameObject HighlightSurfacePoint(SurfacePoint sp, HighlightSize size, Color color)
-    {
-        return HighlightPoint(sp.Position, size, color);
-    }
+    // public static GameObject HighlightSurfacePoint(SurfacePoint sp, HighlightSize size, Color color)
+    // {
+    //     return HighlightPoint(sp.Position, size, color);
+    // }
 
     public static GameObject HighlightPoint(Vector3 position, HighlightSize size, Color color)
     {

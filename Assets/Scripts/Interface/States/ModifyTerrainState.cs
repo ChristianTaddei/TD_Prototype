@@ -14,7 +14,7 @@ public class ModifyTerrainState : InterfaceState
 
     private List<GameObject> selectionMarkers;
 
-    public ModifyTerrainState(Interface _interface, ModifyTerrainCommand modifyTerrainCommand, HighlightCommand highlightCommand)
+    public ModifyTerrainState(Interface _interface, ModifyTerrainCommand modifyTerrainCommand)
     {
         this._interface = _interface;
 
@@ -35,8 +35,8 @@ public class ModifyTerrainState : InterfaceState
     {
         updateCommand();
 
-        // ClearSelectionMarkers();
-        // Maybe<SurfacePoint> sp = InputManager.Instance.GetSurfacePointUnderCursor();
+        ClearSelectionMarkers();
+        // Maybe<SurfacePoint> sp = InputManager.GetSurfacePointUnderCursor();
         // if (sp.HasValue())
         // {
         //     selectionMarkers.Add(

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: try to remove coupling to surface (merge into?) and geometry
 public class Board
 {
     private Surface surface;

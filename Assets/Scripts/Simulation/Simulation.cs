@@ -13,9 +13,4 @@ public class Simulation
     {
         this.surface = surface;
     }
-
-    public void Update()
-    {
-
-    }
 }

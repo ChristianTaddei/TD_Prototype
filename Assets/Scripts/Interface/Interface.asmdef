@@ -14,7 +14,8 @@
         "InputCommands",
         "SurfaceCommands",
         "RepresentationCommands",
-        "SimulationCommands"
+        "SimulationCommands",
+        "Mediators"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
