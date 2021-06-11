@@ -17,19 +17,11 @@ public class ModifyTerrainCommand : Command
 
     public void Execute()
     {
-        // TODO: move to surf
-        // int i = surface.vertices.IndexOf(TargetFace.svA);
-        // surface.vertices[i] = new SurfaceVertex(
-        //     new CartesianVector(
-        //         new Vector3(
-        //             TargetFace.svA.Position.x,
-        //             TargetFace.svA.Position.y + HeightChange,
-        //             TargetFace.svA.Position.z)));
+        surface.Raise(TargetFace, HeightChange);
     }
 
-    
-    public void Undo()
-    {
-        throw new System.NotImplementedException();
-    }
+	public void Undo()
+	{
+		throw new System.NotImplementedException();
+	}
 }

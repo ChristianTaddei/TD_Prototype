@@ -7,6 +7,8 @@ public class InputManager : MonoBehaviour
 {
 	private CameraController mainCameraController;
 
+	private Dictionary<Func<bool>, Action> KeyBindings = new Dictionary<Func<bool>, Action>();
+
 	void Start()
 	{
 		mainCameraController = Camera.main.GetComponent<CameraController>();
@@ -23,9 +25,14 @@ public class InputManager : MonoBehaviour
 		Execute<float>(Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime,
 			mainCameraController.ZoomCamera);
 
-		// Forward keys and buttons
-
-		// Execute<bool>(Input.GetMouseButtonDown(0), forwardIfClickedRepresentation); // the alternative (clicked interface) is part of UI
+		// Forward bound keys and buttons
+		foreach (KeyValuePair<Func<bool>, Action> entry in KeyBindings)
+		{
+			if (entry.Key.Invoke() == true)
+			{
+				entry.Value.Invoke();
+			}
+		}
 	}
 
 	public bool TryGetRaycastHit(out RaycastHit hit)
@@ -34,6 +41,10 @@ public class InputManager : MonoBehaviour
 		   /* && !EventSystem.current.IsPointerOverGameObject()*/;
 	}
 
+	public void Bind(object mouse0, Action action)
+	{
+		KeyBindings.Add(() => Input.GetMouseButtonDown(0) /*&& !EventSystem.current.IsPointerOverGameObject()*/, action);
+	}
 
 	private void Execute<T>(T v, Action<T> action)
 	{

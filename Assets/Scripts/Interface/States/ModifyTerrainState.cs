@@ -27,20 +27,24 @@ public class ModifyTerrainState : InterfaceState
 		updateCommand();
 	}
 
-
+	private Maybe<SurfacePoint> target;
 	public override void Mount()
 	{
+		_interface.OnSelect = () =>
+		{
+			if (target.HasValue())
+			{
+				modifyTerrainCommand.TargetFace = target.Value.Face;
+				modifyTerrainCommand.Execute();
+			}
+		};
 
-
-		// _interface.OnSelect = modifyTerrainCommand;
 		_interface.OnHover = () =>
 		{
-			// Debug.Log("hovering from modify terrain");
-
-			Maybe<SurfacePoint> targetSP = raycastMediator.GetSurfacePointUnderCursor();
-			if (targetSP.HasValue())
+			target = raycastMediator.GetSurfacePointUnderCursor();
+			if (target.HasValue())
 			{
-				highlightMediator.Highlight(targetSP.Value.Position);
+				highlightMediator.Highlight(target.Value.Position);
 			}
 		};
 	}

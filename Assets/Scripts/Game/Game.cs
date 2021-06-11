@@ -29,7 +29,7 @@ public class Game : MonoBehaviour
 			new ModifyTerrainCommand(simulation.Surface) // TODO: with just sim?
 		);
 
-		// inputManager.Bind(inputManager.Mouse0, _interface.OnSelect)
+		inputManager.Bind(null, _interface.OnSelect);
 
 		Board board = new Board(simulation.Surface); // TODO: make into repres & surf
 		br = BoardRepresentation.MakeFrom(board);

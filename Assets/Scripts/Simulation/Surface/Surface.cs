@@ -17,13 +17,24 @@ public class Surface
         this.faces = new List<Face>();
     }
 
-    // public void Raise(Face targetFace)
-    // {
-    //     List<SurfaceVertex> verticesToRaise = new List<SurfaceVertex>();
-    //     verticesToRaise.Add(targetFace.A);
-    // }
+	public void Raise(Face targetFace, float heightChange)
+	{
+		int i =vertices.IndexOf(targetFace.svA);
+        vertices[i] = new SurfaceVertex(
+            new CartesianVector(
+                new Vector3(
+                    targetFace.svA.Position.x,
+                    targetFace.svA.Position.y + heightChange,
+                    targetFace.svA.Position.z)));
+	}
 
-    internal void AddFace(Face face)
+	// public void Raise(Face targetFace)
+	// {
+	//     List<SurfaceVertex> verticesToRaise = new List<SurfaceVertex>();
+	//     verticesToRaise.Add(targetFace.A);
+	// }
+
+	internal void AddFace(Face face)
     {
         faces.Add(face);
     }
