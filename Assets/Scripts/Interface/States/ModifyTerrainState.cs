@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ModifyTerrainState : InterfaceState
 {
-	private Interface _interface;
+	private InterfaceManager _interface;
 
 	private ModifyTerrainCommand modifyTerrainCommand;
 
@@ -15,7 +15,7 @@ public class ModifyTerrainState : InterfaceState
 	public float HeightChange { get; set; } = 1.0f;
 
 
-	public ModifyTerrainState(Interface _interface, ModifyTerrainCommand modifyTerrainCommand, RaycastMediator raycastMediator, HighlightMediator highlightMediator)
+	public ModifyTerrainState(InterfaceManager _interface, ModifyTerrainCommand modifyTerrainCommand, RaycastMediator raycastMediator, HighlightMediator highlightMediator)
 	{
 		this._interface = _interface;
 

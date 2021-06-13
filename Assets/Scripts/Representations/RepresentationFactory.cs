@@ -11,9 +11,9 @@ public enum HighlightSize
 
 public class RepresentationFactory
 {
-    private static Dictionary<Type, GameObject> loadedPrefabs = new Dictionary<Type, GameObject>();
+    private Dictionary<Type, GameObject> loadedPrefabs = new Dictionary<Type, GameObject>();
 
-    public static GameObject GetPrefab(Type type)
+    public GameObject GetPrefab(Type type)
     {
         GameObject prefab;
         if (!loadedPrefabs.TryGetValue(type, out prefab))
@@ -25,7 +25,7 @@ public class RepresentationFactory
         return prefab;
     }
 
-    private static GameObject loadPrefab(Type type)
+    private  GameObject loadPrefab(Type type)
     {
         // if (type == typeof(Tower))
         // {

@@ -5,6 +5,8 @@ using UnityEngine.UIElements;
 
 public class Menu : MonoBehaviour
 {
+    public InterfaceManager interfaceManager;
+
     private VisualElement root;
     private Button pathButton;
     private Button raiseButton;
@@ -17,14 +19,14 @@ public class Menu : MonoBehaviour
         pathButton.clickable = new Clickable(() =>
         {
             Debug.Log("path mode on");
-            Interface.Instance.SetState(Interface.Instance.MakePathState);
+            interfaceManager.State = interfaceManager.MakePathState;
         });
 
         raiseButton = root.Q<Button>("RaiseButton");
         raiseButton.clickable = new Clickable(() =>
         {
             Debug.Log("raise mode on");
-            Interface.Instance.SetState(Interface.Instance.ModifyTerrainState);
+            interfaceManager.State = interfaceManager.ModifyTerrainState;
         });
     }
 
@@ -32,9 +34,4 @@ public class Menu : MonoBehaviour
     {
 
     }
-
-
-
-
-
 }

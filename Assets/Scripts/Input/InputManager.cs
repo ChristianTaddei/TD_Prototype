@@ -37,8 +37,7 @@ public class InputManager : MonoBehaviour
 
 	public bool TryGetRaycastHit(out RaycastHit hit)
 	{
-		return (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
-		   /* && !EventSystem.current.IsPointerOverGameObject()*/;
+		return (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit));
 	}
 
 	public void Bind(object mouse0, Action action)

@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class RaycastMediator
 {
+	// TODO: not really mediating atm, will do with more repres?
+	
 	public InputManager InputManager { get; }
-	public SimulationRepresentation SimulationRepresentation { get; }
 
-	public RaycastMediator(InputManager inputManager, SimulationRepresentation simulationRepresentation)
+	public RaycastMediator(InputManager inputManager)
 	{
 		InputManager = inputManager;
-		SimulationRepresentation = simulationRepresentation;
 	}
 
 	// TODO: should I avoid sending "surfacePoint" to interface?

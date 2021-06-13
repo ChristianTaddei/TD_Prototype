@@ -85,8 +85,8 @@ namespace Tests
                 .MakeDirectPath(Rectangle_ABDE.FED_E, Rectangle_ABDE.ACB_B);
 
             Assert.True(path.HasValue());
-            Assert.AreEqual(Rectangle_ABDE.FED_E, path.Value.Start);
-            Assert.AreEqual(Rectangle_ABDE.ACB_B, path.Value.End);
+            Assert.True(Rectangle_ABDE.FED_E == path.Value.Start); // TODO: identity not required, check equal as IVector?
+            Assert.True(Rectangle_ABDE.ACB_B ==  path.Value.End);
             Assert.AreEqual(5, path.Value.Points.Count);
 
             SurfacePoint intersection = new SurfacePoint(
@@ -94,16 +94,16 @@ namespace Tests
                 new BarycentricVector(
                     Rectangle_ABDE.FED,
                     new BarycentricCoordinates(2.0f / 3.0f, 0.0f, 1.0f / 3.0f)));
-            Assert.AreEqual(intersection.Position, path.Value.Points[1].Position);
+            Assert.AreEqual(intersection as IVector, path.Value.Points[1] as IVector);
 
-            Assert.AreEqual(Rectangle_ABDE.m_CF_AFC.Position, path.Value.Points[2].Position);
+            Assert.AreEqual(Rectangle_ABDE.m_CF_AFC as IVector, path.Value.Points[2] as IVector);
 
             intersection = new SurfacePoint(
                  Rectangle_ABDE.ACB,
                  new BarycentricVector(
                      Rectangle_ABDE.ACB,
                      new BarycentricCoordinates(1.0f / 3.0f, 2.0f / 3.0f, 0.0f)));
-            Assert.AreEqual(intersection.Position, path.Value.Points[3].Position);
+            Assert.AreEqual(intersection as IVector, path.Value.Points[3] as IVector);
             #endregion
         }
 
@@ -122,11 +122,11 @@ namespace Tests
                 .MakeDirectPath(FoldedRectangle_ABDE.FED_E, FoldedRectangle_ABDE.FDC_C);
 
             Assert.True(path.HasValue());
-            Assert.AreEqual(FoldedRectangle_ABDE.FED_E, path.Value.Start);
-            Assert.AreEqual(FoldedRectangle_ABDE.FDC_C, path.Value.End);
+            Assert.True(FoldedRectangle_ABDE.FED_E ==  path.Value.Start);
+            Assert.True(FoldedRectangle_ABDE.FDC_C ==  path.Value.End);
             Assert.AreEqual(3, path.Value.Points.Count);
 
-            AssertAreSamePosition(FoldedRectangle_ABDE.m_FD_FDC.Position, path.Value.Points[1].Position);
+            Assert.AreEqual(FoldedRectangle_ABDE.m_FD_FDC as IVector,  path.Value.Points[1] as IVector);
         }
 
         [Test]
@@ -146,8 +146,8 @@ namespace Tests
                     FoldedRectangle_ABDE.FED,
                     new BarycentricCoordinates(2.0f / 3.0f, 0.0f, 1.0f / 3.0f)));
 
-            AssertAreSamePosition(intersection.Position, path.Value.Points[1].Position);
-            AssertAreSamePosition(FoldedRectangle_ABDE.m_CF_AFC.Position, path.Value.Points[2].Position);
+            Assert.AreEqual(intersection, path.Value.Points[1]);
+            Assert.AreEqual(FoldedRectangle_ABDE.m_CF_AFC, path.Value.Points[2]);
         }
 
         // TODO: auto project, so check proj on high surfaces -> test projects?
@@ -348,13 +348,12 @@ namespace Tests
         }
 
         #region Common assertions
-        // TODO: toleance, where to define it?
         static Action<Vector3, Vector3> AssertAreSamePosition =
             (Vector3 p1, Vector3 p2) =>
                 {
-                    Assert.True(UnityEngine.Mathf.Abs(p1.x - p2.x) < 0.0001f);
-                    Assert.True(UnityEngine.Mathf.Abs(p1.y - p2.y) < 0.0001f);
-                    Assert.True(UnityEngine.Mathf.Abs(p1.z - p2.z) < 0.0001f);
+                    Assert.True(UnityEngine.Mathf.Abs(p1.x - p2.x) < IVector.EPSILON);
+                    Assert.True(UnityEngine.Mathf.Abs(p1.y - p2.y) < IVector.EPSILON);
+                    Assert.True(UnityEngine.Mathf.Abs(p1.z - p2.z) < IVector.EPSILON);
                 };
 
         static Action<SurfacePoint, SurfacePoint, SurfacePoint> AssertPathHasOnlyOneInstersection =
@@ -364,9 +363,11 @@ namespace Tests
 
                    Assert.True(path.HasValue());
                    Assert.AreEqual(3, path.Value.Points.Count);
-                   Assert.AreEqual(start, path.Value.Start);
-                   Assert.AreEqual(end, path.Value.End);
-                   Assert.AreEqual(intersection.Position, path.Value.Points[1].Position); // TODO: would fail if using non-ints floats
+
+                   Assert.True(start == path.Value.Start);
+                   Assert.True(end == path.Value.End);
+
+                   Assert.AreEqual(intersection as IVector, path.Value.Points[1] as IVector);
                };
 
         static Action<SurfacePoint, SurfacePoint> AssertPathIsJustStartAndEnd =
@@ -375,9 +376,9 @@ namespace Tests
                     Maybe<SurfacePath> path = start.Face.Surface.MakeDirectPath(start, end);
 
                     Assert.True(path.HasValue());
+                    Assert.True(start == path.Value.Start);
+                    Assert.True(end == path.Value.End);
                     Assert.AreEqual(2, path.Value.Points.Count);
-                    Assert.AreEqual(start, path.Value.Start);
-                    Assert.AreEqual(end, path.Value.End);
                 };
 
         static Func<Surface, Vector3, Vector3, SurfacePath> AssertPathCanBeMadeFromPositions =

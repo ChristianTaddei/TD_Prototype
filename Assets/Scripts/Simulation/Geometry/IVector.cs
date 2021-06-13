@@ -7,17 +7,18 @@ using UnityEngine;
 // that isnt actually distinct?
 public abstract class IVector
 {
+    public static readonly float EPSILON = 0.001f;
+
     public abstract Vector3 Position {get;} // Position of the point specified by canonic representation
 
     public override bool Equals(object obj)
     {
         return obj is IVector vector
-             && UnityEngine.Mathf.Abs(this.Position.x - vector.Position.x) < 0.0001f
-             && UnityEngine.Mathf.Abs(this.Position.y - vector.Position.y) < 0.0001f
-             && UnityEngine.Mathf.Abs(this.Position.z - vector.Position.z) < 0.0001f;
+             && UnityEngine.Mathf.Abs(this.Position.x - vector.Position.x) < EPSILON
+             && UnityEngine.Mathf.Abs(this.Position.y - vector.Position.y) < EPSILON
+             && UnityEngine.Mathf.Abs(this.Position.z - vector.Position.z) < EPSILON;
     }
 
-    // TODO: what if some vectors are equals but different hashcodes?
     public override int GetHashCode()
     {
         return -425505606 + Position.GetHashCode();

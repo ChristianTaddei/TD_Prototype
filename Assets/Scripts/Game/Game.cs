@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
-	Interface _interface;
+	InterfaceManager _interface;
 	BoardRepresentation br;
 
 	void Start()
@@ -14,19 +14,19 @@ public class Game : MonoBehaviour
 
 		Simulation simulation = new Simulation(new Surface(10.0f));
 
-		RepresentationFactory representationFactory = new RepresentationFactory(); // TODO: unstaticize
+		RepresentationFactory representationFactory = new RepresentationFactory(); 
 
-		SimulationRepresentation simulationRepresentation = this.gameObject.AddComponent<SimulationRepresentation>(); // TODO: new gameobj
+		SimulationRepresentation simulationRepresentation = this.gameObject.AddComponent<SimulationRepresentation>();
 		simulationRepresentation.RepresentedSimulation = simulation;
 
-		RaycastMediator raycastMediator = new RaycastMediator(inputManager, simulationRepresentation);
-		HighlightMediator highlightMediator = new HighlightMediator(representationFactory);
+		RaycastMediator raycastMediator = new RaycastMediator(inputManager);
+		HighlightMediator highlightMediator = new HighlightMediator(representationFactory); // TODOHIGH: when more repres present, expand
 
 		// Desktop Level Interface
-		_interface = new Interface(
+		_interface = new InterfaceManager(
 			raycastMediator,
 	        highlightMediator,
-			new ModifyTerrainCommand(simulation.Surface) // TODO: with just sim?
+			new ModifyTerrainCommand(simulation.Surface)
 		);
 
 		inputManager.Bind(null, _interface.OnSelect);

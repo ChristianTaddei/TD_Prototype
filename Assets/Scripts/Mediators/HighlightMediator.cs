@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class HighlightMediator
 {
+	// TODOHIGH: not really a mediator, will be when more reps are present?
+
     private RepresentationFactory representationFactory;
 
 	private List<GameObject> selectionMarkers = new List<GameObject>();

@@ -17,14 +17,4 @@ public class SurfacePoint : IVector
     }
 
     private SurfacePoint() { }
-
-    public override bool Equals(object obj)
-    {
-        return obj is SurfacePoint point &&
-               base.Equals(obj) &&
-               Position.Equals(point.Position) &&
-               EqualityComparer<BarycentricVector>.Default.Equals(BarycentricVector, point.BarycentricVector) &&
-               Position.Equals(point.Position) &&
-               EqualityComparer<Face>.Default.Equals(Face, point.Face);
-    }
 }

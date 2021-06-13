@@ -3,28 +3,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Interface
+public class InterfaceManager
 {
-	public static Interface Instance; // Only used to quickly bind from UIBuilder
+	public static InterfaceManager Instance; // Only used to quickly bind from UIBuilder
 
 	public Action OnSelect { get; set; }
 	public Action OnHover { get; set; }
 
+	private InterfaceState state;
+	public InterfaceState State
+	{
+		private get => state;
+
+		set
+		{
+			if (state != value)
+			{
+				if (state != null) { state.Unmount(); }
+				state = value;
+				state.Mount();
+			}
+		}
+	}
+
+	private InterfaceState defaultInterfaceState;
+
 	// private readonly SelectUnitsCommand selectUnitsCommand;
 	// private readonly MoveUnitsCommand moveUnitsCommand;
 
-	public readonly ModifyTerrainState ModifyTerrainState; // TODO: create "Menu" here and pass fields like the rest
+	private Menu menu;
+
+	public readonly ModifyTerrainState ModifyTerrainState;
 	public readonly MakePathState MakePathState;
 
-	private InterfaceState defaultInterfaceState;
-	private InterfaceState activeInterfaceState;
 
-	public Interface(RaycastMediator raycastMediator, HighlightMediator highlightMediator, ModifyTerrainCommand modifyTerrainCommand)
+	public InterfaceManager(RaycastMediator raycastMediator, HighlightMediator highlightMediator, ModifyTerrainCommand modifyTerrainCommand)
 	{
-		Instance = this;
+		OnSelect = () => { Debug.Log("Empty select called"); };
+		OnHover = () => { Debug.Log("Empty hover called"); };
 
-		OnSelect = () => {Debug.Log("Empty select called");};
-		OnHover = () => {Debug.Log("Empty hover called");};
+		menu = GameObject.Find("UI").AddComponent<Menu>(); // TODO: create UIDoc and EvtSys here too?
+		menu.interfaceManager = this;
 
 		// MakePathState = new MakePathState(
 		//     this,
@@ -34,35 +53,24 @@ public class Interface
 		ModifyTerrainState = new ModifyTerrainState(
 		    this,
 		    modifyTerrainCommand,
-            raycastMediator,
-            highlightMediator // TODO: not shared, to each state his?
+	    raycastMediator,
+	    highlightMediator // TODOHIGH: not shared, to each state his?
 		);
 
 		defaultInterfaceState = ModifyTerrainState;
-		SetState(defaultInterfaceState);
+		State = defaultInterfaceState;
 	}
 
 	public void Update()
 	{
-		activeInterfaceState.Update();
+		State.Update();
 
-        OnHover();
+		OnHover();
 	}
 
 	internal void ResetDefaultState()
 	{
-		this.SetState(defaultInterfaceState);
-	}
-
-	// TODO: Property instead?
-	public void SetState(InterfaceState state)
-	{
-		if (activeInterfaceState != state)
-		{
-			if (activeInterfaceState != null) activeInterfaceState.Unmount();
-			activeInterfaceState = state;
-			state.Mount();
-		}
+		State = defaultInterfaceState;
 	}
 
 	private List<GameObject> debugLines = new List<GameObject>();

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MakePathState : InterfaceState
 {
-    private Interface _interface;
+    private InterfaceManager _interface;
 
     private SurfacePoint start, destination;
     private bool pathChanged = false;
@@ -13,7 +13,7 @@ public class MakePathState : InterfaceState
 
     private List<GameObject> selectionMarkers;
 
-    public MakePathState(Interface _interface)
+    public MakePathState(InterfaceManager _interface)
     {
         this._interface = _interface;
     }
