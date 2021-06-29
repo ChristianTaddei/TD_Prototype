@@ -20,7 +20,8 @@ public class Game : MonoBehaviour
 		simulationRepresentation.RepresentedSimulation = simulation;
 
 		RaycastMediator raycastMediator = new RaycastMediator(inputManager);
-		HighlightMediator highlightMediator = new HighlightMediator(representationFactory); // TODOHIGH: when more repres present, expand
+
+		HighlightMediator highlightMediator = new HighlightMediator(representationFactory);
 
 		// Desktop Level Interface
 		_interface = new InterfaceManager(

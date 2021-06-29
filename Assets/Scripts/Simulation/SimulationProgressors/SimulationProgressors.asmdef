@@ -1,9 +1,8 @@
 {
-    "name": "Simulation",
+    "name": "SimulationProgressors",
     "rootNamespace": "",
     "references": [
-        "GUID:a0928ef796871704cadefbb57dafda43",
-        "GUID:cce671ad06d5f614badc02dcbed8e9ab"
+        "GUID:14aa403a8d917e743bc6ef3bade16732"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
