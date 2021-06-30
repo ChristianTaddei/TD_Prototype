@@ -4,7 +4,9 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Simulation"
+        "Simulation",
+        "SimulationProgressors",
+        "Builders"
     ],
     "includePlatforms": [
         "Editor"
