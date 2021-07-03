@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TestTools;
 using NUnit.Framework;
+using Moq;
 
 namespace Tests
 {
 	public class CartesianGeometryTests
 	{
 		CartesianGeometry cartesianGeometry;
+		Mock<Factory> cartesianFactory;
 
 		[SetUp]
 		public void Setup()
 		{
 			cartesianGeometry = new CartesianGeometry();
+
+			cartesianFactory = new Mock<Factory>();
 		}
 
 		[TearDown]
@@ -24,15 +28,26 @@ namespace Tests
 
 		// TODO: to geometry too
 		[Test]
-		public void equals_vectorsCloserThanTollerance_vectorsEqual()
+		public void areCloserThanTollerance_vectorsCloser_true()
 		{
+			CartesianVector v1 = new CartesianVector(1, 0, 0); 
+			CartesianVector v2 = new CartesianVector(1.0000001f, 0, 0);
 
+			bool areCloser = cartesianGeometry.AreCloserThanTollerance(v1, v2);
+
+			Assert.True(areCloser);
 		}
 
 		[Test]
-		public void equals_vectorsFurtherThanTollerance_vectorsNotEqual()
+		public void areCloserThanTollerance_vectorsFurther_false()
 		{
 
+			CartesianVector v1 = new CartesianVector(1, 0, 0);
+			CartesianVector v2 = new CartesianVector(1.1f, 0, 0);
+
+			bool areCloser = cartesianGeometry.AreCloserThanTollerance(v1, v2);
+
+			Assert.False(areCloser);
 		}
 
 		// TODO: creation from vec3 respect certain rules -> factory tests

@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class CartesianGeometry
 {
-	protected static readonly float FLOAT_REPRESENTATION_EQUALITY_TOLLERANCE = 0.001f;
+	internal static readonly float FLOAT_REPRESENTATION_EQUALITY_TOLLERANCE = 0.001f;
+
+	// what about "areComplanar" etc methods public while calc ones internal?
 
 	public CartesianVector Sum(CartesianVector v1, CartesianVector v2)
 	{
@@ -21,7 +23,7 @@ public class CartesianGeometry
 		return v.cartesianCoordinates.magnitude;
 	}
 
-	public bool CloserThanTollerance(CartesianVector v1, CartesianVector v2)
+	public bool AreCloserThanTollerance(CartesianVector v1, CartesianVector v2)
 	{
 		return Vector3.Distance(v1.FloatRepresentation, v2.FloatRepresentation) < FLOAT_REPRESENTATION_EQUALITY_TOLLERANCE;
 	}

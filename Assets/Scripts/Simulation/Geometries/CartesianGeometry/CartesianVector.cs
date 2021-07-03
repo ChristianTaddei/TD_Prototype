@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("CartesianGeometryTests")]
 
 public class CartesianVector : Vector
 {
@@ -14,7 +17,8 @@ public class CartesianVector : Vector
 
 	internal readonly Vector3 cartesianCoordinates;
 
-    // TODO: Expose this to testing assembly? https://stackoverflow.com/questions/358196/c-sharp-internal-access-modifier-when-doing-unit-testing
+    // TODO: Expose this to testing assembly https://stackoverflow.com/questions/358196/c-sharp-internal-access-modifier-when-doing-unit-testing
+	// becomes internal + testsAss
 	internal CartesianVector(CartesianVector otherVector)
 	{
 		this.cartesianCoordinates = otherVector.cartesianCoordinates;
@@ -25,7 +29,6 @@ public class CartesianVector : Vector
 		this.cartesianCoordinates = new Vector3(x, y, z);
 	}
 
-	// TODO: factory instead (but creation or obj mocked by tests?), this could remain internal
 	public CartesianVector(Vector3 cartesianCoordinates)
 	{
 		this.cartesianCoordinates = cartesianCoordinates;
