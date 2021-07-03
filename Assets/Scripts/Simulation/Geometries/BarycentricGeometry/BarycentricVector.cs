@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // A base and 3 cooridnates specifying a point in space
-public class BarycentricVector : IVector
+public class BarycentricVector : Vector
 {
-    public override Vector3 Position =>
-        BarycentricCoordinates.a * _base.A.Position
-        + BarycentricCoordinates.b * _base.B.Position
-        + BarycentricCoordinates.c * _base.C.Position;
+    public override Vector3 FloatRepresentation =>
+        BarycentricCoordinates.a * _base.A.FloatRepresentation
+        + BarycentricCoordinates.b * _base.B.FloatRepresentation
+        + BarycentricCoordinates.c * _base.C.FloatRepresentation;
 
     private readonly Triangle _base;
     public Triangle Base { get => _base; }
@@ -26,9 +26,9 @@ public class BarycentricVector : IVector
     {
         this._base = _base;
 
-        CartesianVector a = _base.A.Position;
-        CartesianVector b = _base.B.Position;
-        CartesianVector c = _base.C.Position;
+        CartesianVector a = _base.A.FloatRepresentation;
+        CartesianVector b = _base.B.FloatRepresentation;
+        CartesianVector c = _base.C.FloatRepresentation;
 
         if (!(CartesianVector.areComplanar(p - a, b - a, c - a)))
         {
@@ -80,9 +80,9 @@ public class BarycentricVector : IVector
 
         // TODO: can find components of old base in new base algebrically?
         bool allSuccess = true;
-        BarycentricVector oldBaseAInNewBase = new BarycentricVector(newBase, _base.A.Position);
-        BarycentricVector oldBaseBInNewBase = new BarycentricVector(newBase, _base.B.Position);
-        BarycentricVector oldBaseCInNewBase = new BarycentricVector(newBase, _base.C.Position);
+        BarycentricVector oldBaseAInNewBase = new BarycentricVector(newBase, _base.A.FloatRepresentation);
+        BarycentricVector oldBaseBInNewBase = new BarycentricVector(newBase, _base.B.FloatRepresentation);
+        BarycentricVector oldBaseCInNewBase = new BarycentricVector(newBase, _base.C.FloatRepresentation);
 
         if (!allSuccess)
         {

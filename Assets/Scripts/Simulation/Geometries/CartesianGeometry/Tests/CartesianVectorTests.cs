@@ -31,7 +31,7 @@ namespace Tests
 
             CartesianVector cv = new Vector3(0, 0, 1);
 
-            Assert.AreEqual(new Vector3(0, 0, 0), cv.Project(Plane_Oz).Position);
+            Assert.AreEqual(new Vector3(0, 0, 0), cv.Project(Plane_Oz).FloatRepresentation);
 
             CartesianTriangle ShiftedPlane_Oz = new CartesianTriangle(
                 new CartesianVector(new Vector3(0, 0, 1)),
@@ -40,7 +40,7 @@ namespace Tests
 
             cv = new Vector3(0,0,0);
            
-            Assert.AreEqual(new Vector3(0, 0, 1), cv.Project(ShiftedPlane_Oz).Position);
+            Assert.AreEqual(new Vector3(0, 0, 1), cv.Project(ShiftedPlane_Oz).FloatRepresentation);
             
             CartesianTriangle ShiftedPlane_Oy = new CartesianTriangle(
                 new CartesianVector(new Vector3(1, 1, 0)),
@@ -49,11 +49,11 @@ namespace Tests
 
             cv = new Vector3(3,3,3);
            
-            Assert.AreEqual(new Vector3(3, 1, 3), cv.Project(ShiftedPlane_Oy).Position);
+            Assert.AreEqual(new Vector3(3, 1, 3), cv.Project(ShiftedPlane_Oy).FloatRepresentation);
             
             cv = new Vector3(-3,-3,-3);
 
-            Assert.AreEqual(new Vector3(-3, 1, -3), cv.Project(ShiftedPlane_Oy).Position);
+            Assert.AreEqual(new Vector3(-3, 1, -3), cv.Project(ShiftedPlane_Oy).FloatRepresentation);
 
             CartesianTriangle Plane_45degs = new CartesianTriangle(
                 new CartesianVector(new Vector3(0, 0, 0)),
@@ -61,13 +61,13 @@ namespace Tests
                 new CartesianVector(new Vector3(0, 1, 1)));
 
             cv = new Vector3(0.5f, 0.5f, 1.0f);
-            Assert.AreEqual(new Vector3(0.5f, 0.5f, 1.0f), cv.Project(Plane_45degs).Position);
+            Assert.AreEqual(new Vector3(0.5f, 0.5f, 1.0f), cv.Project(Plane_45degs).FloatRepresentation);
 
             cv = new Vector3(-0.5f, -0.5f, 2.0f);
-            Assert.AreEqual(new Vector3(0.5f, 0.5f, 1.0f), cv.Project(Plane_45degs).Position);
+            Assert.AreEqual(new Vector3(0.5f, 0.5f, 1.0f), cv.Project(Plane_45degs).FloatRepresentation);
 
             cv = new Vector3(0.0f, 0.0f, 1.5f);
-            Assert.AreEqual(new Vector3(0.5f, 0.5f, 1.0f), cv.Project(Plane_45degs).Position);
+            Assert.AreEqual(new Vector3(0.5f, 0.5f, 1.0f), cv.Project(Plane_45degs).FloatRepresentation);
         }
     }
 }

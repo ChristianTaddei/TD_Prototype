@@ -54,7 +54,7 @@ namespace Tests
         }
 
         [Test]
-        public void CheckPositiveTest()
+        public void CheckInternalTest()
         {
             Assert.True(origin.CheckInternal());
             Assert.True(a.CheckInternal());

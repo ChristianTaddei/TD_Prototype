@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CartesianVector : IVector
+public class CartesianVector : Vector
 {
-    public override Vector3 Position =>
+    public override Vector3 FloatRepresentation =>
         new Vector3(
             cartesianCoordinates.x,
             cartesianCoordinates.y,
@@ -46,12 +46,12 @@ public class CartesianVector : IVector
     {
         CartesianVector projectedVector;
 
-        CartesianVector Plane_AB = triangleDefiningPlane.B.Position - triangleDefiningPlane.A.Position;
-        CartesianVector Plane_AC = triangleDefiningPlane.C.Position - triangleDefiningPlane.A.Position;
+        CartesianVector Plane_AB = triangleDefiningPlane.B.FloatRepresentation - triangleDefiningPlane.A.FloatRepresentation;
+        CartesianVector Plane_AC = triangleDefiningPlane.C.FloatRepresentation - triangleDefiningPlane.A.FloatRepresentation;
         CartesianVector Plane_n = Plane_AB.Cross(Plane_AC);
-        CartesianVector AP = this.Position - triangleDefiningPlane.A.Position;
+        CartesianVector AP = this.FloatRepresentation - triangleDefiningPlane.A.FloatRepresentation;
      
-        projectedVector = this.Position - (AP.Dot(Plane_n) / (Plane_n.magnitude * Plane_n.magnitude )) * Plane_n.Position;
+        projectedVector = this.FloatRepresentation - (AP.Dot(Plane_n) / (Plane_n.magnitude * Plane_n.magnitude )) * Plane_n.FloatRepresentation;
 
         return projectedVector;
     }

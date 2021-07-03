@@ -23,9 +23,9 @@ public class Surface
         vertices[i] = new SurfaceVertex(
             new CartesianVector(
                 new Vector3(
-                    targetFace.svA.Position.x,
-                    targetFace.svA.Position.y + heightChange,
-                    targetFace.svA.Position.z)));
+                    targetFace.svA.FloatRepresentation.x,
+                    targetFace.svA.FloatRepresentation.y + heightChange,
+                    targetFace.svA.FloatRepresentation.z)));
 	}
 
 	// public void Raise(Face targetFace)
@@ -93,7 +93,7 @@ public class Surface
             Maybe<SurfacePoint> intersection = GetIntersectionToward(currentPoint, endPoint, alreadyVisitedFaces);
             if (intersection.HasValue())
             {
-                if (intersection.Value.Position == endPoint.Position) break;
+                if (intersection.Value.FloatRepresentation == endPoint.FloatRepresentation) break;
 
                 alreadyVisitedFaces.Add(intersection.Value.Face);
                 crossingPoints.Add(intersection.Value);
@@ -121,9 +121,9 @@ public class Surface
         for (int i = 1; i < allPoints.Count; i++)
         {
             SurfacePoint p1 = allPoints[i - 1], p2 = allPoints[i];
-            if (!(UnityEngine.Mathf.Abs(p1.Position.x - p2.Position.x) < 0.0001f
-                && UnityEngine.Mathf.Abs(p1.Position.y - p2.Position.y) < 0.0001f
-                && UnityEngine.Mathf.Abs(p1.Position.z - p2.Position.z) < 0.0001f))
+            if (!(UnityEngine.Mathf.Abs(p1.FloatRepresentation.x - p2.FloatRepresentation.x) < 0.0001f
+                && UnityEngine.Mathf.Abs(p1.FloatRepresentation.y - p2.FloatRepresentation.y) < 0.0001f
+                && UnityEngine.Mathf.Abs(p1.FloatRepresentation.z - p2.FloatRepresentation.z) < 0.0001f))
             {
                 noDuplicatePositions.Add(p2);
             }
@@ -134,7 +134,7 @@ public class Surface
 
     public Maybe<SurfacePoint> GetIntersectionToward(SurfacePoint start, SurfacePoint end, List<Face> alreadyVisitedFaces)
     {
-        if (start.Position == end.Position)
+        if (start.FloatRepresentation == end.FloatRepresentation)
         {
             return new Maybe<SurfacePoint>.Just(start);
         }
@@ -143,7 +143,7 @@ public class Surface
 
         BarycentricVector endInFlatStartBase = new BarycentricVector(
             flatStartBase,
-            new CartesianVector(end.BarycentricVector.Position).Project(flatStartBase));
+            new CartesianVector(end.BarycentricVector.FloatRepresentation).Project(flatStartBase));
 
         BarycentricVector flatEndInStartBase = new BarycentricVector(
             start.BarycentricVector.Base,
@@ -235,9 +235,9 @@ public class Surface
             .Where(face => intersectionVector.ChangeBase(face).IsPointOnBaseTriangle()
                 && !alreadyVisitedFaces.Contains(face))
             .OrderBy(face => Mathf.Min(Mathf.Min(
-                Vector3.Distance(face.A.Position, flatEndInStartBase.Position),
-                Vector3.Distance(face.B.Position, flatEndInStartBase.Position)),
-                Vector3.Distance(face.C.Position, flatEndInStartBase.Position)))
+                Vector3.Distance(face.A.FloatRepresentation, flatEndInStartBase.FloatRepresentation),
+                Vector3.Distance(face.B.FloatRepresentation, flatEndInStartBase.FloatRepresentation)),
+                Vector3.Distance(face.C.FloatRepresentation, flatEndInStartBase.FloatRepresentation)))
             .First();
 
         intersectionVector = intersectionVector.ChangeBase(nextFace);
@@ -255,11 +255,11 @@ public class Surface
     {
         return new CartesianTriangle(
             new CartesianVector(
-                new Vector3(triangle.A.Position.x, 0, triangle.A.Position.z)),
+                new Vector3(triangle.A.FloatRepresentation.x, 0, triangle.A.FloatRepresentation.z)),
             new CartesianVector(
-                new Vector3(triangle.B.Position.x, 0, triangle.B.Position.z)),
+                new Vector3(triangle.B.FloatRepresentation.x, 0, triangle.B.FloatRepresentation.z)),
             new CartesianVector(
-                new Vector3(triangle.C.Position.x, 0, triangle.C.Position.z)));
+                new Vector3(triangle.C.FloatRepresentation.x, 0, triangle.C.FloatRepresentation.z)));
     }
 
     // Surface made of squares

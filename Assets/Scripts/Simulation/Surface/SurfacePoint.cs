@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class SurfacePoint : IVector
+public class SurfacePoint : Vector
 {
     public BarycentricVector BarycentricVector;
 
-    public override Vector3 Position => BarycentricVector.Position;
+    public override Vector3 FloatRepresentation => BarycentricVector.FloatRepresentation;
     public Face Face { get; private set; }
 
     public SurfacePoint(Face face, BarycentricVector barycentricVector)

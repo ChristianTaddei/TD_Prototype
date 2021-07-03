@@ -27,7 +27,7 @@ public class Board
         {
             foreach (TriangleVertexIdentifiers vName in Triangle.Vertices)
             {
-                Vector3 vertex = f.GetVertex(vName).Position;
+                Vector3 vertex = f.GetVertex(vName).FloatRepresentation;
                 if (!Vertices.Contains(vertex))
                 {
                     Vertices.Add(vertex);

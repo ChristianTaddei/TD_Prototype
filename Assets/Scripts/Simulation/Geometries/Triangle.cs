@@ -8,12 +8,12 @@ public abstract class Triangle
     public static IEnumerable<TriangleVertexIdentifiers> Vertices =>
         (TriangleVertexIdentifiers[])Enum.GetValues(typeof(TriangleVertexIdentifiers));
 
-    public abstract IVector A { get; }
-    public abstract IVector B { get; }
-    public abstract IVector C { get; }
+    public abstract Vector A { get; }
+    public abstract Vector B { get; }
+    public abstract Vector C { get; }
 
 
-    public IVector GetVertex(TriangleVertexIdentifiers v)
+    public Vector GetVertex(TriangleVertexIdentifiers v)
     {
         switch (v)
         {

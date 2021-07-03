@@ -44,7 +44,7 @@ public class ModifyTerrainState : InterfaceState
 			target = raycastMediator.GetSurfacePointUnderCursor();
 			if (target.HasValue())
 			{
-				highlightMediator.Highlight(target.Value.Position);
+				highlightMediator.Highlight(target.Value.FloatRepresentation);
 			}
 		};
 	}

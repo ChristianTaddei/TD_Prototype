@@ -1,14 +1,14 @@
 public class CartesianTriangle : Triangle
 {
-    private readonly IVector _A;
-    private readonly IVector _B;
-    private readonly IVector _C;
+    private readonly Vector _A;
+    private readonly Vector _B;
+    private readonly Vector _C;
 
-    public override IVector A { get => _A; }
-    public override IVector B { get => _B; }
-    public override IVector C { get => _C; }
+    public override Vector A { get => _A; }
+    public override Vector B { get => _B; }
+    public override Vector C { get => _C; }
 
-    public CartesianTriangle(IVector A, IVector B, IVector C)
+    public CartesianTriangle(Vector A, Vector B, Vector C)
     {
         _A = A;
         _B = B;

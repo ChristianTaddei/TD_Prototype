@@ -76,20 +76,20 @@ namespace Tests
             Assert.Throws<Exception>(delegate { originRegBase.Normalize(); });
 
             AssertAreComponentWiseEquals(
-                aRegBase.Position,
-                aRegBase.Normalize().Position,
+                aRegBase.FloatRepresentation,
+                aRegBase.Normalize().FloatRepresentation,
                 0.0001f);
             AssertAreComponentWiseEquals(
-                aRandomBase.Position,
-                aRandomBase.Normalize().Position,
+                aRandomBase.FloatRepresentation,
+                aRandomBase.Normalize().FloatRepresentation,
                 0.0001f);
             AssertAreComponentWiseEquals(
-                centerRegBase.Position,
-                centerRegBase.Normalize().Position,
+                centerRegBase.FloatRepresentation,
+                centerRegBase.Normalize().FloatRepresentation,
                 0.0001f);
             AssertAreComponentWiseEquals(
-                centerRandomBase.Position,
-                centerRandomBase.Normalize().Position,
+                centerRandomBase.FloatRepresentation,
+                centerRandomBase.Normalize().FloatRepresentation,
                 0.0001f);
         }
 
@@ -163,24 +163,24 @@ namespace Tests
         public void ConstructFromCartesian()
         {
             BarycentricVector bv = new BarycentricVector(regularBase, new Vector3(1, 0, 0));
-            Assert.AreEqual(new Vector3(1, 0, 0), bv.Position);
+            Assert.AreEqual(new Vector3(1, 0, 0), bv.FloatRepresentation);
 
             Vector3 cartesianRegularBaseCentre = new Vector3(1, 1, 1) / 3.0f;
             bv = new BarycentricVector(regularBase, new Vector3(1, 0, 0));
             AssertAreComponentWiseEquals(
                 new Vector3(1, 0, 0),
-                bv.Position,
+                bv.FloatRepresentation,
                 0.001f
              );
 
             Vector3 cartesianRandomBaseCentre =
-                randomBase.A.Position / 3.0f +
-                randomBase.B.Position / 3.0f +
-                randomBase.C.Position / 3.0f;
+                randomBase.A.FloatRepresentation / 3.0f +
+                randomBase.B.FloatRepresentation / 3.0f +
+                randomBase.C.FloatRepresentation / 3.0f;
             bv = new BarycentricVector(randomBase, cartesianRandomBaseCentre);
             AssertAreComponentWiseEquals(
                 cartesianRandomBaseCentre,
-                bv.Position,
+                bv.FloatRepresentation,
                 0.001f
             );
         }
@@ -197,14 +197,14 @@ namespace Tests
             Action<BarycentricVector, CartesianTriangle> AssertCoordinatesStayTheSame = (bv, otherBase) =>
             {
                 Assert.AreEqual( // Change base to itself
-                    bv.Position,
-                    bv.ChangeBase(bv.Base).Position);
+                    bv.FloatRepresentation,
+                    bv.ChangeBase(bv.Base).FloatRepresentation);
                 Assert.AreEqual( // Change to other base
-                    bv.Position,
-                    bv.ChangeBase(otherBase).Position);
+                    bv.FloatRepresentation,
+                    bv.ChangeBase(otherBase).FloatRepresentation);
                 Assert.AreEqual( // To other base and back
-                    bv.Position,
-                    bv.ChangeBase(otherBase).ChangeBase(bv.Base).Position);
+                    bv.FloatRepresentation,
+                    bv.ChangeBase(otherBase).ChangeBase(bv.Base).FloatRepresentation);
             };
 
             CartesianTriangle otherRegBase =

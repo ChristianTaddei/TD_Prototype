@@ -94,16 +94,16 @@ namespace Tests
                 new BarycentricVector(
                     Rectangle_ABDE.FED,
                     new BarycentricCoordinates(2.0f / 3.0f, 0.0f, 1.0f / 3.0f)));
-            Assert.AreEqual(intersection as IVector, path.Value.Points[1] as IVector);
+            Assert.AreEqual(intersection as Vector, path.Value.Points[1] as Vector);
 
-            Assert.AreEqual(Rectangle_ABDE.m_CF_AFC as IVector, path.Value.Points[2] as IVector);
+            Assert.AreEqual(Rectangle_ABDE.m_CF_AFC as Vector, path.Value.Points[2] as Vector);
 
             intersection = new SurfacePoint(
                  Rectangle_ABDE.ACB,
                  new BarycentricVector(
                      Rectangle_ABDE.ACB,
                      new BarycentricCoordinates(1.0f / 3.0f, 2.0f / 3.0f, 0.0f)));
-            Assert.AreEqual(intersection as IVector, path.Value.Points[3] as IVector);
+            Assert.AreEqual(intersection as Vector, path.Value.Points[3] as Vector);
             #endregion
         }
 
@@ -126,7 +126,7 @@ namespace Tests
             Assert.True(FoldedRectangle_ABDE.FDC_C ==  path.Value.End);
             Assert.AreEqual(3, path.Value.Points.Count);
 
-            Assert.AreEqual(FoldedRectangle_ABDE.m_FD_FDC as IVector,  path.Value.Points[1] as IVector);
+            Assert.AreEqual(FoldedRectangle_ABDE.m_FD_FDC as Vector,  path.Value.Points[1] as Vector);
         }
 
         [Test]
@@ -191,22 +191,22 @@ namespace Tests
             Vector3 intersection4 = new Vector3(1.0f, 0, 2.0f);
             Vector3 intersection5 = new Vector3(1.0f, 0, 1.0f);
 
-            Assert.AreEqual(intersection1, path.Points[1].Position);
-            Assert.AreEqual(intersection2, path.Points[2].Position);
-            Assert.AreEqual(intersection3, path.Points[3].Position);
-            Assert.AreEqual(intersection4, path.Points[4].Position);
-            Assert.AreEqual(intersection5, path.Points[5].Position);
+            Assert.AreEqual(intersection1, path.Points[1].FloatRepresentation);
+            Assert.AreEqual(intersection2, path.Points[2].FloatRepresentation);
+            Assert.AreEqual(intersection3, path.Points[3].FloatRepresentation);
+            Assert.AreEqual(intersection4, path.Points[4].FloatRepresentation);
+            Assert.AreEqual(intersection5, path.Points[5].FloatRepresentation);
 
             SurfacePath path2 = AssertPathCanBeMadeFromPositions(LargeSquare.Surface, new Vector3(1.0f, 0.0f, 5.0f), new Vector3(1.0f, 0, 1.0f));
 
             // Assert.AreEqual(5, path.Points.Count);
             // TODO: rather than checking intersection check "path does not jump" and "all segments in the same direction"
 
-            Assert.AreEqual(intersection1, path.Points[1].Position);
-            Assert.AreEqual(intersection2, path.Points[2].Position);
-            Assert.AreEqual(intersection3, path.Points[3].Position);
-            Assert.AreEqual(intersection4, path.Points[4].Position);
-            Assert.AreEqual(intersection5, path.Points[5].Position);
+            Assert.AreEqual(intersection1, path.Points[1].FloatRepresentation);
+            Assert.AreEqual(intersection2, path.Points[2].FloatRepresentation);
+            Assert.AreEqual(intersection3, path.Points[3].FloatRepresentation);
+            Assert.AreEqual(intersection4, path.Points[4].FloatRepresentation);
+            Assert.AreEqual(intersection5, path.Points[5].FloatRepresentation);
 
 
             SurfacePath path3 = AssertPathCanBeMadeFromPositions(LargeSquare.Surface, new Vector3(7.0f, 0.0f, 3.0f), new Vector3(7.0f, 0, 9.0f));
@@ -321,7 +321,7 @@ namespace Tests
             System.Random random = new System.Random();
             Func<float> makeRandom = () => (float)(random.NextDouble() * 10.0);
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 3; i++)
             {
                 SurfacePath path = AssertPathCanBeMadeFromPositions(
                     LargeSquare.Surface,
@@ -337,7 +337,7 @@ namespace Tests
             Func<float> makeRandom = () => (float)(random.NextDouble() * 10.0);
 
             Surface TiltedSquare = new Surface(10.0f, 1.0f);
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 3; i++)
             {
                 float x1 = makeRandom(), z1 = makeRandom(), x2 = makeRandom(), z2 = makeRandom();
                 SurfacePath path = AssertPathCanBeMadeFromPositions(
@@ -348,12 +348,12 @@ namespace Tests
         }
 
         #region Common assertions
-        static Action<Vector3, Vector3> AssertAreSamePosition =
+        static Action<Vector3, Vector3> AssertAreSamePosition = // TODO: can do using Point.Equals?
             (Vector3 p1, Vector3 p2) =>
                 {
-                    Assert.True(UnityEngine.Mathf.Abs(p1.x - p2.x) < IVector.EPSILON);
-                    Assert.True(UnityEngine.Mathf.Abs(p1.y - p2.y) < IVector.EPSILON);
-                    Assert.True(UnityEngine.Mathf.Abs(p1.z - p2.z) < IVector.EPSILON);
+                    Assert.True(UnityEngine.Mathf.Abs(p1.x - p2.x) < 0.0001f);
+                    Assert.True(UnityEngine.Mathf.Abs(p1.y - p2.y) < 0.0001f);
+                    Assert.True(UnityEngine.Mathf.Abs(p1.z - p2.z) < 0.0001f);
                 };
 
         static Action<SurfacePoint, SurfacePoint, SurfacePoint> AssertPathHasOnlyOneInstersection =
@@ -367,7 +367,7 @@ namespace Tests
                    Assert.True(start == path.Value.Start);
                    Assert.True(end == path.Value.End);
 
-                   Assert.AreEqual(intersection as IVector, path.Value.Points[1] as IVector);
+                   Assert.AreEqual(intersection as Vector, path.Value.Points[1] as Vector);
                };
 
         static Action<SurfacePoint, SurfacePoint> AssertPathIsJustStartAndEnd =
@@ -389,10 +389,10 @@ namespace Tests
                     Maybe<SurfacePath> path = surface.MakeDirectPath(start.Value, end.Value);
 
                     Assert.True(start.HasValue());
-                    AssertAreSamePosition(p1, start.Value.Position);
+                    AssertAreSamePosition(p1, start.Value.FloatRepresentation);
 
                     Assert.True(end.HasValue());
-                    AssertAreSamePosition(p2, end.Value.Position);
+                    AssertAreSamePosition(p2, end.Value.FloatRepresentation);
 
                     Assert.True(path.HasValue());
 

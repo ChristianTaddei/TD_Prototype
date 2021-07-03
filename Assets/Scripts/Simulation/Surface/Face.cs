@@ -14,9 +14,9 @@ public class Face : Triangle
     public SurfaceVertex svB => Surface.vertices[svBIndex];
     public SurfaceVertex svC => Surface.vertices[svCIndex];
 
-    public override IVector A => svA;
-    public override IVector B => svB;
-    public override IVector C => svC;
+    public override Vector A => svA;
+    public override Vector B => svB;
+    public override Vector C => svC;
 
     public Surface Surface { get; private set; }
 
@@ -73,7 +73,7 @@ public class Face : Triangle
         {
             foreach (TriangleVertexIdentifiers v2 in Vertices)
             {
-                if (this.GetVertex(v1).Position == otherFace.GetVertex(v2).Position) sharedVertices.Add(v1);
+                if (this.GetVertex(v1).FloatRepresentation == otherFace.GetVertex(v2).FloatRepresentation) sharedVertices.Add(v1);
             }
         }
 
