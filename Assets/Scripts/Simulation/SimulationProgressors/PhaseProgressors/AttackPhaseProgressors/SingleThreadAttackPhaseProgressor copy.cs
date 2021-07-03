@@ -1,5 +1,5 @@
 
-public class MultiThreadAttackPhaseProgressor : AttackPhaseProgressor<SimulationState>
+public class SingleThreadAttackPhaseProgressor : AttackPhaseProgressor
 {
 	public Builder<SimulationState> progressStateBuilder(Builder<SimulationState> stateBuilder)
 	{

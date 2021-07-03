@@ -1,10 +1,12 @@
 {
-    "name": "Simulation",
+    "name": "TurnProgressors",
     "rootNamespace": "",
     "references": [
-        "GUID:a0928ef796871704cadefbb57dafda43",
-        "GUID:cce671ad06d5f614badc02dcbed8e9ab",
-        "GUID:9942ea40131ebb04eb318662e0c57ee4"
+        "GUID:61fa0e9766b81964091d77e6a22a168d",
+        "GUID:c88ae4d5d654e3a468cf71170e12dd7f",
+        "GUID:20e1e2527fbbbba46b533705afdd9222",
+        "GUID:14aa403a8d917e743bc6ef3bade16732",
+        "GUID:cce671ad06d5f614badc02dcbed8e9ab"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

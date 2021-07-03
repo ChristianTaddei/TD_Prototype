@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Unit
 {
-    
+	public int HealthPoints {get; set;}
 }

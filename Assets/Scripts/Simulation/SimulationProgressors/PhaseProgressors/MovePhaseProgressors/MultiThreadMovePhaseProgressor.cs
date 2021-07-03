@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Computes the next full state 
-public class MultiThreadMovePhaseProgressor : MovePhaseProgressor<SimulationState>
+public class MultiThreadMovePhaseProgressor : MovePhaseProgressor
 {
 	public Builder<SimulationState> progressStateBuilder(Builder<SimulationState> stateBuilder)
 	{
