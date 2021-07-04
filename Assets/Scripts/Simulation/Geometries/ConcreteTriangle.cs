@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-// generic triangle implementation
+﻿// generic triangle implementation
 public class ConcreteTriangle : Triangle
 {
 	public override Vector A { get => _A; }

@@ -23,6 +23,8 @@ namespace Tests
 
 		}
 
+		// TODO: test all
+		
 		[Test]
 		public void areCloserThanTollerance_vectorsCloser_true()
 		{

@@ -5,13 +5,6 @@ using UnityEngine;
 
 public class CartesianFactory
 {
-	private readonly CartesianGeometry cartesianGeometry;
-
-	public CartesianFactory(CartesianGeometry cartesianGeometry)
-	{
-		this.cartesianGeometry = cartesianGeometry;
-	}
-
 	public CartesianVector VectorFromVec3(Vector3 vec3)
 	{
 		return new CartesianVector(vec3);

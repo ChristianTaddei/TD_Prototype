@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public abstract class Triangle // TODO: to interface if can move Vertices and GetVertex away?
 {
