@@ -70,7 +70,7 @@ public class Surface
 
 	public Face AddFace(CartesianVector cartesianPoint1, CartesianVector cartesianPoint2, CartesianVector cartesianPoint3)
 	{
-		Face newFace = new Face(this, new CartesianTriangle(cartesianPoint1, cartesianPoint2, cartesianPoint3));
+		Face newFace = new Face(this, new ConcreteTriangle(cartesianPoint1, cartesianPoint2, cartesianPoint3));
 		return newFace;
 	}
 
@@ -254,7 +254,7 @@ public class Surface
 
 	private static Triangle ProjectOnPlane_Oy(Triangle triangle)
 	{
-		return new CartesianTriangle(
+		return new ConcreteTriangle(
 			new CartesianVector(
 				new Vector3(triangle.A.FloatRepresentation.x, 0, triangle.A.FloatRepresentation.z)),
 			new CartesianVector(

@@ -20,7 +20,7 @@ public class Face : Triangle
 
     public Surface Surface { get; private set; }
 
-    public Face(Surface s, Triangle t)
+    public Face(Surface s, ConcreteTriangle t)
     {
         foreach (TriangleVertexIdentifiers vId in Triangle.Vertices)
         {

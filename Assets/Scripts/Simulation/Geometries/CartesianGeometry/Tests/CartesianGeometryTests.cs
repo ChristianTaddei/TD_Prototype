@@ -49,7 +49,7 @@ namespace Tests
 		[Test]
 		public void project_predefinedValues_predefinedResults()
 		{
-			CartesianTriangle Plane_Oz = new CartesianTriangle(
+			ConcreteTriangle Plane_Oz = new ConcreteTriangle(
 				new CartesianVector(0, 0, 0),
 				new CartesianVector(1, 0, 0),
 				new CartesianVector(0, 1, 0));
@@ -58,7 +58,7 @@ namespace Tests
 
 			Assert.AreEqual(new Vector3(0, 0, 0), cartesianGeometry.Project(cv, Plane_Oz).FloatRepresentation);
 
-			CartesianTriangle ShiftedPlane_Oz = new CartesianTriangle(
+			ConcreteTriangle ShiftedPlane_Oz = new ConcreteTriangle(
 				new CartesianVector(0, 0, 1),
 				new CartesianVector(1, 0, 1),
 				new CartesianVector(0, 1, 1));
@@ -67,7 +67,7 @@ namespace Tests
 
 			Assert.AreEqual(new Vector3(0, 0, 1), cartesianGeometry.Project(cv, ShiftedPlane_Oz).FloatRepresentation);
 
-			CartesianTriangle ShiftedPlane_Oy = new CartesianTriangle(
+			ConcreteTriangle ShiftedPlane_Oy = new ConcreteTriangle(
 				new CartesianVector(1, 1, 0),
 				new CartesianVector(0, 1, 1),
 				new CartesianVector(0, 1, 0));
@@ -80,7 +80,7 @@ namespace Tests
 
 			Assert.AreEqual(new Vector3(-3, 1, -3), cartesianGeometry.Project(cv, ShiftedPlane_Oy).FloatRepresentation);
 
-			CartesianTriangle Plane_45degs = new CartesianTriangle(
+			ConcreteTriangle Plane_45degs = new ConcreteTriangle(
 				new CartesianVector(0, 0, 0),
 				new CartesianVector(1, 0, 1),
 				new CartesianVector(0, 1, 1));

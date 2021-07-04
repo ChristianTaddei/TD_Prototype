@@ -14,7 +14,7 @@ public class BarycentricLine
         // Direction = (endPoint - Point).Normalized;
     }
 
-    public List<BarycentricVector> GetIntersectionsWithTriangle(Triangle t)
+    public List<BarycentricVector> GetIntersectionsWithTriangle(ConcreteTriangle t)
     {
         // BarycentricLine lineOnBaseT = new BarycentricLine(Point.ChangeBase(t), (Point + Direction).ChangeBase(t));
 

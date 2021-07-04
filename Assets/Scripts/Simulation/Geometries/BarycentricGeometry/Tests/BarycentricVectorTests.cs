@@ -10,13 +10,13 @@ namespace Tests
 {
     public class BarycentricVectorTests
     {
-        CartesianTriangle regularBase =
-            new CartesianTriangle(
+        ConcreteTriangle regularBase =
+            new ConcreteTriangle(
                 new CartesianVector(Vector3.right),
                 new CartesianVector(Vector3.up),
                 new CartesianVector(Vector3.forward));
-        CartesianTriangle randomBase =
-            new CartesianTriangle(
+        ConcreteTriangle randomBase =
+            new ConcreteTriangle(
                 new CartesianVector(new Vector3(12.3643634f, -2.124f, -55.123f)),
                 new CartesianVector(new Vector3(3.0f, 1.5f, -0.124f)),
                 new CartesianVector(new Vector3(22.2f, 123.8f, 48.566666666f)));
@@ -194,7 +194,7 @@ namespace Tests
         [Test]
         public void CoordinatesStayTheSame()
         {
-            Action<BarycentricVector, CartesianTriangle> AssertCoordinatesStayTheSame = (bv, otherBase) =>
+            Action<BarycentricVector, ConcreteTriangle> AssertCoordinatesStayTheSame = (bv, otherBase) =>
             {
                 Assert.AreEqual( // Change base to itself
                     bv.FloatRepresentation,
@@ -207,8 +207,8 @@ namespace Tests
                     bv.ChangeBase(otherBase).ChangeBase(bv.Base).FloatRepresentation);
             };
 
-            CartesianTriangle otherRegBase =
-                new CartesianTriangle(
+            ConcreteTriangle otherRegBase =
+                new ConcreteTriangle(
                     new CartesianVector(new Vector3(0, 1, 0)),
                     new CartesianVector(new Vector3(0, 0, 1)),
                     new CartesianVector(new Vector3(1, 0, 0))
