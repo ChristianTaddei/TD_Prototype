@@ -17,8 +17,6 @@ public class CartesianVector : Vector
 
 	internal readonly Vector3 cartesianCoordinates;
 
-    // TODO: Expose this to testing assembly https://stackoverflow.com/questions/358196/c-sharp-internal-access-modifier-when-doing-unit-testing
-	// becomes internal + testsAss
 	internal CartesianVector(CartesianVector otherVector)
 	{
 		this.cartesianCoordinates = otherVector.cartesianCoordinates;

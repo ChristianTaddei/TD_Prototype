@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Moq;
 
 namespace Tests
-{
+{  
 	public class CartesianGeometryTests
 	{
 		CartesianGeometry cartesianGeometry;
@@ -46,15 +46,11 @@ namespace Tests
 			Assert.False(areCloser);
 		}
 
-		// TODO: creation from vec3 respect certain rules -> factory tests
-		// (does not moves fRep more than x, magnitude within y? in this case 0 and 0)
-
-		// TODO: to cart geometry tests (+ other geom methods)
 		[Test]
-		public void TestProject()
+		public void project_predefinedValues_predefinedResults()
 		{
 			CartesianTriangle Plane_Oz = new CartesianTriangle(
-				new CartesianVector(0, 0, 0), // TODO: this should be automatic, other way rather than specific CV constructor?
+				new CartesianVector(0, 0, 0),
 				new CartesianVector(1, 0, 0),
 				new CartesianVector(0, 1, 0));
 

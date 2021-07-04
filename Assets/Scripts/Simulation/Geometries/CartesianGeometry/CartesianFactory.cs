@@ -17,7 +17,7 @@ public class CartesianFactory
 		return new CartesianVector(vec3);
 	}
 
-	public virtual CartesianVector VectorFromCoordinates(float v1, float v2, float v3)
+	public CartesianVector VectorFromCoordinates(float v1, float v2, float v3)
 	{
 		return new CartesianVector(v1, v2, v3);
 	}
