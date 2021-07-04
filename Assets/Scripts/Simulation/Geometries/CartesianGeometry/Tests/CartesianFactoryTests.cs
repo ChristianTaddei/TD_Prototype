@@ -72,5 +72,15 @@ namespace Tests
 			Assert.AreEqual(randomFloat2, v.FloatRepresentation.y);
 			Assert.AreEqual(randomFloat3, v.FloatRepresentation.z);
 		}
+
+		[Test]
+		public void copy_original_copyEqualsOriginal()
+		{
+			CartesianVector original = new CartesianVector(1, 2, 3);
+
+			CartesianVector copy = cartesianFactory.Copy(original);
+
+			Assert.AreEqual(original, copy);
+		}
 	}
 }

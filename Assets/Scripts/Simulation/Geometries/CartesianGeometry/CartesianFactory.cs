@@ -14,4 +14,9 @@ public class CartesianFactory
 	{
 		return new CartesianVector(v1, v2, v3);
 	}
+
+	public CartesianVector Copy(CartesianVector otherCV)
+	{
+		return new CartesianVector(otherCV);
+	}
 }

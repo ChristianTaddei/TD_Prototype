@@ -17,9 +17,9 @@ public class CartesianVector : Vector
 
 	internal readonly Vector3 cartesianCoordinates;
 
-	internal CartesianVector(CartesianVector otherVector)
+	internal CartesianVector(CartesianVector other)
 	{
-		this.cartesianCoordinates = otherVector.cartesianCoordinates;
+		this.cartesianCoordinates = other.cartesianCoordinates;
 	}
 
 	internal CartesianVector(float x, float y, float z)
@@ -27,9 +27,9 @@ public class CartesianVector : Vector
 		this.cartesianCoordinates = new Vector3(x, y, z);
 	}
 
-	public CartesianVector(Vector3 cartesianCoordinates)
+	public CartesianVector(Vector3 vector3)
 	{
-		this.cartesianCoordinates = cartesianCoordinates;
+		this.cartesianCoordinates = vector3;
 	}
 
 	// TODO: This gtg too, but its used a lot in tests....
