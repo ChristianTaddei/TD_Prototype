@@ -9,5 +9,5 @@ public class LargeSquare
 
         x_z, y is height to be like unity
     */
-    public static readonly Surface Surface = new Surface(10);
+    public static readonly ConcreteSurface Surface = new ConcreteSurface(10);
 }

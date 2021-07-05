@@ -11,7 +11,7 @@ public class Square2x2
         |   \  |   \  |  
         00 --- 10 --- 20  
     */
-    public static readonly Surface Surface = new Surface();
+    public static readonly ConcreteSurface Surface = new ConcreteSurface();
 
     private static readonly CartesianVector _00 = new Vector3(0, 0, 0);
     private static readonly CartesianVector _01 = new Vector3(0, 0, 1);
@@ -23,14 +23,14 @@ public class Square2x2
     private static readonly CartesianVector _21 = new Vector3(2, 0, 1);
     private static readonly CartesianVector _22 = new Vector3(2, 0, 2);
 
-    public static readonly Face _00_01_10 = Surface.AddFace(_00, _01, _10);
-    public static readonly Face _01_11_10 = Surface.AddFace(_01, _11, _10);
-    public static readonly Face _01_02_11 = Surface.AddFace(_01, _02, _11);
-    public static readonly Face _02_12_11 = Surface.AddFace(_02, _12, _11);
-    public static readonly Face _10_11_20 = Surface.AddFace(_10, _11, _20);
-    public static readonly Face _11_21_20 = Surface.AddFace(_11, _21, _20);
-    public static readonly Face _11_12_21 = Surface.AddFace(_11, _12, _21);
-    public static readonly Face _12_22_21 = Surface.AddFace(_12, _22, _21);
+    public static readonly AbstractFace _00_01_10 = Surface.AddFace(_00, _01, _10);
+    public static readonly AbstractFace _01_11_10 = Surface.AddFace(_01, _11, _10);
+    public static readonly AbstractFace _01_02_11 = Surface.AddFace(_01, _02, _11);
+    public static readonly AbstractFace _02_12_11 = Surface.AddFace(_02, _12, _11);
+    public static readonly AbstractFace _10_11_20 = Surface.AddFace(_10, _11, _20);
+    public static readonly AbstractFace _11_21_20 = Surface.AddFace(_11, _21, _20);
+    public static readonly AbstractFace _11_12_21 = Surface.AddFace(_11, _12, _21);
+    public static readonly AbstractFace _12_22_21 = Surface.AddFace(_12, _22, _21);
 
     public static readonly SurfacePoint centre_10_11_20 = new SurfacePoint(
        _10_11_20,

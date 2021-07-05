@@ -5,12 +5,12 @@ using UnityEngine;
 // TODO: try to remove coupling to surface (merge into?) and geometry
 public class Board
 {
-    private Surface surface;
+    private ConcreteSurface surface;
 
     public List<Vector3> Vertices;
     public List<int> Triangles { get; private set; }
 
-    public Board(Surface surface)
+    public Board(ConcreteSurface surface)
     {
         this.surface = surface;
 
@@ -23,7 +23,7 @@ public class Board
     internal void UpdateVertices()
     {
         Vertices.Clear();
-        foreach (Face f in surface.Faces)
+        foreach (ConcreteFace f in surface.Faces)
         {
             foreach (TriangleVertexIdentifiers vName in Triangle.Vertices)
             {

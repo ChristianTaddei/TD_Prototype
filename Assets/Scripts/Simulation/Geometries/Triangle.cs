@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public abstract class Triangle // TODO: to interface if can move Vertices and GetVertex away?
 {
+	// TODO: this is ugly also to use
 	public static IEnumerable<TriangleVertexIdentifiers> Vertices =>
 		(TriangleVertexIdentifiers[])Enum.GetValues(typeof(TriangleVertexIdentifiers));
 

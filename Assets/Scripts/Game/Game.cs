@@ -12,7 +12,7 @@ public class Game : MonoBehaviour
 		// Desktop InputManager
 		InputManager inputManager = this.gameObject.AddComponent<InputManager>();
 
-		SimulationState simulation = new SimulationState(new Surface(10.0f));
+		SimulationState simulation = new SimulationState(new ConcreteSurface(10.0f));
 
 		RepresentationFactory representationFactory = new RepresentationFactory(); 
 

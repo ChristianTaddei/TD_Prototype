@@ -24,7 +24,7 @@ namespace Tests
         // TODO: what is a non-path (start == end) ?
         // public void GetIntersectionTowardItself()
         // {
-        //     // This point in in the middle of a face, and there is no intersection in the direction 000
+        //     // This point is in the middle of a face, and there is no intersection in the direction 000
         //     Maybe<SurfacePoint> noIntersection = 
         //         DisjointedSurface.Surface.GetIntersectionToward(
         //             DisjointedSurface.BaricentreOf1,

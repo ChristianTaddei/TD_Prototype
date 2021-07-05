@@ -293,7 +293,7 @@ namespace Tests
         [Test]
         public void PathsFromAllVertices()
         {
-            Surface smallSquare = new Surface (2.0f);
+            ConcreteSurface smallSquare = new ConcreteSurface (2.0f);
             for (float x1 = 0.0f; x1 <= 2.0f; x1++)
             {
                 for (float z1 = 0.0f; z1 <= 2.0f; z1++)
@@ -336,7 +336,7 @@ namespace Tests
             System.Random random = new System.Random();
             Func<float> makeRandom = () => (float)(random.NextDouble() * 10.0);
 
-            Surface TiltedSquare = new Surface(10.0f, 1.0f);
+            ConcreteSurface TiltedSquare = new ConcreteSurface(10.0f, 1.0f);
             for (int i = 0; i < 3; i++)
             {
                 float x1 = makeRandom(), z1 = makeRandom(), x2 = makeRandom(), z2 = makeRandom();
@@ -359,7 +359,8 @@ namespace Tests
         static Action<SurfacePoint, SurfacePoint, SurfacePoint> AssertPathHasOnlyOneInstersection =
            (SurfacePoint start, SurfacePoint intersection, SurfacePoint end) =>
                {
-                   Maybe<SurfacePath> path = start.Face.Surface.MakeDirectPath(start, end);
+                   // TODO: no cast
+                   Maybe<SurfacePath> path = (start.Face.Surface as ConcreteSurface).MakeDirectPath(start, end);
 
                    Assert.True(path.HasValue());
                    Assert.AreEqual(3, path.Value.Points.Count);
@@ -372,8 +373,9 @@ namespace Tests
 
         static Action<SurfacePoint, SurfacePoint> AssertPathIsJustStartAndEnd =
             (SurfacePoint start, SurfacePoint end) =>
-                {
-                    Maybe<SurfacePath> path = start.Face.Surface.MakeDirectPath(start, end);
+                {                   
+                    // TODO: no cast
+                    Maybe<SurfacePath> path = (start.Face.Surface as ConcreteSurface).MakeDirectPath(start, end);
 
                     Assert.True(path.HasValue());
                     Assert.True(start == path.Value.Start);
@@ -381,8 +383,8 @@ namespace Tests
                     Assert.AreEqual(2, path.Value.Points.Count);
                 };
 
-        static Func<Surface, Vector3, Vector3, SurfacePath> AssertPathCanBeMadeFromPositions =
-            (Surface surface, Vector3 p1, Vector3 p2) =>
+        static Func<ConcreteSurface, Vector3, Vector3, SurfacePath> AssertPathCanBeMadeFromPositions =
+            (ConcreteSurface surface, Vector3 p1, Vector3 p2) =>
                 {
                     Maybe<SurfacePoint> start = surface.GetSurfacePoint(p1);
                     Maybe<SurfacePoint> end = surface.GetSurfacePoint(p2);

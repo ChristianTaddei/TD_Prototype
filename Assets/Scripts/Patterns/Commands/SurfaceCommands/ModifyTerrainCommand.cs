@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class ModifyTerrainCommand : Command
 {
-    private readonly Surface surface;
+    private readonly ConcreteSurface surface;
 
-    public Face TargetFace { get; set; }
+    public AbstractFace TargetFace { get; set; }
     public float HeightChange { get; set; }
 
-    public ModifyTerrainCommand(Surface surface)
+    public ModifyTerrainCommand(ConcreteSurface surface)
     {
         this.surface = surface;
     }

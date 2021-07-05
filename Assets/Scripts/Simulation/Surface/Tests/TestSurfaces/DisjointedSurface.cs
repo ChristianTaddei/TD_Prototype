@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class DisjointedSurface
 {
-    public static readonly Surface Surface = new Surface();
+    public static readonly ConcreteSurface Surface = new ConcreteSurface();
 
-    public static readonly Face Face1 =
+    public static readonly AbstractFace Face1 =
         Surface.AddFace(
             (CartesianVector)new Vector3(0, 0, 0),
             (CartesianVector)new Vector3(1, 0, 0),
             (CartesianVector)new Vector3(0, 0, 1));
 
-    public static readonly Face Face2 =
+    public static readonly AbstractFace Face2 =
         Surface.AddFace(
             (CartesianVector)new Vector3(1, 0, 1),
             (CartesianVector)new Vector3(2, 0, 1),

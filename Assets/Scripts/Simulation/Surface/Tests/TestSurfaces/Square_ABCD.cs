@@ -9,15 +9,15 @@ public class Square_ABCD
         |  \  |  
         D --- A 
     */
-    public static readonly Surface Surface = new Surface();
+    public static readonly ConcreteSurface Surface = new ConcreteSurface();
 
     private static readonly CartesianVector _A = new Vector3(1, 0, 0);
     private static readonly CartesianVector _B = new Vector3(1, 0, 1);
     private static readonly CartesianVector _C = new Vector3(0, 0, 1);
     private static readonly CartesianVector _D = new Vector3(0, 0, 0);
 
-    public static readonly Face ACB = Surface.AddFace(_A, _C, _B);
-    public static readonly Face ADC = Surface.AddFace(_A, _D, _C);
+    public static readonly AbstractFace ACB = Surface.AddFace(_A, _C, _B);
+    public static readonly AbstractFace ADC = Surface.AddFace(_A, _D, _C);
 
     public static readonly SurfacePoint ACB_A = new SurfacePoint(
        ACB,

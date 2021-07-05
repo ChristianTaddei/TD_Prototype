@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SurfaceVertex : CartesianVector
 {
-    private List<Face> belongingFaces;
+    private List<ConcreteFace> belongingFaces;
 
     public SurfaceVertex(Vector v) : base(new Vector3(v.FloatRepresentation.x, v.FloatRepresentation.y, v.FloatRepresentation.z))
     {
