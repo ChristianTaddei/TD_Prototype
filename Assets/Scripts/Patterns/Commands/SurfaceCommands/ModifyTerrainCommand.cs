@@ -5,19 +5,19 @@ using UnityEngine;
 
 public class ModifyTerrainCommand : Command
 {
-    private readonly ConcreteSurface surface;
+    private readonly Surface surface;
 
-    public AbstractFace TargetFace { get; set; }
+    public Face TargetFace { get; set; }
     public float HeightChange { get; set; }
 
-    public ModifyTerrainCommand(ConcreteSurface surface)
+    public ModifyTerrainCommand(Surface surface)
     {
         this.surface = surface;
     }
 
     public void Execute()
     {
-        surface.Raise(TargetFace, HeightChange);
+        // surface.Raise(TargetFace, HeightChange);
     }
 
 	public void Undo()

@@ -28,7 +28,7 @@ public class SurfacePathfinder : Pathfinder
 
 		List<SurfacePoint> crossingPoints = new List<SurfacePoint>();
 
-		List<AbstractFace> alreadyVisitedFaces = new List<AbstractFace>();
+		List<Face> alreadyVisitedFaces = new List<Face>();
 		alreadyVisitedFaces.Add(startPoint.Face);
 		int tries = 0;
 		SurfacePoint currentPoint = startPoint;

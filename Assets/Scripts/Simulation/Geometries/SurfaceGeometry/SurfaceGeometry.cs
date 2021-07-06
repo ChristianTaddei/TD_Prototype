@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SurfaceGeometry {
 	
-	public Maybe<SurfacePoint> GetIntersectionToward(SurfacePoint start, SurfacePoint end, List<AbstractFace> alreadyVisitedFaces)
+	public Maybe<SurfacePoint> GetIntersectionToward(SurfacePoint start, SurfacePoint end, List<Face> alreadyVisitedFaces)
 	{
 		if (start.FloatRepresentation == end.FloatRepresentation)
 		{
@@ -89,7 +89,7 @@ public class SurfaceGeometry {
 			}
 		}
 
-		HashSet<AbstractFace> facesSharingChangedCoordinates = start.Face.GetFacesFromSharedVertices(sharedVertices);
+		HashSet<Face> facesSharingChangedCoordinates = start.Face.GetFacesFromSharedVertices(sharedVertices);
 		facesSharingChangedCoordinates.Remove(start.Face);
 		if (facesSharingChangedCoordinates.Count == 0)
 		{
@@ -105,7 +105,7 @@ public class SurfaceGeometry {
 			return new Maybe<SurfacePoint>.Nothing();
 		}
 
-		AbstractFace nextFace = facesSharingChangedCoordinates
+		Face nextFace = facesSharingChangedCoordinates
 			.Where(face => intersectionVector.ChangeBase(face).IsPointOnBaseTriangle()
 				&& !alreadyVisitedFaces.Contains(face))
 			.OrderBy(face => Mathf.Min(Mathf.Min(

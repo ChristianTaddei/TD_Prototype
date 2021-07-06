@@ -26,17 +26,17 @@ public class BoardRepresentation : MonoBehaviour
 
     public void Sync()
     {
-        board.UpdateVertices();
-        vertices = board.Vertices.ToArray<Vector3>();
+        // board.UpdateVertices();
+        // vertices = board.Vertices.ToArray<Vector3>();
 
-        terrainMesh.vertices = vertices;
-        meshCollider.sharedMesh = terrainMesh;
+        // terrainMesh.vertices = vertices;
+        // meshCollider.sharedMesh = terrainMesh;
 
-        meshCollider.sharedMesh.colors = Colors;
+        // meshCollider.sharedMesh.colors = Colors;
 
-        terrainMesh.RecalculateNormals();
-        terrainMesh.RecalculateBounds();
-        terrainMesh.RecalculateTangents();
+        // terrainMesh.RecalculateNormals();
+        // terrainMesh.RecalculateBounds();
+        // terrainMesh.RecalculateTangents();
     }
 
     // public override void SetPrevRepresentedState(BoardState value)
@@ -69,9 +69,10 @@ public class BoardRepresentation : MonoBehaviour
             SimulationRepresentationGameObject.AddComponent<MeshCollider>());
 
         // have to initialize vertices (cant wait sync) to initialize triangles
-        terrainRepresentation.vertices = board.Vertices.ToArray<Vector3>();
-        terrainRepresentation.terrainMesh.vertices = terrainRepresentation.vertices;
-        terrainRepresentation.terrainMesh.triangles = board.Triangles.ToArray<int>();
+        // DISABLED BECAUSE BOARD CURRENTLY COMMENTED
+        // terrainRepresentation.vertices = board.Vertices.ToArray<Vector3>();
+        // terrainRepresentation.terrainMesh.vertices = terrainRepresentation.vertices;
+        // terrainRepresentation.terrainMesh.triangles = board.Triangles.ToArray<int>();
 
         // TODO: material from SimulationRepresentation?
         terrainRepresentation.SetupMaterial(Resources.Load("Materials/GroundMaterial", typeof(Material)) as Material);

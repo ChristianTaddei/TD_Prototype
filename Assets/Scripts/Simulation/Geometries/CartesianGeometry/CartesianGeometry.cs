@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CartesianGeometry
+public class CartesianGeometry : Geometry
 {
 	internal static readonly float FLOAT_REPRESENTATION_EQUALITY_TOLLERANCE = 0.001f;
 

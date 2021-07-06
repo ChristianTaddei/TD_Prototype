@@ -2,10 +2,10 @@ using System.Collections.Generic;
 
 public class SimulationState : State
 {
-	public ConcreteSurface Surface { get => surface; }
+	public Surface Surface { get => surface; }
 	public List<Unit> Units { get; set; }
 
-	private ConcreteSurface surface;
+	private Surface surface;
 
 	//private History<Surface> surfacesHistory;
 
@@ -17,7 +17,7 @@ public class SimulationState : State
         Units = new List<Unit>();
 	}
 
-	public SimulationState(ConcreteSurface surface) : this()
+	public SimulationState(Surface surface) : this()
 	{
 		this.surface = surface;
 	}

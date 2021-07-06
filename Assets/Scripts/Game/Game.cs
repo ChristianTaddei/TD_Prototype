@@ -9,33 +9,22 @@ public class Game : MonoBehaviour
 
 	void Start()
 	{
-		// Desktop InputManager
-		InputManager inputManager = this.gameObject.AddComponent<InputManager>();
+		Geometry cartesianGeometry = new CartesianGeometry();
+		Geometry barycentricGeometry = new BarycentricGeometry(cartesianGeometry);
 
-		SimulationState simulation = new SimulationState(new ConcreteSurface(10.0f));
+		SurfaceFactory barycentricSurfaceFactory = new SurfaceFactory(barycentricGeometry);
 
-		RepresentationFactory representationFactory = new RepresentationFactory(); 
+		Surface gameSurface = barycentricSurfaceFactory.MakeSquareSurface(10.0f, 10);
 
-		SimulationRepresentation simulationRepresentation = this.gameObject.AddComponent<SimulationRepresentation>();
-		simulationRepresentation.RepresentedSimulation = simulation;
+		// Simulation gameSimulation = new Simulation(gameSurface);
 
-		RaycastMediator raycastMediator = new RaycastMediator(inputManager);
+		// UnitFactory unitFactory = new UnitFactory();
 
-		HighlightMediator highlightMediator = new HighlightMediator(representationFactory);
+		// RepresentationFactory representationFactory = new RepresentationFactory(); 
 
-		// Desktop Level Interface
-		_interface = new InterfaceManager(
-			raycastMediator,
-	        highlightMediator,
-			new ModifyTerrainCommand(simulation.Surface)
-		);
+		// SimulationRepresentation simulationRepresentation = representationFactory.GetRepresentation(gameSimulation);
 
-		inputManager.Bind(null, _interface.OnSelect);
-
-		Board board = new Board(simulation.Surface); // TODO: make into repres & surf
-		br = BoardRepresentation.MakeFrom(board);
-
-		// Register observers/observables
+		// gameSimulation.AddEnemy(unitFactory.GetEnemy(), new Vector3(1,0,1));
 	}
 
 	void Update()
