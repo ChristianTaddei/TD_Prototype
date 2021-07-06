@@ -7,7 +7,7 @@ using Moq;
 
 namespace Tests
 {  
-	public class CartesianGeometryTests
+	public class CartesianGeometryTests 
 	{
 		CartesianGeometry cartesianGeometry;
 

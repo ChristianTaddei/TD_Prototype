@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ConcreteSurface : AbstractSurface
 {
-	// internal to be added from face, invert?
+	// internal to be added from face, invert control?
 	internal List<SurfaceVertex> vertices;
 	private List<AbstractFace> faces;
 

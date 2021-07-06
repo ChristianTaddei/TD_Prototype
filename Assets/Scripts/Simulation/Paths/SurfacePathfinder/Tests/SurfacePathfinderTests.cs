@@ -5,9 +5,12 @@ using UnityEngine;
 
 namespace Tests
 {
+    // TODO: TestSurfaces only in one package (surface), get here using NUnit workflow
 	public class SurfacePathfinderTests
 	{
 		SurfacePathfinder surfacePathfinder;
+
+        // TODO: should mock an interface (this uses actual impl)
 		Mock<SurfaceGeometry> surfaceGeometry;
 
 		[SetUp]

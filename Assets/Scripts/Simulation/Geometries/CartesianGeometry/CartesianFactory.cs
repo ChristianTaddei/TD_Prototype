@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: try with generics -> Factory<T> -> PointFactory<T> : Factory<T extends Point> -> CartesianPointFactory : PointFactory<CartesianPoint> 
+// mb factory isnt needed for simple (no exc?) data structures (or it is to ensure immut?)? Avoid using pattern just because?
 public class CartesianFactory
 {
 	public CartesianVector VectorFromVec3(Vector3 vec3)
