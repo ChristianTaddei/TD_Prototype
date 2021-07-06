@@ -2,43 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CartesianGeometry : Geometry
+public class VectorialGeometry : Geometry
 {
 	internal static readonly float FLOAT_REPRESENTATION_EQUALITY_TOLLERANCE = 0.001f;
 
 	// what about "areComplanar" etc methods public while calc ones internal?
 
-	public CartesianVector Sum(CartesianVector v1, CartesianVector v2)
+	public Vector  Sum(Vector  v1, Vector  v2)
 	{
-		return new CartesianVector(v1.cartesianCoordinates + v2.cartesianCoordinates);
+		return new CartesianVector(v1.FloatRepresentation + v2.FloatRepresentation);
 	}
 
-	public CartesianVector Substract(CartesianVector v1, CartesianVector v2)
+	public Vector  Substract(Vector  v1, Vector  v2)
 	{
-		return new CartesianVector(v1.cartesianCoordinates - v2.cartesianCoordinates);
+		return new CartesianVector(v1.FloatRepresentation - v2.FloatRepresentation);
 	}
 
-	public float Magnitude(CartesianVector v)
+	public float Magnitude(Vector  v)
 	{
-		return v.cartesianCoordinates.magnitude;
+		return v.FloatRepresentation.magnitude;
 	}
 
-	public bool AreCloserThanTollerance(CartesianVector v1, CartesianVector v2)
+	public bool AreCloserThanTollerance(Vector  v1, Vector  v2)
 	{
 		return Vector3.Distance(v1.FloatRepresentation, v2.FloatRepresentation) < FLOAT_REPRESENTATION_EQUALITY_TOLLERANCE;
 	}
 
-	public float Dot(CartesianVector v1, CartesianVector v2)
+	public float Dot(Vector v1, Vector v2)
 	{
-		return Vector3.Dot(v1.cartesianCoordinates, v2.cartesianCoordinates);
+		return Vector3.Dot(v1.FloatRepresentation, v2.FloatRepresentation);
 	}
 
-	public CartesianVector Cross(CartesianVector v1, CartesianVector v2)
+	public Vector Cross(Vector v1, Vector v2)
 	{
-		return new CartesianVector(Vector3.Cross(v1.cartesianCoordinates, v2.cartesianCoordinates));
+		return new CartesianVector(Vector3.Cross(v1.FloatRepresentation, v2.FloatRepresentation));
 	}
 
-	public bool AreComplanar(CartesianVector a, CartesianVector b, CartesianVector c)
+	public bool AreComplanar(Vector a, Vector b, Vector c)
 	{
 		float mixedProd = Dot(a, Cross(b, c));
 
@@ -50,14 +50,14 @@ public class CartesianGeometry : Geometry
 		return false;
 	}
 
-	public CartesianVector Project(CartesianVector v, Triangle triangleDefiningPlane)
+	public Vector Project(Vector v, Triangle triangleDefiningPlane)
 	{
-		CartesianVector projectedVector;
+		Vector projectedVector;
 
-		CartesianVector Plane_AB = new CartesianVector(triangleDefiningPlane.B.FloatRepresentation - triangleDefiningPlane.A.FloatRepresentation);
-		CartesianVector Plane_AC = new CartesianVector(triangleDefiningPlane.C.FloatRepresentation - triangleDefiningPlane.A.FloatRepresentation);
-		CartesianVector Plane_n = Cross(Plane_AB, Plane_AC);
-		CartesianVector AP = new CartesianVector(v.FloatRepresentation - triangleDefiningPlane.A.FloatRepresentation);
+		Vector Plane_AB = new CartesianVector(triangleDefiningPlane.B.FloatRepresentation - triangleDefiningPlane.A.FloatRepresentation);
+		Vector Plane_AC = new CartesianVector(triangleDefiningPlane.C.FloatRepresentation - triangleDefiningPlane.A.FloatRepresentation);
+		Vector Plane_n = Cross(Plane_AB, Plane_AC);
+		Vector AP = new CartesianVector(v.FloatRepresentation - triangleDefiningPlane.A.FloatRepresentation);
 
 		float squareMag = Magnitude(Plane_n) * Magnitude(Plane_n);
 		projectedVector = Substract(v, (new CartesianVector((Dot(AP, Plane_n) / squareMag) * Plane_n.FloatRepresentation)));

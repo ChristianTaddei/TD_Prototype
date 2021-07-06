@@ -8,6 +8,7 @@ using System;
 
 namespace Tests
 {
+/*
     public class BarycentricVectorTests
     {
         ConcreteTriangle regularBase =
@@ -246,4 +247,5 @@ namespace Tests
             // assertionsToTest(insiderRandomBase, regularBase);
         }
     }
+    */
 }

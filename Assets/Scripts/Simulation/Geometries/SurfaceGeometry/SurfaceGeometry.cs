@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 public class SurfaceGeometry {
-	
+/*	
 	public Maybe<SurfacePoint> GetIntersectionToward(SurfacePoint start, SurfacePoint end, List<Face> alreadyVisitedFaces)
 	{
 		if (start.FloatRepresentation == end.FloatRepresentation)
@@ -14,7 +14,7 @@ public class SurfaceGeometry {
 
 		Triangle flatStartBase = ProjectOnPlane_Oy(start.BarycentricVector.Base);
 
-		CartesianGeometry cg = new CartesianGeometry();
+		VectorialGeometry cg = new VectorialGeometry();
 		BarycentricVector endInFlatStartBase = new BarycentricVector(
 			flatStartBase,
 			cg.Project(new CartesianVector(end.BarycentricVector.FloatRepresentation), flatStartBase));
@@ -135,5 +135,5 @@ public class SurfaceGeometry {
 			new CartesianVector(
 				new Vector3(triangle.C.FloatRepresentation.x, 0, triangle.C.FloatRepresentation.z)));
 	}
-
+*/
 }

@@ -3,11 +3,27 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Surface
+// A Surface is responsable of maintaining the relation between faces and a list of uniques vertices.
+public interface Surface
 {
-	public List<SurfaceVertex> Vertices { get; }
-	public List<Face> Faces { get; }
+	List<Vector> Vertices { get; }
+	List<Triangle> Faces { get; }
 
-	// public void AddFace(Face face);
-	// public Face AddFace(Vector a, Vector b, Vector c);
+	void AddFace(Face face);
+	void AddFaces(List<Face> faces);
+
+    bool Contains(Vector startPoint);
 }
+
+// In tests:
+
+// All points in Vertices are vertices of a face
+// All vertices of faces are in Vertices
+
+// Contains any point inside a Face 
+// does not Contain any point outside all Faces
+
+// Implementations (or subinterfaces? or subset of tests that ensure behaviours?):
+// connectedSurface -> Faces cannot be disconnected
+// stronglyConnectedSurface -> Faces cannot be disconnected or connected by a single vertex
+// convexSurface -> 

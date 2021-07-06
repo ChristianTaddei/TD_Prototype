@@ -5,14 +5,13 @@ using UnityEngine;
 
 public class SurfaceFactory
 {
-	private readonly Geometry geometry;
-
-	public SurfaceFactory(Geometry geometry){ // should be passed every time as parameter?
-		this.geometry = geometry;
+	public SurfaceFactory(){ 
 	}
 
 	public Surface MakeSquareSurface(float squareEdge, int subSquaresForSide){
-		return new Surface();
+		return new ConcreteSurface();
+
+		// add faces & verts to make square
 	}
 	
 }

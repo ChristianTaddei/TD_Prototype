@@ -21,11 +21,11 @@ public class BarycentricVector : Vector
 		this._base = _base;
 		BarycentricCoordinates = coordinates;
 	}
-
+/*
 	public BarycentricVector(Triangle _base, CartesianVector p) // TODO: project by default, want warning or something?
 	{
 		this._base = _base;
-		CartesianGeometry cartesianGeometry = new CartesianGeometry(); // TODO: created in barGeom
+		VectorialGeometry cartesianGeometry = new VectorialGeometry(); // TODO: created in barGeom
 
 		CartesianVector a = new CartesianVector(_base.A.FloatRepresentation);
 		CartesianVector b = new CartesianVector(_base.B.FloatRepresentation);
@@ -153,4 +153,5 @@ public class BarycentricVector : Vector
 		BarycentricVector same_baseB2 = b2.ChangeBase(b1._base);
 		return new BarycentricVector(b1._base, b1.BarycentricCoordinates - same_baseB2.BarycentricCoordinates);
 	}
+*/
 }

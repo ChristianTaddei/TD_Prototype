@@ -1,15 +1,12 @@
 {
-    "name": "SurfacePathfinderTests",
+    "name": "PathTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "SurfacePathfinder",
-        "SurfaceGeometry",
+        "Paths",
         "Surface",
         "Geometry",
-        "CartesianGeometry",
-        "BarycentricGeometry",
         "Monads"
     ],
     "includePlatforms": [

@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public interface Path
+public class Path
 {
-	List<Vector> Points { get; }
+	public Path(){
+
+	}
+
+	public List<Vector> Points { get; }
     
-	Vector Start { get; }
-	Vector End { get; }
+	public Vector Start { get; }
+	public Vector End { get; }
 }
