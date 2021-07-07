@@ -31,7 +31,7 @@ public class StatelessPathfinder : Pathfinder
 			Triangle currentFace = surface.GetFacesContaining(currentPoint).First();
 			while (currentFace != finalFace)
 			{
-				Vector intersection = geometry.GetTriangleIntersectionToward(currentPoint, finalPoint);
+				Vector intersection = geometry.GetTriangleIntersectionToward(currentFace, currentPoint, finalPoint);
 				alreadyVisitedFaces.Add(currentFace);
 
 				List<Triangle> candidatesForNextFace = surface.GetFacesContaining(intersection);

@@ -65,7 +65,7 @@ public class VectorialGeometry : Geometry
 		return projectedVector;
 	}
 
-	public Vector GetTriangleIntersectionToward(Vector currentPoint, Vector finalPoint)
+	public Vector GetTriangleIntersectionToward(Triangle t, Vector currentPoint, Vector finalPoint)
 	{
 		throw new System.NotImplementedException();
 	}
