@@ -19,14 +19,14 @@ public class Menu : MonoBehaviour
         pathButton.clickable = new Clickable(() =>
         {
             Debug.Log("path mode on");
-            interfaceManager.State = interfaceManager.MakePathState;
+            // interfaceManager.State = interfaceManager.MakePathState;
         });
 
         raiseButton = root.Q<Button>("RaiseButton");
         raiseButton.clickable = new Clickable(() =>
         {
             Debug.Log("raise mode on");
-            interfaceManager.State = interfaceManager.ModifyTerrainState;
+            // interfaceManager.State = interfaceManager.ModifyTerrainState;
         });
     }
 

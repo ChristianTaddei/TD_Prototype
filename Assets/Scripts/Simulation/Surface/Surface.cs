@@ -9,11 +9,11 @@ public interface Surface
 	List<Vector> Vertices { get; }
 	List<Triangle> Faces { get; }
 
-	void AddFace(Face face);
-	void AddFaces(List<Face> faces);
+	void AddFace(Triangle face);
+	void AddFaces(List<Triangle> faces);
 
-    bool Contains(Vector startPoint);
-	List<Triangle> GetFacesContaining(Vector finalPoint);
+    bool Contains(Vector point);
+	List<Triangle> GetFacesContaining(Vector point);
 }
 
 // In tests:

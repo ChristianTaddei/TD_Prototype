@@ -38,9 +38,9 @@ public class Board
     //     }
     // }
 
-    public Maybe<SurfacePoint> GetSurfacePoint(int triangleIndex, Vector3 point)
-    {
-        // return surface.GetSurfacePoint(triangleIndex, point);
-        return new Maybe<SurfacePoint>.Nothing();
-    }
+    // public Maybe<SurfacePoint> GetSurfacePoint(int triangleIndex, Vector3 point)
+    // {
+    //     // return surface.GetSurfacePoint(triangleIndex, point);
+    //     return new Maybe<SurfacePoint>.Nothing();
+    // }
 }

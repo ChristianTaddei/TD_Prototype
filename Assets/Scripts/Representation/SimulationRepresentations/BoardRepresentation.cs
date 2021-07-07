@@ -86,10 +86,10 @@ public class BoardRepresentation : MonoBehaviour
         return terrainRepresentation;
     }
 
-    public Maybe<SurfacePoint> GetSurfacePoint(int triangleIndex, Vector3 point)
-    {
-        return board.GetSurfacePoint(triangleIndex, point);
-    }
+    // public Maybe<SurfacePoint> GetSurfacePoint(int triangleIndex, Vector3 point)
+    // {
+    //     return board.GetSurfacePoint(triangleIndex, point);
+    // }
 
     public void SetupComponents(MeshFilter meshFilter, MeshRenderer meshRenderer, MeshCollider meshCollider)
     {

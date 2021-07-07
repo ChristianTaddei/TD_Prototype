@@ -19,14 +19,14 @@ namespace Tests
 		[SetUp]
 		public void Setup()
 		{
-			vectorFactory = new CartesianFactory();
+			vectorFactory = new ConcreteVectorFactory();
 
-			geometry = new CartesianGeometry();
+			geometry = new ConcreteGeometry();
 			pathFactory = new ConcretePathFactory();
 
 			pathfinder = new StatelessPathfinder(geometry, pathFactory);
 
-			surfaceFactory = new SurfaceFactory();
+			surfaceFactory = new ConcreteSurfaceFactory();
 		}
 
 		[TearDown]

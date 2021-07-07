@@ -33,33 +33,33 @@ public class InterfaceManager
 
 	private Menu menu;
 
-	public readonly ModifyTerrainState ModifyTerrainState;
-	public readonly MakePathState MakePathState;
+	// public readonly ModifyTerrainState ModifyTerrainState;
+	// public readonly MakePathState MakePathState;
 
 
-	public InterfaceManager(RaycastMediator raycastMediator, HighlightMediator highlightMediator, ModifyTerrainCommand modifyTerrainCommand)
-	{
-		OnSelect = () => { Debug.Log("Empty select called"); };
-		OnHover = () => { Debug.Log("Empty hover called"); };
+	// public InterfaceManager(RaycastMediator raycastMediator, HighlightMediator highlightMediator, ModifyTerrainCommand modifyTerrainCommand)
+	// {
+	// 	OnSelect = () => { Debug.Log("Empty select called"); };
+	// 	OnHover = () => { Debug.Log("Empty hover called"); };
 
-		menu = GameObject.Find("UI").AddComponent<Menu>(); // TODO: create UIDoc and EvtSys here too?
-		menu.interfaceManager = this;
+	// 	menu = GameObject.Find("UI").AddComponent<Menu>(); // TODO: create UIDoc and EvtSys here too?
+	// 	menu.interfaceManager = this;
 
-		// MakePathState = new MakePathState(
-		//     this,
-		//     highlightCommand
-		// );
+	// 	// MakePathState = new MakePathState(
+	// 	//     this,
+	// 	//     highlightCommand
+	// 	// );
 
-		ModifyTerrainState = new ModifyTerrainState(
-		    this,
-		    modifyTerrainCommand,
-	    raycastMediator,
-	    highlightMediator // TODOHIGH: not shared, to each state his?
-		);
+	// 	ModifyTerrainState = new ModifyTerrainState(
+	// 	    this,
+	// 	    modifyTerrainCommand,
+	//     raycastMediator,
+	//     highlightMediator // TODOHIGH: not shared, to each state his?
+	// 	);
 
-		defaultInterfaceState = ModifyTerrainState;
-		State = defaultInterfaceState;
-	}
+	// 	defaultInterfaceState = ModifyTerrainState;
+	// 	State = defaultInterfaceState;
+	// }
 
 	public void Update()
 	{
