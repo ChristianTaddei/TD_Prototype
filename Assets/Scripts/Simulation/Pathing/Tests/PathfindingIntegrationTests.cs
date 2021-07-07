@@ -4,6 +4,7 @@ using UnityEngine;
 namespace Tests
 {
 	[TestFixture]
+  	[Category("Integration")]
 	public class PathingIntegrationTests
 	{
 		Pathfinder pathfinder;

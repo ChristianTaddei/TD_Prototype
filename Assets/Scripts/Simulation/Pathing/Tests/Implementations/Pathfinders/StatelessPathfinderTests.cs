@@ -6,6 +6,8 @@ using Moq;
 
 namespace Tests
 {
+	[TestFixture]
+  	[Category("Unit")]
 	public class StatelessPathfinderTests
 	{
 		Pathfinder pathfinder;

@@ -1,5 +1,5 @@
 {
-    "name": "PathTests",
+    "name": "PathfindingImplementationsTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
@@ -7,8 +7,7 @@
         "Paths",
         "Surface",
         "Geometry",
-        "Monads",
-        "CartesianGeometry"
+        "Monads"
     ],
     "includePlatforms": [
         "Editor"
