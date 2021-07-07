@@ -21,6 +21,8 @@ public class StatelessPathfinder : Pathfinder
 			}
 
 			List<Vector> crossingPoints = new List<Vector>();
+			crossingPoints.Add(startPoint);
+
 			List<Triangle> alreadyVisitedFaces = new List<Triangle>();
 
 			Triangle finalFace = surface.GetFacesContaining(finalPoint).First();
@@ -35,9 +37,9 @@ public class StatelessPathfinder : Pathfinder
 				List<Triangle> candidatesForNextFace = surface.GetFacesContaining(intersection);
 				candidatesForNextFace.RemoveAll(t => alreadyVisitedFaces.Contains(t));
 
-				if (!crossingPoints.Contains(currentPoint))
+				if (!crossingPoints.Contains(intersection))
 				{
-					crossingPoints.Add(currentPoint);
+					crossingPoints.Add(intersection);
 				}
 
 				currentPoint = intersection;

@@ -13,6 +13,7 @@ namespace Tests
 
 		Mock<Surface> surface;
 
+		[SetUp]
 		public void Setup()
 		{
 			geometry = new Mock<Geometry>();
@@ -21,6 +22,7 @@ namespace Tests
 			surface = new Mock<Surface>();
 		}
 
+		[TearDown]
 		public void TearDown()
 		{
 
@@ -30,24 +32,24 @@ namespace Tests
 		public void directPath_flatSquareOppositeCorners_crossesDiagonalAtMiddle()
 		{
 			Mock<Vector> start = new Mock<Vector>();
-			start.Setup(v => v.FloatRepresentation).Returns(new Vector3(0, 0, 0));
-
 			Mock<Vector> end = new Mock<Vector>();
-			end.Setup(v => v.FloatRepresentation).Returns(new Vector3(1, 0, 1));
+			Mock<Vector> intersection = new Mock<Vector>();
 
-			Mock<Vector> middlePoint = new Mock<Vector>();
-			middlePoint.Setup(v => v.FloatRepresentation).Returns(new Vector3(0.5f, 0, 0.5f));
-			
-			// geometry.Setup(g => g. )
+			Mock<Triangle> a = new Mock<Triangle>();
+			Mock<Triangle> b = new Mock<Triangle>();
+
+			surface.Setup(s => s.Contains(It.IsAny<Vector>())).Returns(true);
+
+			surface.Setup(s => s.GetFacesContaining(start.Object)).Returns(new List<Triangle> { a.Object });
+			surface.Setup(s => s.GetFacesContaining(end.Object)).Returns(new List<Triangle> { b.Object });
+			surface.Setup(s => s.GetFacesContaining(intersection.Object)).Returns(new List<Triangle> { a.Object, b.Object });
+
+			geometry.Setup(g => g.GetTriangleIntersectionToward(start.Object, end.Object)).Returns(intersection.Object);
 
 			Maybe<Path> path = pathfinder.GetDirectPath(surface.Object, start.Object, end.Object);
 
-			// TODO: avoid more than one -> other tests for hasValue, others for start, others for end
-			// Assert.True(path.HasValue());
-
-			// Assert.AreEqual(start.Object.FloatRepresentation, path.Value.Points[0]);
-			Assert.AreEqual(middlePoint.Object.FloatRepresentation, path.Value.Points[1]);
-			// Assert.AreEqual(end.Object.FloatRepresentation, path.Value.Points[2]);
+			Assert.True(path.HasValue());
+			Assert.AreEqual(intersection.Object, path.Value.Points[1]);
 		}
 	}
 }
