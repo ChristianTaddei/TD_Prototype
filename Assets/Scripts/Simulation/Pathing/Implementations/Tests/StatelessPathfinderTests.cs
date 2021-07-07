@@ -73,6 +73,7 @@ namespace Tests
 
 			Maybe<Path> path = pathfinder.GetDirectPath(surface.Object, start.Object, end.Object);
 
+			// TODO: some verify or stuff to check everything is used and/or nothing feeds correct result?
 			Assert.True(path.Value.Points.Contains(intersection.Object));
 		}
 

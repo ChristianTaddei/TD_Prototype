@@ -7,7 +7,8 @@
         "Paths",
         "Surface",
         "Geometry",
-        "Monads"
+        "Monads",
+        "CartesianGeometry"
     ],
     "includePlatforms": [
         "Editor"

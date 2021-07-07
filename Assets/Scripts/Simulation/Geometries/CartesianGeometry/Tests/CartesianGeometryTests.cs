@@ -9,12 +9,12 @@ namespace Tests
 {  
 	public class CartesianGeometryTests 
 	{
-		VectorialGeometry cartesianGeometry;
+		CartesianGeometry cartesianGeometry;
 
 		[SetUp]
 		public void Setup()
 		{
-			cartesianGeometry = new VectorialGeometry();
+			cartesianGeometry = new CartesianGeometry();
 		}
 
 		[TearDown]
