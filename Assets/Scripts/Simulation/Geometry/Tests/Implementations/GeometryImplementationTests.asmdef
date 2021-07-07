@@ -1,12 +1,13 @@
 {
-    "name": "BaricentricGeometryTests",
+    "name": "GeometryImplementationTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
+        "Paths",
+        "Surface",
         "Geometry",
-        "BarycentricGeometry",
-        "CartesianGeometry"
+        "Monads"
     ],
     "includePlatforms": [
         "Editor"
@@ -15,7 +16,8 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "nunit.framework.dll"
+        "nunit.framework.dll",
+        "Moq.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [

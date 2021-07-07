@@ -1,11 +1,13 @@
 {
-    "name": "CartesianGeometryTests",
+    "name": "GeometryIntegrationTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "CartesianGeometry",
-        "Geometry"
+        "Paths",
+        "Surface",
+        "Geometry",
+        "Monads"
     ],
     "includePlatforms": [
         "Editor"
