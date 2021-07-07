@@ -9,14 +9,16 @@ namespace Tests
 	public class StatelessPathfinderTests
 	{
 		Pathfinder pathfinder;
+		Mock<Geometry> geometry;
 
 		Mock<Surface> surface;
 
 		public void Setup()
 		{
-			surface = new Mock<Surface>();
+			geometry = new Mock<Geometry>();
+			pathfinder = new StatelessPathfinder(geometry.Object);
 
-			pathfinder = new StatelessPathfinder();
+			surface = new Mock<Surface>();
 		}
 
 		public void TearDown()
@@ -36,7 +38,7 @@ namespace Tests
 			Mock<Vector> middlePoint = new Mock<Vector>();
 			middlePoint.Setup(v => v.FloatRepresentation).Returns(new Vector3(0.5f, 0, 0.5f));
 			
-			// Setup surface to return middlepoint as intersection for getIntersTwrd
+			// geometry.Setup(g => g. )
 
 			Maybe<Path> path = pathfinder.GetDirectPath(surface.Object, start.Object, end.Object);
 

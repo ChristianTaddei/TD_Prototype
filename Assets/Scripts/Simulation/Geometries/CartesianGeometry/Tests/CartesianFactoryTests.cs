@@ -27,7 +27,7 @@ namespace Tests
 		{
 			Vector3 vec3 = new Vector3(1.00000001f, 1315246.23634f, 0.0f);
 
-			CartesianVector v = cartesianFactory.VectorFromVec3(vec3);
+			Vector v = cartesianFactory.VectorFromVec3(vec3);
 
 			Assert.AreEqual(vec3, v.FloatRepresentation);
 		}
@@ -39,7 +39,7 @@ namespace Tests
 			float c2 = 1315246.23634f;
 			float c3 = 0.0f;
 
-			CartesianVector v = cartesianFactory.VectorFromCoordinates(c1, c2, c3);
+			Vector v = cartesianFactory.VectorFromCoordinates(c1, c2, c3);
 
 			Assert.AreEqual(c1, v.FloatRepresentation.x);
 			Assert.AreEqual(c2, v.FloatRepresentation.y);
@@ -55,7 +55,7 @@ namespace Tests
 		{
 			Vector3 vec3 = new Vector3(randomFloat1, randomFloat2, randomFloat3);
 
-			CartesianVector v = cartesianFactory.VectorFromVec3(vec3);
+			Vector v = cartesianFactory.VectorFromVec3(vec3);
 
 			Assert.AreEqual(vec3, v.FloatRepresentation);
 		}
@@ -66,7 +66,7 @@ namespace Tests
 			[NUnit.Framework.Random(1)] float randomFloat2,
 			[NUnit.Framework.Random(1)] float randomFloat3)
 		{
-			CartesianVector v = cartesianFactory.VectorFromCoordinates(randomFloat1, randomFloat2, randomFloat3);
+			Vector v = cartesianFactory.VectorFromCoordinates(randomFloat1, randomFloat2, randomFloat3);
 
 			Assert.AreEqual(randomFloat1, v.FloatRepresentation.x);
 			Assert.AreEqual(randomFloat2, v.FloatRepresentation.y);
@@ -78,7 +78,7 @@ namespace Tests
 		{
 			CartesianVector original = new CartesianVector(1, 2, 3);
 
-			CartesianVector copy = cartesianFactory.Copy(original);
+			Vector copy = cartesianFactory.Copy(original);
 
 			Assert.AreEqual(original, copy);
 		}

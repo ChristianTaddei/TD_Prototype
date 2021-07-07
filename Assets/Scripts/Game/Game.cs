@@ -16,7 +16,7 @@ public class Game : MonoBehaviour
 
 		Surface gameSurface = barycentricSurfaceFactory.MakeSquareSurface(10.0f, 10);
 
-		Pathfinder statelessPathFinder = new StatelessPathfinder();
+		Pathfinder statelessPathFinder = new StatelessPathfinder(cartesianGeometry);
 
 		// Simulation gameSimulation = new Simulation(gameSurface);
 

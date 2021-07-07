@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 public class CartesianVector : Vector
 {
-	public override Vector3 FloatRepresentation =>
+	public Vector3 FloatRepresentation =>
 		new Vector3(
 			cartesianCoordinates.x,
 			cartesianCoordinates.y,
@@ -27,11 +27,24 @@ public class CartesianVector : Vector
 		this.cartesianCoordinates = new Vector3(x, y, z);
 	}
 
-	public CartesianVector(Vector3 vector3)
+	internal CartesianVector(Vector3 vector3)
 	{
 		this.cartesianCoordinates = vector3;
 	}
 
-	// TODO: This gtg too, but its used a lot in tests....
-	public static implicit operator CartesianVector(Vector3 v) => new CartesianVector(v);
+	// FIXME: Without this override test of copy in factory fails. What Equals is it using?
+	public override bool Equals(object obj)
+	{
+		return obj is CartesianVector vector &&
+			   FloatRepresentation.Equals(vector.FloatRepresentation) &&
+			   cartesianCoordinates.Equals(vector.cartesianCoordinates);
+	}
+
+	public override int GetHashCode()
+	{
+		int hashCode = -831778624;
+		hashCode = hashCode * -1521134295 + FloatRepresentation.GetHashCode();
+		hashCode = hashCode * -1521134295 + cartesianCoordinates.GetHashCode();
+		return hashCode;
+	}
 }
