@@ -5,10 +5,12 @@ using System.Linq;
 public class StatelessPathfinder : Pathfinder
 {
 	private Geometry geometry;
+	private PathFactory pathFactory;
 
-	public StatelessPathfinder(Geometry geometry)
+	public StatelessPathfinder(Geometry geometry, PathFactory pathFactory)
 	{
 		this.geometry = geometry;
+		this.pathFactory = pathFactory;
 	}
 
 	public Maybe<Path> GetDirectPath(Surface surface, Vector startPoint, Vector finalPoint)
@@ -21,8 +23,6 @@ public class StatelessPathfinder : Pathfinder
 			}
 
 			List<Vector> crossingPoints = new List<Vector>();
-			crossingPoints.Add(startPoint);
-
 			List<Triangle> alreadyVisitedFaces = new List<Triangle>();
 
 			Triangle finalFace = surface.GetFacesContaining(finalPoint).First();
@@ -46,12 +46,7 @@ public class StatelessPathfinder : Pathfinder
 				currentFace = candidatesForNextFace.First();
 			}
 
-			if (!crossingPoints.Contains(finalPoint))
-			{
-				crossingPoints.Add(finalPoint);
-			}
-
-			return new Maybe<Path>.Just(new Path(crossingPoints));
+			return new Maybe<Path>.Just(pathFactory.PathFromPoints(startPoint, crossingPoints, finalPoint));
 		}
 		catch (InvalidOperationException e) // TODO: replace first with something safer
 		{

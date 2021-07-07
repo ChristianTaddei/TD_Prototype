@@ -9,15 +9,40 @@ namespace Tests
 	public class StatelessPathfinderTests
 	{
 		Pathfinder pathfinder;
-		Mock<Geometry> geometry;
 
+		Mock<Geometry> geometry;
+		Mock<PathFactory> pathFactory;
 		Mock<Surface> surface;
 
 		[SetUp]
 		public void Setup()
 		{
 			geometry = new Mock<Geometry>();
-			pathfinder = new StatelessPathfinder(geometry.Object);
+
+			// TODO: move to where all tests can use it
+			pathFactory = new Mock<PathFactory>();
+			pathFactory.Setup(pf => pf.PathFromPoints(It.IsAny<List<Vector>>()))
+				.Returns((List<Vector> points) =>
+				{
+					var path = new Mock<Path>();
+					path.Setup(p => p.Points).Returns(points);
+					return path.Object;
+				});
+			pathFactory.Setup(pf => pf.PathFromPoints(It.IsAny<Vector>(), It.IsAny<List<Vector>>(), It.IsAny<Vector>()))
+				.Returns((Vector p1, List<Vector> points, Vector p2) =>
+				{
+					List<Vector> allPoints = new List<Vector>();
+					allPoints.Add(p1);
+					allPoints.AddRange(points);
+					allPoints.Add(p2);
+
+					var path = new Mock<Path>();
+					path.Setup(p => p.Points).Returns(allPoints);
+
+					return path.Object;
+				});
+
+			pathfinder = new StatelessPathfinder(geometry.Object, pathFactory.Object);
 
 			surface = new Mock<Surface>();
 		}
@@ -107,7 +132,8 @@ namespace Tests
 			Assert.True(hasNoDuplicates(path.Value.Points));
 		}
 
-		private bool hasNoDuplicates<T>(List<T> list){
+		private bool hasNoDuplicates<T>(List<T> list)
+		{
 			return list.Count == new HashSet<T>(list).Count;
 		}
 	}
