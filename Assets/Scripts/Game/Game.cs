@@ -9,14 +9,14 @@ public class Game : MonoBehaviour
 
 	void Start()
 	{
-		Geometry cartesianGeometry = new VectorialGeometry();
-		Geometry barycentricGeometry = new BarycentricGeometry(cartesianGeometry);
+		// Geometry cartesianGeometry = new VectorialGeometry();
+		// Geometry barycentricGeometry = new BarycentricGeometry(cartesianGeometry);
 
-		SurfaceFactory barycentricSurfaceFactory = new SurfaceFactory();
+		// SurfaceFactory surfaceFactory = new SurfaceFactory();
 
-		Surface gameSurface = barycentricSurfaceFactory.MakeSquareSurface(10.0f, 10);
+		// Surface gameSurface = surfaceFactory.MakeSquareSurface(10.0f, 10);
 
-		Pathfinder statelessPathFinder = new StatelessPathfinder(cartesianGeometry);
+		// Pathfinder statelessPathFinder = new StatelessPathfinder(cartesianGeometry);
 
 		// Simulation gameSimulation = new Simulation(gameSurface);
 

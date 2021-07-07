@@ -16,6 +16,11 @@ public class BarycentricGeometry : Geometry
 		this.geometry = geometry;
 	}
 
+	public Vector GetTriangleIntersectionToward(Vector currentPoint, Vector finalPoint)
+	{
+		throw new System.NotImplementedException();
+	}
+
 	public Vector Project(Vector v, Triangle t)
 	{
 		throw new System.NotImplementedException();

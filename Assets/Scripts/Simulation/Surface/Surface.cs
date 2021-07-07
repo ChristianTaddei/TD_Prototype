@@ -13,6 +13,7 @@ public interface Surface
 	void AddFaces(List<Face> faces);
 
     bool Contains(Vector startPoint);
+	List<Triangle> GetFacesContaining(Vector finalPoint);
 }
 
 // In tests:

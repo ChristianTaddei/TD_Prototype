@@ -32,4 +32,8 @@ public class ConcreteSurface : Surface
 		throw new NotImplementedException();
 	}
 
+	public List<Triangle> GetFacesContaining(Vector finalPoint)
+	{
+		throw new NotImplementedException();
+	}
 }
