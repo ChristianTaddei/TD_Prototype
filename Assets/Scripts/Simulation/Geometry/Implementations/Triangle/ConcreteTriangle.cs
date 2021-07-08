@@ -1,9 +1,9 @@
 ﻿// generic triangle implementation
 public class ConcreteTriangle : Triangle
 {
-	public Vector A { get => _A; }
-	public Vector B { get => _B; }
-	public Vector C { get => _C; }
+	public override Vector A { get => _A; }
+	public override Vector B { get => _B; }
+	public override Vector C { get => _C; }
 
 	private readonly Vector _A;
 	private readonly Vector _B;

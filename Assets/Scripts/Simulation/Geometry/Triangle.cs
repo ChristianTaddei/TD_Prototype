@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-public abstract class Triangle 
+public abstract class Triangle
 {
-	Vector A { get; }
-	Vector B { get; }
-	Vector C { get; }
+	public abstract Vector A { get; }
+	public abstract Vector B { get; }
+	public abstract Vector C { get; }
 
 	public override bool Equals(object obj)
 	{
