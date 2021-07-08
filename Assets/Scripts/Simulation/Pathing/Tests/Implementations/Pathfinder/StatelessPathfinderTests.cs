@@ -7,46 +7,23 @@ using Moq;
 namespace Tests
 {
 	[TestFixture]
-  	[Category("Unit")]
+	[Category("Unit")]
 	public class StatelessPathfinderTests
 	{
-		Pathfinder pathfinder;
+		// unit under test - use implementation
+		Pathfinder statelessPathfinder;
 
-		Mock<Geometry> geometry;
-		Mock<PathFactory> pathFactory;
-		Mock<Surface> surface;
+		// collaborators - use stubs and fill them as needed
+		Geometry geometry;
+		PathFactory pathFactory;
 
 		[SetUp]
 		public void Setup()
 		{
-			geometry = new Mock<Geometry>();
+			geometry = new GeometryStub();
+			pathFactory = new PathFactoryStub();
 
-			// TODO: move to where all tests can use it
-			pathFactory = new Mock<PathFactory>();
-			pathFactory.Setup(pf => pf.PathFromPoints(It.IsAny<List<Vector>>()))
-				.Returns((List<Vector> points) =>
-				{
-					var path = new Mock<Path>();
-					path.Setup(p => p.Points).Returns(points);
-					return path.Object;
-				});
-			pathFactory.Setup(pf => pf.PathFromPoints(It.IsAny<Vector>(), It.IsAny<List<Vector>>(), It.IsAny<Vector>()))
-				.Returns((Vector p1, List<Vector> points, Vector p2) =>
-				{
-					List<Vector> allPoints = new List<Vector>();
-					allPoints.Add(p1);
-					allPoints.AddRange(points);
-					allPoints.Add(p2);
-
-					var path = new Mock<Path>();
-					path.Setup(p => p.Points).Returns(allPoints);
-
-					return path.Object;
-				});
-
-			pathfinder = new StatelessPathfinder(geometry.Object, pathFactory.Object);
-
-			surface = new Mock<Surface>();
+			statelessPathfinder = new StatelessPathfinder(geometry, pathFactory);
 		}
 
 		[TearDown]
@@ -58,86 +35,90 @@ namespace Tests
 		[Test]
 		public void getDirectPath_pathCrossOneEdge_pathContainsIntersection()
 		{
-			Mock<Vector> start = new Mock<Vector>();
-			Mock<Vector> end = new Mock<Vector>();
-			Mock<Vector> intersection = new Mock<Vector>();
+			FlatSquareStub flatSquare = new FlatSquareStub();
 
-			Mock<Triangle> a = new Mock<Triangle>();
-			Mock<Triangle> b = new Mock<Triangle>();
+			// Setup
+			Vector start = FlatSquareStub.a;
+			Vector end = FlatSquareStub.d;
 
-			surface.Setup(s => s.Contains(It.IsAny<Vector>())).Returns(true);
+			Vector intersection = FlatSquareStub.centre;
 
-			surface.Setup(s => s.GetFacesContaining(start.Object)).Returns(new List<Triangle> { a.Object });
-			surface.Setup(s => s.GetFacesContaining(end.Object)).Returns(new List<Triangle> { b.Object });
-			surface.Setup(s => s.GetFacesContaining(intersection.Object)).Returns(new List<Triangle> { a.Object, b.Object });
+			Triangle A = FlatSquareStub.A;
+			Triangle B = FlatSquareStub.B;
 
-			geometry.Setup(g => g.GetTriangleIntersectionToward(a.Object, start.Object, end.Object)).Returns(intersection.Object);
+			// Execute
+			Maybe<Path> path = statelessPathfinder.GetDirectPath(flatSquare, start, end);
 
-			Maybe<Path> path = pathfinder.GetDirectPath(surface.Object, start.Object, end.Object);
+			Assert.AreEqual(intersection, path.Value.Points[1]);
 
-			// TODO: some verify or stuff to check everything is used and/or nothing feeds correct result?
-			Assert.True(path.Value.Points.Contains(intersection.Object));
+			// TODO: check equals in concrete impl tests
+			// Assert.AreEqual(intersection, ConcreteVector.From(0.5f, 0, 0.5f));
+			// Assert.AreEqual(ConcreteVector.From(0.5f, 0, 0.5f), intersection);
 		}
 
-		[Test]
-		public void getDirectPath_pathCrossAtSharedVertex_pathContainsIntersection()
-		{
-			Mock<Vector> start = new Mock<Vector>();
-			Mock<Vector> end = new Mock<Vector>();
-			Mock<Vector> intersection = new Mock<Vector>();
+		// [Test]
+		// public void getDirectPath_pathCrossAtSharedVertex_pathContainsIntersection()
+		// {
+		// 	// sepatation interface abstract -> to be sure not to use any impl in this tests
+		// 	// stub classes -> made using Mock<> but already setup trivial calls and has Equals support?
 
-			Mock<Triangle> a = new Mock<Triangle>();
-			Mock<Triangle> b = new Mock<Triangle>();
-			Mock<Triangle> c = new Mock<Triangle>();
-			Mock<Triangle> d = new Mock<Triangle>();
+		// 	Mock<Vector> start = new Mock<Vector>();
+		// 	Mock<Vector> end = new Mock<Vector>();
+		// 	Mock<Vector> intersection = new Mock<Vector>();
 
-			surface.Setup(s => s.Contains(It.IsAny<Vector>())).Returns(true);
+		// 	Mock<Triangle> a = new Mock<Triangle>();
+		// 	Mock<Triangle> b = new Mock<Triangle>();
+		// 	Mock<Triangle> c = new Mock<Triangle>();
+		// 	Mock<Triangle> d = new Mock<Triangle>();
 
-			surface.Setup(s => s.GetFacesContaining(start.Object)).Returns(new List<Triangle> { a.Object });
-			surface.Setup(s => s.GetFacesContaining(end.Object)).Returns(new List<Triangle> { b.Object });
-			surface.Setup(s => s.GetFacesContaining(intersection.Object))
-				.Returns(new List<Triangle> { a.Object, b.Object, c.Object, d.Object });
+		// 	surface.Setup(s => s.Contains(It.IsAny<Vector>())).Returns(true);
 
-			geometry.Setup(g => g.GetTriangleIntersectionToward(a.Object, start.Object, end.Object)).Returns(intersection.Object);
-			geometry.Setup(g => g.GetTriangleIntersectionToward(c.Object, intersection.Object, end.Object)).Returns(intersection.Object);
-			geometry.Setup(g => g.GetTriangleIntersectionToward(d.Object, intersection.Object, end.Object)).Returns(intersection.Object);
+		// 	surface.Setup(s => s.GetFacesContaining(start.Object)).Returns(new List<Triangle> { a.Object });
+		// 	surface.Setup(s => s.GetFacesContaining(end.Object)).Returns(new List<Triangle> { b.Object });
+		// 	surface.Setup(s => s.GetFacesContaining(intersection.Object))
+		// 		.Returns(new List<Triangle> { a.Object, b.Object, c.Object, d.Object });
 
-			Maybe<Path> path = pathfinder.GetDirectPath(surface.Object, start.Object, end.Object);
+		// 	geometry.Setup(g => g.GetTriangleIntersectionToward(a.Object, start.Object, end.Object)).Returns(intersection.Object);
+		// 	geometry.Setup(g => g.GetTriangleIntersectionToward(c.Object, intersection.Object, end.Object)).Returns(intersection.Object);
+		// 	geometry.Setup(g => g.GetTriangleIntersectionToward(d.Object, intersection.Object, end.Object)).Returns(intersection.Object);
 
-			Assert.True(path.Value.Points.Contains(intersection.Object));
-		}
-		[Test]
-		public void getDirectPath_pathCrossAtSharedVertex_pathHasNoDuplicates()
-		{
-			// TODO: duplicate code, extract specific setup methods for this state?
-			Mock<Vector> start = new Mock<Vector>();
-			Mock<Vector> end = new Mock<Vector>();
-			Mock<Vector> intersection = new Mock<Vector>();
+		// 	Maybe<Path> path = statelessPathfinder.GetDirectPath(surface.Object, start.Object, end.Object);
 
-			Mock<Triangle> a = new Mock<Triangle>();
-			Mock<Triangle> b = new Mock<Triangle>();
-			Mock<Triangle> c = new Mock<Triangle>();
-			Mock<Triangle> d = new Mock<Triangle>();
+		// 	Assert.True(path.Value.Contains(intersection.Object));
+		// }
 
-			surface.Setup(s => s.Contains(It.IsAny<Vector>())).Returns(true);
+		// [Test]
+		// public void getDirectPath_pathCrossAtSharedVertex_pathHasNoDuplicates()
+		// {
+		// 	// TODO: duplicate code, extract specific setup methods for this state?
+		// 	Mock<Vector> start = new Mock<Vector>();
+		// 	Mock<Vector> end = new Mock<Vector>();
+		// 	Mock<Vector> intersection = new Mock<Vector>();
 
-			surface.Setup(s => s.GetFacesContaining(start.Object)).Returns(new List<Triangle> { a.Object });
-			surface.Setup(s => s.GetFacesContaining(end.Object)).Returns(new List<Triangle> { b.Object });
-			surface.Setup(s => s.GetFacesContaining(intersection.Object))
-				.Returns(new List<Triangle> { a.Object, b.Object, c.Object, d.Object });
+		// 	Mock<Triangle> a = new Mock<Triangle>();
+		// 	Mock<Triangle> b = new Mock<Triangle>();
+		// 	Mock<Triangle> c = new Mock<Triangle>();
+		// 	Mock<Triangle> d = new Mock<Triangle>();
 
-			geometry.Setup(g => g.GetTriangleIntersectionToward(a.Object, start.Object, end.Object)).Returns(intersection.Object);
-			geometry.Setup(g => g.GetTriangleIntersectionToward(c.Object, intersection.Object, end.Object)).Returns(intersection.Object);
-			geometry.Setup(g => g.GetTriangleIntersectionToward(d.Object, intersection.Object, end.Object)).Returns(intersection.Object);
+		// 	surface.Setup(s => s.Contains(It.IsAny<Vector>())).Returns(true);
 
-			Maybe<Path> path = pathfinder.GetDirectPath(surface.Object, start.Object, end.Object);
+		// 	surface.Setup(s => s.GetFacesContaining(start.Object)).Returns(new List<Triangle> { a.Object });
+		// 	surface.Setup(s => s.GetFacesContaining(end.Object)).Returns(new List<Triangle> { b.Object });
+		// 	surface.Setup(s => s.GetFacesContaining(intersection.Object))
+		// 		.Returns(new List<Triangle> { a.Object, b.Object, c.Object, d.Object });
 
-			Assert.True(hasNoDuplicates(path.Value.Points));
-		}
+		// 	geometry.Setup(g => g.GetTriangleIntersectionToward(a.Object, start.Object, end.Object)).Returns(intersection.Object);
+		// 	geometry.Setup(g => g.GetTriangleIntersectionToward(c.Object, intersection.Object, end.Object)).Returns(intersection.Object);
+		// 	geometry.Setup(g => g.GetTriangleIntersectionToward(d.Object, intersection.Object, end.Object)).Returns(intersection.Object);
 
-		private bool hasNoDuplicates<T>(List<T> list)
-		{
-			return list.Count == new HashSet<T>(list).Count;
-		}
+		// 	Maybe<Path> path = statelessPathfinder.GetDirectPath(surface.Object, start.Object, end.Object);
+
+		// 	Assert.True(hasNoDuplicates(path.Value.Points));
+		// }
+
+		// private bool hasNoDuplicates<T>(List<T> list)
+		// {
+		// 	return list.Count == new HashSet<T>(list).Count;
+		// }
 	}
 }
