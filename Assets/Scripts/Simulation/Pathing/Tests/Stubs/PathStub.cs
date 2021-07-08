@@ -10,7 +10,7 @@ public class PathStub : Path
 
 	public bool Contains(Vector v)
 	{
-		throw new System.NotImplementedException();
+		return Points.Contains(v);	
 	}
 
 	internal PathStub(List<Vector> points){

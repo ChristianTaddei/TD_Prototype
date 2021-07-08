@@ -1,24 +1,23 @@
 using System.Collections.Generic;
 
-public class FlatSquareStub : Surface
+public class FlatCrossedSquareStub : Surface
 {
 	/*
 		c ----- d
-		| \   B |
-		|   \   |
-		| A   \ |
+		|  \  / |
+		|   m   |
+		|  /  \ |
 		a ----- b
 	*/
-
 	public static readonly Vector a = new VectorStub(0, 0, 0);
 	public static readonly Vector b = new VectorStub(1, 0, 0);
 	public static readonly Vector c = new VectorStub(0, 0, 1);
 	public static readonly Vector d = new VectorStub(1, 0, 1);
-	public static readonly Vector centre = new VectorStub(0.5f, 0, 0.5f);
+	public static readonly Vector m = new VectorStub(0.5f, 0, 0.5f);
 
 	public bool Contains(Vector point)
 	{
-		if (point.Equals(a) || point.Equals(b) || point.Equals(c) || point.Equals(d) || point.Equals(centre))
+		if (point.Equals(a) || point.Equals(b) || point.Equals(c) || point.Equals(d) || point.Equals(m))
 		{
 			return true;
 		}
@@ -26,8 +25,10 @@ public class FlatSquareStub : Surface
 		return false;
 	}
 
-	public static readonly Triangle A = new TriangleStub(a, b, c);
-	public static readonly Triangle B = new TriangleStub(b, c, d);
+	public static readonly Triangle AB = new TriangleStub(a, b, m);
+	public static readonly Triangle AC = new TriangleStub(a, c, m);
+	public static readonly Triangle BD = new TriangleStub(b, d, m);
+	public static readonly Triangle CD = new TriangleStub(c, d, m);
 
 	public List<Triangle> GetFacesContaining(Vector point)
 	{
@@ -35,26 +36,30 @@ public class FlatSquareStub : Surface
 
 		if (point.Equals(a))
 		{
-			facesContainingPoint.Add(A);
+			facesContainingPoint.Add(AB);
+			facesContainingPoint.Add(AC);
 		}
 		else if (point.Equals(b))
 		{
-			facesContainingPoint.Add(A);
-			facesContainingPoint.Add(B);
+			facesContainingPoint.Add(AB);
+			facesContainingPoint.Add(BD);
 		}
 		else if (point.Equals(c))
 		{
-			facesContainingPoint.Add(A);
-			facesContainingPoint.Add(B);
+			facesContainingPoint.Add(AC);
+			facesContainingPoint.Add(CD);
 		}
 		else if (point.Equals(d))
 		{
-			facesContainingPoint.Add(B);
+			facesContainingPoint.Add(BD);
+			facesContainingPoint.Add(CD);
 		}
-		else if (point.Equals(centre))
+		else if (point.Equals(m))
 		{
-			facesContainingPoint.Add(A);
-			facesContainingPoint.Add(B);
+			facesContainingPoint.Add(AB);
+			facesContainingPoint.Add(AC);
+			facesContainingPoint.Add(BD);
+			facesContainingPoint.Add(CD);
 		}
 		else
 		{
