@@ -5,10 +5,10 @@ public class ConcretePath : Path
 {
 	internal ConcretePath(List<Vector> points)
 	{
-		Points = points;
+		Vertices = points;
 	}
 
-	public List<Vector> Points { get; }
+	public List<Vector> Vertices { get; }
 
 	public Vector Start { get; }
 	public Vector End { get; }

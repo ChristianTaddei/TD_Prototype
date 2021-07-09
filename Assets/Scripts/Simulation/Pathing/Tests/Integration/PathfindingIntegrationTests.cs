@@ -35,7 +35,7 @@ namespace Tests
 
 		[Test]
 		[Ignore("Not all dependencies are implemented")]
-		public void getDirectPath_pathCrossOneEdge_pathContainsIntersection()
+		public void getDirectPath_pathCrossOneEdge_pathVerticesContainsIntersection()
 		{
 			Surface surface = surfaceFactory.MakeSquareSurface(1.0f, 1);
 
@@ -49,7 +49,7 @@ namespace Tests
 
 			Maybe<Path> path = pathfinder.GetDirectPath(surface, start, end);
 
-			Assert.True(path.Value.Contains(intersection));
+			Assert.True(path.Value.Vertices.Contains(intersection));
 		}
 	}
 }

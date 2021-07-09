@@ -46,10 +46,12 @@ namespace Tests
 			Triangle A = FlatSquareStub.A;
 			Triangle B = FlatSquareStub.B;
 
+			(geometry as GeometryStub).AddGetTriangleIntersectionTowardStub((A, start, end), intersection);
+
 			// Execute
 			Maybe<Path> path = statelessPathfinder.GetDirectPath(flatSquare, start, end);
 
-			Assert.True(path.Value.Contains(intersection));
+			Assert.True(path.Value.Vertices.Contains(intersection));
 		}
 
 		[Test]
@@ -78,7 +80,7 @@ namespace Tests
 			// Execute
 			Maybe<Path> path = statelessPathfinder.GetDirectPath(flatCrossedSquare, start, end);
 
-			Assert.True(path.Value.Contains(intersection));
+			Assert.True(path.Value.Vertices.Contains(intersection));
 		}
 
 		[Test]

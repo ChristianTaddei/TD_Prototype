@@ -5,6 +5,7 @@ public abstract class Vector
 {
 	public abstract Vector3 FloatRepresentation { get; }
 
+	// Factory methods: already implemented, needs testing?
 	public static Vector From(Vector3 vec3)
 	{
 		return ConcreteVector.From(vec3);
@@ -15,6 +16,7 @@ public abstract class Vector
 		return ConcreteVector.Copy(otherVector);
 	}
 
+	// Equals also implemented, test 
 	public override bool Equals(object obj)
 	{
 		return obj is Vector vector &&
