@@ -1,39 +1,29 @@
 using System;
 using System.Collections.Generic;
 
-// public class ConcreteSurface : Surface
-// {	
+public class ConcreteSurface : Surface
+{
+	public List<Vector> Vertices => throw new NotImplementedException();
 
-// 	public List<Vector> Vertices => new List<Vector>(vertices);
-// 	public List<Triangle> Faces => new List<Triangle>(faces);
-	
-// 	// internal to be added from face, invert?
-// 	internal List<Vector> vertices;
-// 	private List<Triangle> faces;
+	public List<Triangle> Faces => throw new NotImplementedException();
 
-// 	public ConcreteSurface()
-// 	{
-// 		this.vertices = new List<Vector>();
-// 		this.faces = new List<Triangle>();
-// 	}
+	public void AddFace(Triangle face)
+	{
+		throw new NotImplementedException();
+	}
 
-// 	public void AddFace(Face face)
-// 	{
-// 		faces.Add(face);
-// 	}
+	public void AddFaces(List<Triangle> faces)
+	{
+		throw new NotImplementedException();
+	}
 
-// 	public void AddFaces(List<Face> faces)
-// 	{
-// 		throw new NotImplementedException();
-// 	}	
+	public bool Contains(Vector point)
+	{
+		throw new NotImplementedException();
+	}
 
-// 	public bool Contains(Vector startPoint)
-// 	{
-// 		throw new NotImplementedException();
-// 	}
-
-// 	public List<Triangle> GetFacesContaining(Vector finalPoint)
-// 	{
-// 		throw new NotImplementedException();
-// 	}
-// }
+	public List<Triangle> GetFacesContaining(Vector point)
+	{
+		throw new NotImplementedException();
+	}
+}

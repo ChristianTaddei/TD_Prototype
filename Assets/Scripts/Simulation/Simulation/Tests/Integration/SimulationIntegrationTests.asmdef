@@ -1,14 +1,18 @@
 {
-    "name": "PathfindingIntegrationTests",
+    "name": "SimulationIntegrationTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Monads",
+        "Simulation",
+        "SimulationImplementations",
         "Surface",
         "SurfaceImplementations",
-        "Geometry",
-        "Paths"
+        "Units",
+        "NewAssembly",
+        "Paths",
+        "Geometry"
     ],
     "includePlatforms": [
         "Editor"

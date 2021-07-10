@@ -22,7 +22,7 @@ namespace Tests
 		{
 			// here just use ConcreteVector.From() as needed
 
-			geometry = new FloatVectorialGeometry();
+			geometry = new FloatGeometry();
 			pathFactory = new ConcretePathFactory();
 
 			pathfinder = new ExactPathfinder(geometry, pathFactory);

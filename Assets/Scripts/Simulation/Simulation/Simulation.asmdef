@@ -1,7 +1,10 @@
 {
     "name": "Simulation",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:5dc9c08f2e33f5b488666160d6301b09",
+        "GUID:a0928ef796871704cadefbb57dafda43"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

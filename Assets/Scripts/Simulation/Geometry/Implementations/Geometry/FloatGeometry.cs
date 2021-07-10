@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FloatVectorialGeometry : ExactGeometry
+public class FloatGeometry : ExactGeometry
 {
 	// internal static readonly float FLOAT_REPRESENTATION_EQUALITY_TOLLERANCE = 0.001f;
 

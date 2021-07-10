@@ -1,0 +1,18 @@
+{
+    "name": "SimulationImplementations",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b9a69033e25b5a541ac5f9aee88b01b0",
+        "GUID:5dc9c08f2e33f5b488666160d6301b09",
+        "GUID:a0928ef796871704cadefbb57dafda43"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
