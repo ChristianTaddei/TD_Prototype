@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-public class GeometryStub : Geometry
+public class ExactGeometryStub : ExactGeometry
 {
 	// TODO: can all this be automatic? Only missing part is acting on method name 
 	// & auto get right param fom actual signature, do as Moq or use reflection?

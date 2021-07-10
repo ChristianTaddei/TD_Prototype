@@ -8,22 +8,22 @@ namespace Tests
 {
 	[TestFixture]
 	[Category("Unit")]
-	public class StatelessPathfinderTests
+	public class PathfinderTests
 	{
 		// unit under test - use implementation
-		Pathfinder statelessPathfinder;
+		Pathfinder Pathfinder;
 
 		// collaborators - use stubs and fill them as needed
-		Geometry geometry;
+		ExactGeometry geometry;
 		PathFactory pathFactory;
 
 		[SetUp]
 		public void Setup()
 		{
-			geometry = new GeometryStub();
+			geometry = new ExactGeometryStub();
 			pathFactory = new PathFactoryStub();
 
-			statelessPathfinder = new StatelessPathfinder(geometry, pathFactory);
+			Pathfinder = new ExactPathfinder(geometry, pathFactory);
 		}
 
 		[TearDown]
@@ -46,10 +46,10 @@ namespace Tests
 			Triangle A = FlatSquareStub.A;
 			Triangle B = FlatSquareStub.B;
 
-			(geometry as GeometryStub).AddGetTriangleIntersectionTowardStub((A, start, end), intersection);
+			(geometry as ExactGeometryStub).AddGetTriangleIntersectionTowardStub((A, start, end), intersection);
 
 			// Execute
-			Maybe<Path> path = statelessPathfinder.GetDirectPath(flatSquare, start, end);
+			Maybe<Path> path = Pathfinder.GetDirectPath(flatSquare, start, end);
 
 			Assert.True(path.Value.Vertices.Contains(intersection));
 		}
@@ -70,15 +70,15 @@ namespace Tests
 			Triangle BD = FlatCrossedSquareStub.BD;
 			Triangle CD = FlatCrossedSquareStub.CD;
 
-			(geometry as GeometryStub).AddGetTriangleIntersectionTowardStub((AB, start, end), intersection);
-			(geometry as GeometryStub).AddGetTriangleIntersectionTowardStub((AC, start, end), intersection);
-			(geometry as GeometryStub).AddGetTriangleIntersectionTowardStub((AB, intersection, end), intersection);
-			(geometry as GeometryStub).AddGetTriangleIntersectionTowardStub((AC, intersection, end), intersection);
-			(geometry as GeometryStub).AddGetTriangleIntersectionTowardStub((BD, intersection, end), end);
-			(geometry as GeometryStub).AddGetTriangleIntersectionTowardStub((CD, intersection, end), end);
+			(geometry as ExactGeometryStub).AddGetTriangleIntersectionTowardStub((AB, start, end), intersection);
+			(geometry as ExactGeometryStub).AddGetTriangleIntersectionTowardStub((AC, start, end), intersection);
+			(geometry as ExactGeometryStub).AddGetTriangleIntersectionTowardStub((AB, intersection, end), intersection);
+			(geometry as ExactGeometryStub).AddGetTriangleIntersectionTowardStub((AC, intersection, end), intersection);
+			(geometry as ExactGeometryStub).AddGetTriangleIntersectionTowardStub((BD, intersection, end), end);
+			(geometry as ExactGeometryStub).AddGetTriangleIntersectionTowardStub((CD, intersection, end), end);
 
 			// Execute
-			Maybe<Path> path = statelessPathfinder.GetDirectPath(flatCrossedSquare, start, end);
+			Maybe<Path> path = Pathfinder.GetDirectPath(flatCrossedSquare, start, end);
 
 			Assert.True(path.Value.Vertices.Contains(intersection));
 		}
@@ -93,5 +93,10 @@ namespace Tests
 		{
 			return list.Count == new HashSet<T>(list).Count;
 		}
+
+
+		// test points on different surface no path
+
+		// test no direct pact no path
 	}
 }

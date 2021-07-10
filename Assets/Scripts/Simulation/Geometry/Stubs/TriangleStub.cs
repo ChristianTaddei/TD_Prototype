@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TriangleStub : Triangle
+public class TriangleStub : AbstractTriangle
 {
 	public override Vector A => _A;
 	public override Vector B => _B;

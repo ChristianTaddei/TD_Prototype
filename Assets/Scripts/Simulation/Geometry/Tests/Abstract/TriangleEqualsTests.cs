@@ -7,7 +7,7 @@ namespace Tests
 {
 	[TestFixture]
 	[Category("Unit")]
-	public class TriangleStubTests
+	public class TriangleEqualsTests
 	{
 		[SetUp]
 		public void Setup()
@@ -21,7 +21,6 @@ namespace Tests
 
 		}
 
-		// TODO: any better way or place to test Equals?
 		[Test]
 		public void equals_sameTriangle_isEqual()
 		{
@@ -47,5 +46,7 @@ namespace Tests
 
 			Assert.AreNotEqual(t1, t2);
 		}
+
+		// test hashcode?
 	}
 }

@@ -7,7 +7,7 @@ namespace Tests
 {
 	[TestFixture]
 	[Category("Unit")]
-	public class AbstractVectorTests
+	public class VectorEqualsTests
 	{
 		[SetUp]
 		public void Setup()
@@ -21,24 +21,6 @@ namespace Tests
 
 		}
 
-		[Test]
-		public void from_vec3_floatRepresentationIsEqual()
-		{
-			Vector3 original = new Vector3(1,2,3);
-			Vector v = Vector.From(original);
-
-			Assert.AreEqual(original, v.FloatRepresentation);
-		}
-
-		[Test]
-		public void copy_otherVector_areEqual()
-		{
-			Vector original = new VectorStub(1,2,3);
-			Vector copy = Vector.Copy(original);
-
-			Assert.AreEqual(original, copy);
-		}
-		
 		[Test]
 		public void equals_sameVector_isEqual()
 		{

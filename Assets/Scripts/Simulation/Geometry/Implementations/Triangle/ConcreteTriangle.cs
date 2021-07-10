@@ -1,5 +1,5 @@
 ﻿// generic triangle implementation
-public class ConcreteTriangle : Triangle
+public class ConcreteTriangle : AbstractTriangle
 {
 	public override Vector A { get => _A; }
 	public override Vector B { get => _B; }

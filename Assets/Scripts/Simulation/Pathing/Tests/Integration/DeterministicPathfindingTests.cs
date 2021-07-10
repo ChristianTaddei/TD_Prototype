@@ -3,13 +3,15 @@ using UnityEngine;
 
 namespace Tests
 {
+	// Assert Pathfinding works, with exact expected results
+
 	[TestFixture]
   	[Category("Integration")]
-	public class PathingIntegrationTests
+	public class DeterministicPathfindingTests
 	{
 		Pathfinder pathfinder;
 
-		Geometry geometry;
+		ExactGeometry geometry;
 		PathFactory pathFactory;
 
 		SurfaceFactory surfaceFactory;
@@ -19,10 +21,10 @@ namespace Tests
 		{
 			// here just use ConcreteVector.From() as needed
 
-			geometry = new ConcreteGeometry();
+			geometry = new FloatVectorialGeometry();
 			pathFactory = new ConcretePathFactory();
 
-			pathfinder = new StatelessPathfinder(geometry, pathFactory);
+			pathfinder = new ExactPathfinder(geometry, pathFactory);
 
 			surfaceFactory = new ConcreteSurfaceFactory();
 		}
@@ -40,12 +42,12 @@ namespace Tests
 			Surface surface = surfaceFactory.MakeSquareSurface(1.0f, 1);
 
 			Vector3 startVec3 = new Vector3(0, 0, 0);
-			Vector start = ConcreteVector.From(startVec3);
+			Vector start = ImmutableVector.From(startVec3);
 			Vector3 endVec3 = new Vector3(1, 0, 1);
-			Vector end = ConcreteVector.From(endVec3);
+			Vector end = ImmutableVector.From(endVec3);
 
 			Vector3 intersectionVec3 = new Vector3(0.5f, 0, 0.5f);
-			Vector intersection = ConcreteVector.From(intersectionVec3);
+			Vector intersection = ImmutableVector.From(intersectionVec3);
 
 			Maybe<Path> path = pathfinder.GetDirectPath(surface, start, end);
 

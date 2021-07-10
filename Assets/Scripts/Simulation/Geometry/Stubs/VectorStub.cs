@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class VectorStub : Vector
+public class VectorStub : AbstractVector
 {
 	public override Vector3 FloatRepresentation => coordinates;
 

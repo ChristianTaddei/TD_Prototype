@@ -8,7 +8,7 @@ namespace Tests
 {
 	[TestFixture]
 	[Category("Unit")]
-	public class ConcreteVectorTests
+	public class MutableVectorTests
 	{
 		[SetUp]
 		public void Setup()
@@ -22,12 +22,24 @@ namespace Tests
 
 		}
 
+		// TODO: actually test set methods and property setter
+		[Test]
+		public void isMutable()
+		{ 
+			Vector3 initial = new Vector3(1,3,4);
+
+			MutableVector v = MutableVector.From(initial);
+			v.x = 12;
+
+			Assert.AreNotEqual(initial, v.FloatRepresentation);
+		}
+
 		[Test]
 		public void from_vec3_isEqualToFloatingRepresentation()
 		{
 			Vector3 vec3 = new Vector3(1, 2, 3);
 
-			Vector vector = ConcreteVector.From(vec3);
+			Vector vector = MutableVector.From(vec3);
 
 			Assert.AreEqual(vec3, vector.FloatRepresentation);
 		}
@@ -37,7 +49,7 @@ namespace Tests
 		{
 			float x = 1, y = 2, z = 3;
 
-			Vector vector = ConcreteVector.From(x, y, z);
+			Vector vector = MutableVector.From(x, y, z);
 
 			Assert.AreEqual(x, vector.FloatRepresentation.x);
 			Assert.AreEqual(y, vector.FloatRepresentation.y);
@@ -47,13 +59,11 @@ namespace Tests
 		[Test]
 		public void copy_vector_isEqualToCopy()
 		{
-			Mock<Vector> original = new Mock<Vector>();
-			original.Setup(v => v.FloatRepresentation).Returns(new Vector3(1, 2, 3));
+			Vector original = new VectorStub(1, 3, 4);
 
-			Vector copy = ConcreteVector.Copy(original.Object);
+			Vector copy = MutableVector.Copy(original);
 
-			// Cannot use AreEqual neither original.Object.Equals because of mocking
-			Assert.True(copy.Equals(original.Object));
+			Assert.AreEqual(original, copy);
 		}
 	}
 }

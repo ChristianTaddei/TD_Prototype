@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class StatelessPathfinder : AbstractPathfinder
+public class ExactPathfinder : AbstractPathfinder
 {
-	public StatelessPathfinder(Geometry geometry, PathFactory pathFactory) : base(geometry, pathFactory) { }
+	public ExactPathfinder(ExactGeometry geometry, PathFactory pathFactory) : base(geometry, pathFactory) { }
 
 	public override Maybe<Path> GetDirectPath(Surface surface, Vector startPoint, Vector finalPoint)
 	{

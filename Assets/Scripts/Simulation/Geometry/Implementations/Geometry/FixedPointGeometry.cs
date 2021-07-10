@@ -2,10 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConcreteGeometry : Geometry
+// Execute operations returning a FixedPointVector. 
+// If input is not FixedPointVector, converts.
+public class FixedPointGeometry : ApproximateGeometry
 {
-	internal static readonly float FLOAT_REPRESENTATION_EQUALITY_TOLLERANCE = 0.001f;
+	public float Tolerance => throw new System.NotImplementedException();
 
+	// internal static readonly float FLOAT_REPRESENTATION_EQUALITY_TOLLERANCE = 0.001f;
+
+	public Vector GetTriangleIntersectionToward(Triangle t, Vector currentPoint, Vector finalPoint)
+	{
+		throw new System.NotImplementedException();
+	}
+	
 	// what about "areComplanar" etc methods public while calc ones internal?
 
 	// public Vector  Sum(Vector  v1, Vector  v2)
@@ -65,8 +74,4 @@ public class ConcreteGeometry : Geometry
 	// 	return projectedVector;
 	// }
 
-	public Vector GetTriangleIntersectionToward(Triangle t, Vector currentPoint, Vector finalPoint)
-	{
-		throw new System.NotImplementedException();
-	}
 }
