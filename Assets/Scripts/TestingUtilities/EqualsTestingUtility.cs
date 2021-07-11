@@ -5,33 +5,10 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 
-// From https://codinghelmet.com/articles/testing-equals-and-gethashcode
-public static class EqualityTests
+// TODO: format to my style
+// Started from https://codinghelmet.com/articles/testing-equals-and-gethashcode
+public static class EqualsTestingUtility
 {
-	private struct TestResult
-	{
-
-		public bool IsSuccess { get; set; }
-		public string ErrorMessage { get; set; }
-
-		public static TestResult CreateSuccess()
-		{
-			return new TestResult()
-			{
-				IsSuccess = true
-			};
-		}
-
-		public static TestResult CreateFailure(string message)
-		{
-			return new TestResult()
-			{
-				IsSuccess = false,
-				ErrorMessage = message
-			};
-		}
-
-	}
 
 	public static void TestEqualObjects<T>(T obj1, T obj2)
 	{
@@ -47,7 +24,7 @@ public static class EqualityTests
 				TestInequalityOperator<T>(obj1, obj2, false)
 			};
 
-		AssertAllTestsHavePassed(testResults);
+		InternalUtils.AssertAllTestsHavePassed(testResults);
 
 	}
 
@@ -65,7 +42,7 @@ public static class EqualityTests
 				TestInequalityOperator<T>(obj1, obj2, true)
 			};
 
-		AssertAllTestsHavePassed(testResults);
+		InternalUtils.AssertAllTestsHavePassed(testResults);
 
 	}
 
@@ -82,14 +59,13 @@ public static class EqualityTests
 				TestInequalityOperatorReceivingNull<T>(obj),
 			};
 
-		AssertAllTestsHavePassed(testResults);
+		InternalUtils.AssertAllTestsHavePassed(testResults);
 
 	}
 
 	private static TestResult TestGetHashCodeOnEqualObjects<T>(T obj1, T obj2)
 	{
-
-		return SafeCall("GetHashCode", () =>
+		return InternalUtils.SafeCall("GetHashCode", () =>
 			{
 				if (obj1.GetHashCode() != obj2.GetHashCode())
 					return TestResult.CreateFailure(
@@ -97,12 +73,11 @@ public static class EqualityTests
 						"returned different values.");
 				return TestResult.CreateSuccess();
 			});
-
 	}
 
 	private static TestResult TestEqualsReceivingNonNullOfOtherType<T>(T obj)
 	{
-		return SafeCall("Equals", () =>
+		return InternalUtils.SafeCall("Equals", () =>
 			{
 				if (obj.Equals(new object()))
 					return TestResult.CreateFailure(
@@ -128,7 +103,7 @@ public static class EqualityTests
 
 	private static TestResult TestEquals<T>(T obj1, T obj2, bool expectedEqual)
 	{
-		return SafeCall("Equals", () =>
+		return InternalUtils.SafeCall("Equals", () =>
 			{
 				if (obj1.Equals((object)obj2) != expectedEqual)
 				{
@@ -143,18 +118,16 @@ public static class EqualityTests
 			});
 	}
 
-	private static TestResult TestEqualsOfT<T>(T obj1, T obj2,
-											   bool expectedEqual)
+	private static TestResult TestEqualsOfT<T>(T obj1, T obj2, bool expectedEqual)
 	{
 		if (obj1 is IEquatable<T>)
-			return TestEqualsOfTOnIEquatable<T>(obj1 as IEquatable<T>,
-												obj2, expectedEqual);
+			return TestEqualsOfTOnIEquatable<T>(obj1 as IEquatable<T>, obj2, expectedEqual);
 		return TestResult.CreateSuccess();
 	}
 
 	private static TestResult TestEqualsOfTOnIEquatable<T>(IEquatable<T> obj1, T obj2, bool expectedEqual)
 	{
-		return SafeCall("Strongly typed Equals", () =>
+		return InternalUtils.SafeCall("Strongly typed Equals", () =>
 			{
 				if (obj1.Equals(obj2) != expectedEqual)
 				{
@@ -183,13 +156,12 @@ public static class EqualityTests
 		if (equalityOperator == null)
 			return TestResult.CreateFailure("Type does not override " +
 											"equality operator.");
-		return TestEqualityOperator<T>(obj1, obj2, expectedEqual,
-									   equalityOperator);
+		return TestEqualityOperator<T>(obj1, obj2, expectedEqual, equalityOperator);
 	}
 
 	private static TestResult TestEqualityOperator<T>(T obj1, T obj2, bool expectedEqual, MethodInfo equalityOperator)
 	{
-		return SafeCall("Operator ==", () =>
+		return InternalUtils.SafeCall("Operator ==", () =>
 			{
 				bool equal =
 					(bool)equalityOperator.Invoke(null,
@@ -219,23 +191,17 @@ public static class EqualityTests
 	{
 		MethodInfo inequalityOperator = GetInequalityOperator<T>();
 		if (inequalityOperator == null)
-			return TestResult.CreateFailure("Type does not override " +
-											"inequality operator.");
-		return TestInequalityOperator<T>(obj1, obj2, expectedUnequal,
-										 inequalityOperator);
+			return TestResult.CreateFailure("Type does not override inequality operator.");
+		return TestInequalityOperator<T>(obj1, obj2, expectedUnequal, inequalityOperator);
 	}
 
-	private static TestResult
-		TestInequalityOperator<T>(T obj1, T obj2,
-								  bool expectedUnequal,
-								  MethodInfo inequalityOperator)
+	private static TestResult TestInequalityOperator<T>(T obj1, T obj2,
+					bool expectedUnequal, MethodInfo inequalityOperator)
 	{
-		return SafeCall("Operator !=", () =>
+		return InternalUtils.SafeCall("Operator !=", () =>
 			{
 				bool unequal =
-					(bool)inequalityOperator.Invoke(null,
-													new object[]
-													{ obj1, obj2 });
+					(bool)inequalityOperator.Invoke(null, new object[] { obj1, obj2 });
 				if (unequal != expectedUnequal)
 				{
 					string message =
@@ -256,66 +222,13 @@ public static class EqualityTests
 			throw new System.ArgumentNullException();
 	}
 
-	private static TestResult SafeCall(string functionName,
-									   Func<TestResult> test)
-	{
-
-		try
-		{
-			return test();
-		}
-		catch (System.Exception ex)
-		{
-
-			string message =
-				string.Format("{0} threw {1}: {2}",
-							  functionName,
-							  ex.GetType().Name,
-							  ex.Message);
-
-			return TestResult.CreateFailure(message);
-
-		}
-
-	}
-
 	private static MethodInfo GetEqualityOperator<T>()
 	{
-		return GetOperator<T>("op_Equality");
+		return InternalUtils.GetOperator<T>("op_Equality");
 	}
 
 	private static MethodInfo GetInequalityOperator<T>()
 	{
-		return GetOperator<T>("op_Inequality");
-	}
-
-	private static MethodInfo GetOperator<T>(string methodName)
-	{
-		BindingFlags bindingFlags =
-			BindingFlags.Static |
-			BindingFlags.Public;
-		MethodInfo equalityOperator =
-			typeof(T).GetMethod(methodName, bindingFlags);
-		return equalityOperator;
-	}
-
-	private static void AssertAllTestsHavePassed(IList<TestResult> testResults)
-	{
-
-		bool allTestsPass =
-			testResults
-			.All(r => r.IsSuccess);
-		string[] errors =
-			testResults
-			.Where(r => !r.IsSuccess)
-			.Select(r => r.ErrorMessage)
-			.ToArray();
-		string compoundMessage =
-			string.Join(Environment.NewLine, errors);
-
-		Assert.IsTrue(allTestsPass,
-					  "Some tests have failed:\n" +
-					  compoundMessage);
-
+		return InternalUtils.GetOperator<T>("op_Inequality");
 	}
 }

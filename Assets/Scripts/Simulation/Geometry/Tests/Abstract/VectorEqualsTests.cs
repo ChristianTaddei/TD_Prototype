@@ -24,14 +24,15 @@ namespace Tests
 
 		}
 
+
 		[Test]
-		[TestCaseSource(typeof(VectorStub), "Equalities")] 
-		public void equals_stubEquality_isEqual((Vector, Vector) operands)
+		[TestCaseSource(typeof(VectorStub), "KnownEqualities")] 
+		public void vectorStubEquals_operandsInEqualities_areEqual((Vector, Vector) operands)
 		{
 			VectorStub lhs = new VectorStub(operands.Item1.FloatRepresentation);
 			VectorStub rhs = new VectorStub(operands.Item2.FloatRepresentation);
 
-			EqualityTests.TestEqualObjects<VectorStub>(lhs, rhs);
+			EqualsTestingUtility.TestEqualObjects<VectorStub>(lhs, rhs);
 		}
 	}
 }

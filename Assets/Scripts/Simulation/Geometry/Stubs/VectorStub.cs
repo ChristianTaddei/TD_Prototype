@@ -15,7 +15,7 @@ public class VectorStub : Vector
 
 	public VectorStub(float x, float y, float z) : this(new Vector3(x, y, z)) { }
 
-	public static IEnumerable<(Vector, Vector)> Equalities
+	public static IEnumerable<(Vector, Vector)> KnownEqualities
 	{
 		get => new List<(Vector, Vector)>()
 		{
@@ -23,7 +23,7 @@ public class VectorStub : Vector
 		};
 	}
 
-	public static IEnumerable<(Vector, Vector)> Disequalities
+	public static IEnumerable<(Vector, Vector)> KnownDisequalities
 	{
 		get => new List<(Vector, Vector)>()
 		{

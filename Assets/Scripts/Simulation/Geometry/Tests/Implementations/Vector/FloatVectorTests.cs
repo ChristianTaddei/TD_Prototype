@@ -62,7 +62,7 @@ namespace Tests
 			FloatVector lhs = (FloatVector) FloatVector.Factory.From(sharedVec3);
 			FloatVector rhs = (FloatVector) FloatVector.Factory.From(sharedVec3);
 
-			EqualityTests.TestEqualObjects<AbstractVector>(lhs, rhs);
+			EqualsTestingUtility.TestEqualObjects<AbstractVector>(lhs, rhs);
 		}
 
 		[Test]
@@ -74,7 +74,7 @@ namespace Tests
 			FloatVector lhs = (FloatVector) FloatVector.Factory.From(v1);
 			FloatVector rhs = (FloatVector) FloatVector.Factory.From(v2);
 
-			EqualityTests.TestUnequalObjects<AbstractVector>(lhs, rhs);
+			EqualsTestingUtility.TestUnequalObjects<AbstractVector>(lhs, rhs);
 		}	
 
 		// TODO: can/should test null against null? 
@@ -84,7 +84,7 @@ namespace Tests
 		{
 			FloatVector notNullVector = (FloatVector) FloatVector.Factory.From(1,2,3);
 
-			EqualityTests.TestAgainstNull<AbstractVector>(notNullVector);
+			EqualsTestingUtility.TestAgainstNull<AbstractVector>(notNullVector);
 		}
 	}
 }
