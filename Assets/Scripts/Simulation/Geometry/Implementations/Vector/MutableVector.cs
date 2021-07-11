@@ -15,24 +15,29 @@ public class MutableVector : AbstractVector
 
 	public void Set(float x, float y, float z)
 	{
-		this.x = x; 
-		this.y = y; 
+		this.x = x;
+		this.y = y;
 		this.z = z;
 	}
 
-	public static new MutableVector From(Vector3 vec3)
-	{
-		return new MutableVector(vec3);
-	}
+	public static VectorFactory<MutableVector> Factory = new MutableVectorFactory();
 
-	public static MutableVector From(float x, float y, float z)
+	private class MutableVectorFactory : VectorFactory<MutableVector>
 	{
-		return new MutableVector(new Vector3(x, y, z));
-	}
+		public MutableVector From(Vector3 vec3)
+		{
+			return new MutableVector(vec3);
+		}
 
-	public static new MutableVector Copy(Vector otherVector)
-	{
-		return new MutableVector(otherVector.FloatRepresentation);
+		public MutableVector From(float x, float y, float z)
+		{
+			return new MutableVector(new Vector3(x, y, z));
+		}
+
+		public MutableVector Copy(Vector otherVector)
+		{
+			return new MutableVector(otherVector.FloatRepresentation);
+		}
 	}
 
 	private MutableVector(Vector3 vector3)

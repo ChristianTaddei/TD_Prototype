@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public interface VectorFactory
+public interface VectorFactory<T> where T : Vector
 {
-	Vector From(Vector3 vec3);
-	Vector From(float x, float y, float z);
+	T From(Vector3 vec3);
+	T From(float x, float y, float z);
 
-	Vector Copy(Vector otherVector);
+	T Copy(Vector otherVector);
 }

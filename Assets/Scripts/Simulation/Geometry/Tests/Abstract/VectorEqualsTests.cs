@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using NUnit.Framework;
 using Moq;
+using System;
+using System.Reflection;
+using System.Linq;
 
 namespace Tests
 {
@@ -22,20 +25,14 @@ namespace Tests
 		}
 
 		[Test]
-		public void equals_sameVector_isEqual()
+		[TestCaseSource(typeof(VectorStub), "Equalities")] 
+		public void equals_stubEquality_isEqual((Vector, Vector) operands)
 		{
-			Vector v = new VectorStub(1,2,3);
+			VectorStub lhs = new VectorStub(operands.Item1.FloatRepresentation);
+			VectorStub rhs = new VectorStub(operands.Item2.FloatRepresentation);
 
-			Assert.AreEqual(v,v);
-		}
-		
-		[Test]
-		public void equals_differentVector_notEqual()
-		{
-			Vector v1 = new VectorStub(1,2,3);
-			Vector v2 = new VectorStub(2,3,4);
-			
-			Assert.AreNotEqual(v1,v2);
+			EqualityTests.TestEqualObjects<VectorStub>(lhs, rhs);
 		}
 	}
 }
+

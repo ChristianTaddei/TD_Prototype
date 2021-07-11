@@ -1,4 +1,6 @@
+using System.Threading.Tasks;
+
 public interface Simulation {
 	SimulationState CurrentState { get; }
-	void ProgressSimulation();
+	Task<SimulationState> ProgressToNextTurn();
 }

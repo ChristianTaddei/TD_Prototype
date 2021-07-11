@@ -1,12 +1,9 @@
 {
-    "name": "GeometryAbstractTests",
+    "name": "TestingUtilities",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner",
-        "TestingUtilities",
-        "Geometry",
-        "Monads"
+        "UnityEditor.TestRunner"
     ],
     "includePlatforms": [
         "Editor"

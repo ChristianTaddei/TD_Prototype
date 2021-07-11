@@ -8,7 +8,7 @@ namespace Tests
 
 	[TestFixture]
   	[Category("Integration")]
-	public class ImmutablePathfindingTests
+	public class ImmutablePathfindingIntegrationTests
 	{
 		ExactPathfinder pathfinder;
 
@@ -22,7 +22,7 @@ namespace Tests
 		{
 			// here just use ConcreteVector.From() as needed
 
-			geometry = new FloatGeometry();
+			geometry = new FloatGeometry<FloatVector>(FloatVector.Factory); // TODO: can deduct from factory type and avoid putting type?
 			pathFactory = new ConcretePathFactory();
 
 			pathfinder = new ExactPathfinder(geometry, pathFactory);
@@ -43,12 +43,12 @@ namespace Tests
 			Surface surface = surfaceFactory.MakeSquareSurface(1.0f, 1);
 
 			Vector3 startVec3 = new Vector3(0, 0, 0);
-			Vector start = ImmutableVector.From(startVec3);
+			Vector start = FloatVector.Factory.From(startVec3);
 			Vector3 endVec3 = new Vector3(1, 0, 1);
-			Vector end = ImmutableVector.From(endVec3);
+			Vector end = FloatVector.Factory.From(endVec3);
 
 			Vector3 intersectionVec3 = new Vector3(0.5f, 0, 0.5f);
-			Vector intersection = ImmutableVector.From(intersectionVec3);
+			Vector intersection = FloatVector.Factory.From(intersectionVec3);
 
 			Maybe<Path> path = pathfinder.GetDirectPath(surface, start, end);
 

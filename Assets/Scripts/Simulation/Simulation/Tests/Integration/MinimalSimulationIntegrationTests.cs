@@ -1,16 +1,18 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using UnityEngine;
 
 namespace Tests
 {
 	[TestFixture]
-  	[Category("Integration")]
+	[Category("Integration")]
 	public class MinimalSimulationIntegrationTests
 	{
 		[SetUp]
 		public void Setup()
 		{
-		
+
 		}
 
 		[TearDown]
@@ -20,16 +22,24 @@ namespace Tests
 		}
 
 		[Test]
+		// [Ignore("Not all dependencies are implemented")]
 		public void nextTurn_towerHasEnemyInRange_enemyDestroyed()
 		{
 			Surface surface = new ConcreteSurface();
-			Enemy enemy = new Enemy();
-			Tower tower = new Tower();
+			Unit enemy = new Enemy();
+			Unit tower = new Tower();
 
-			Simulation minimalSimulation = new ConcreteSimulation();
-			minimalSimulation.ProgressSimulation();
+			SimulationState firstTurn = new ConcreteSimulationState( // TODO: could have personal factory that takes enemy/allies
+				surface,
+				new List<Unit>() { tower, enemy });
 
-			Assert.False(minimalSimulation.CurrentState.Units.Contains(enemy));
+			SelfProgressedSimulation minimalSimulation = new SelfProgressedSimulation(firstTurn);
+
+			Task<SimulationState> firstTurnExectution = minimalSimulation.ProgressToNextTurn();
+			SimulationState secondTurn = firstTurnExectution.Result;
+
+			// Assert.False(minimalSimulation.CurrentState.Units.Contains(enemy));
+			Assert.AreEqual(firstTurn, secondTurn);
 		}
 	}
 }
