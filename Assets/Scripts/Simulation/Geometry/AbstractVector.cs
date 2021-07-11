@@ -27,9 +27,9 @@ public abstract class AbstractVector : Vector
 		bool isRhsNull = object.ReferenceEquals(rhs, null);
 
 		if (isLhsNull && isRhsNull)
-			return true;
+			return true;	// TODO: cover with tests (same in stub? or remove stub...)
 		else if (isLhsNull)
-			return false;
+			return false;   // TODO: cover with tests
 		else
 			return lhs.Equals(rhs);
 	}
