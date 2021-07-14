@@ -28,7 +28,7 @@ namespace Tests
 		{
 			MutableVector original = MutableVector.Factory.From(1, 2, 3);
 
-			FloatVector copy = FloatVector.Factory.Copy(original);
+			FloatVector copy = FloatVector.Copy(original);
 
 			Assert.AreEqual(original, copy); // TODO: check its using mutable.Equals or ==, while below uses float.Equals
 		}
@@ -36,7 +36,7 @@ namespace Tests
 		[Test]
 		public void mutableCopy_floatVector_isEqualToCopy()
 		{
-			FloatVector original = FloatVector.Factory.From(1, 2, 3);
+			FloatVector original = FloatVector.From(1, 2, 3);
 
 			MutableVector copy = MutableVector.Factory.Copy(original);
 
@@ -46,7 +46,7 @@ namespace Tests
 		[Test]
 		public void floatAndMutableFrom_sameCoords_areEquals()
 		{
-			FloatVector floatVector = FloatVector.Factory.From(1, 2, 3);
+			FloatVector floatVector = FloatVector.From(1, 2, 3);
 			MutableVector mutableVector = MutableVector.Factory.From(1, 2, 3);
 
 			// TODO: like equalsUtils: make result class that says "Class1.Equals failed (Type1, Type2)"

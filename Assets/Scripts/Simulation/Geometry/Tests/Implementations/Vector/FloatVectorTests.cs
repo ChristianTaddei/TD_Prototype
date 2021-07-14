@@ -27,7 +27,7 @@ namespace Tests
 		{
 			Vector3 vec3 = new Vector3(1, 2, 3);
 
-			Vector vector = FloatVector.Factory.From(vec3);
+			Vector vector = FloatVector.From(vec3);
 
 			Assert.AreEqual(vec3, vector.FloatRepresentation);
 		}
@@ -37,7 +37,7 @@ namespace Tests
 		{
 			float x = 1, y = 2, z = 3;
 
-			Vector vector = FloatVector.Factory.From(x, y, z);
+			Vector vector = FloatVector.From(x, y, z);
 
 			Assert.AreEqual(x, vector.FloatRepresentation.x);
 			Assert.AreEqual(y, vector.FloatRepresentation.y);
@@ -47,9 +47,9 @@ namespace Tests
 		[Test]
 		public void copy_vector_isEqualToCopy()
 		{
-			Vector original = FloatVector.Factory.From(1, 2, 3);
+			Vector original = FloatVector.From(1, 2, 3);
 
-			Vector copy = FloatVector.Factory.Copy(original);
+			FloatVector copy = FloatVector.Copy(original);
 
 			Assert.AreEqual(original, copy);
 		}
@@ -59,10 +59,10 @@ namespace Tests
 		{
 			Vector3 sharedVec3 = new Vector3(1,3,4);
 
-			FloatVector lhs = (FloatVector) FloatVector.Factory.From(sharedVec3);
-			FloatVector rhs = (FloatVector) FloatVector.Factory.From(sharedVec3);
+			FloatVector lhs = FloatVector.From(sharedVec3);
+			FloatVector rhs = FloatVector.From(sharedVec3);
 
-			EqualsTestingUtility.TestEqualObjects<AbstractVector>(lhs, rhs);
+			EqualsTestingUtility.TestEqualObjects<Vector>(lhs, rhs);
 		}
 
 		[Test]
@@ -71,10 +71,10 @@ namespace Tests
 			Vector3 v1 = new Vector3(1,3,4);
 			Vector3 v2 = new Vector3(2,4,2);
 
-			FloatVector lhs = (FloatVector) FloatVector.Factory.From(v1);
-			FloatVector rhs = (FloatVector) FloatVector.Factory.From(v2);
+			FloatVector lhs = FloatVector.From(v1);
+			FloatVector rhs = FloatVector.From(v2);
 
-			EqualsTestingUtility.TestUnequalObjects<AbstractVector>(lhs, rhs);
+			EqualsTestingUtility.TestUnequalObjects<Vector>(lhs, rhs);
 		}	
 
 		// TODO: can/should test null against null? 
@@ -82,9 +82,9 @@ namespace Tests
 		[Test]
 		public void equals_NotNullAgainstNull_areNotEqual()
 		{
-			FloatVector notNullVector = (FloatVector) FloatVector.Factory.From(1,2,3);
+			FloatVector notNullVector = FloatVector.From(1,2,3);
 
-			EqualsTestingUtility.TestAgainstNull<AbstractVector>(notNullVector);
+			EqualsTestingUtility.TestAgainstNull<Vector>(notNullVector);
 		}
 	}
 }

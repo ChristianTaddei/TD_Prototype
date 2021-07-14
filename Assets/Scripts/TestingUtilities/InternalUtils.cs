@@ -58,4 +58,10 @@ internal class InternalUtils
 					  compoundMessage);
 
 	}
+	
+	internal static void ThrowIfAnyIsNull(params object[] objects)
+	{
+		if (objects.Any(o => object.ReferenceEquals(o, null)))
+			throw new System.ArgumentNullException();
+	}
 }

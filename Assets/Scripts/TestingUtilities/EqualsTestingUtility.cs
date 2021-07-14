@@ -13,7 +13,7 @@ public static class EqualsTestingUtility
 	public static void TestEqualObjects<T>(T obj1, T obj2)
 	{
 
-		ThrowIfAnyIsNull(obj1, obj2);
+		InternalUtils.ThrowIfAnyIsNull(obj1, obj2);
 
 		IList<TestResult> testResults = new List<TestResult>()
 			{
@@ -31,7 +31,7 @@ public static class EqualsTestingUtility
 	public static void TestUnequalObjects<T>(T obj1, T obj2)
 	{
 
-		ThrowIfAnyIsNull(obj1, obj2);
+		InternalUtils.ThrowIfAnyIsNull(obj1, obj2);
 
 		IList<TestResult> testResults = new List<TestResult>()
 			{
@@ -49,7 +49,7 @@ public static class EqualsTestingUtility
 	public static void TestAgainstNull<T>(T obj)
 	{
 
-		ThrowIfAnyIsNull(obj);
+		InternalUtils.ThrowIfAnyIsNull(obj);
 
 		IList<TestResult> testResults = new List<TestResult>()
 			{
@@ -216,11 +216,6 @@ public static class EqualsTestingUtility
 			});
 	}
 
-	private static void ThrowIfAnyIsNull(params object[] objects)
-	{
-		if (objects.Any(o => object.ReferenceEquals(o, null)))
-			throw new System.ArgumentNullException();
-	}
 
 	private static MethodInfo GetEqualityOperator<T>()
 	{

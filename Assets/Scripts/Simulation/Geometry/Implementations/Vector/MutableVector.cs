@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MutableVector : AbstractVector
+public class MutableVector : Vector
 {
 	public override Vector3 FloatRepresentation => cartesianCoordinates;
 
@@ -20,6 +20,7 @@ public class MutableVector : AbstractVector
 		this.z = z;
 	}
 
+	// TODO: factory like FloatVector
 	public static VectorFactory<MutableVector> Factory = new MutableVectorFactory();
 
 	private class MutableVectorFactory : VectorFactory<MutableVector>

@@ -2,18 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FloatGeometry<T> : ExactGeometry where T : Vector
+public class FloatGeometry : ExactGeometry
 {
 	// internal static readonly float FLOAT_EQUALITY_TOLLERANCE = 0.001f;
-	private VectorFactory<T> vectorFactory;
-
-	public FloatGeometry(VectorFactory<T> vectorFactory){
-		this.vectorFactory = vectorFactory;
-	}
 
 	public Vector GetTriangleIntersectionToward(Triangle t, Vector currentPoint, Vector finalPoint)
 	{
-		vectorFactory.From(new Vector3(1,3,4));
+		Vector.From(new Vector3(1,3,4));
 		throw new System.NotImplementedException();
 	}
 	
