@@ -3,17 +3,16 @@ using System;
 using UnityEngine;
 
 // provide common Equals and GetHashCode implementations for all vectors
-// and default factory
 public abstract class Vector : IEquatable<Vector>
 {
 	public abstract Vector3 FloatRepresentation { get; }
 
-	public static Vector From(Vector3 vector3) // Default factory -> force override (check in tests)
+	public static Vector From(Vector3 vector3) // Default factory 
 	{ 
 		return FloatVector.From(vector3);
 	}
 
-	public static Vector From(float x, float y, float z) // Default factory shorthand -> force override (same as def. fac)
+	public static Vector From(float x, float y, float z) // Default factory shorthand -> TODO: force override for this too
 	{ 
 		return FloatVector.From(new Vector3(x, y, z));
 	}
@@ -44,7 +43,7 @@ public abstract class Vector : IEquatable<Vector>
 		bool isRhsNull = object.ReferenceEquals(rhs, null);
 
 		if (isLhsNull && isRhsNull)
-			return true;    // TODO: cover with tests (same in stub? or remove stub...)
+			return true;    // TODO: cover with tests -> EqualsTestUtility?
 		else if (isLhsNull)
 			return false;   // TODO: cover with tests
 		else

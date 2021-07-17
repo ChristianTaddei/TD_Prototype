@@ -20,25 +20,57 @@ public class MutableVector : Vector
 		this.z = z;
 	}
 
-	// TODO: factory like FloatVector
-	public static VectorFactory<MutableVector> Factory = new MutableVectorFactory();
-
-	private class MutableVectorFactory : VectorFactory<MutableVector>
+	public static new MutableVector From(Vector3 vec3)
 	{
-		public MutableVector From(Vector3 vec3)
+		return new MutableVector(vec3);
+	}
+
+	public static new MutableVector From(float x, float y, float z)
+	{
+		return new MutableVector(new Vector3(x, y, z));
+	}
+
+	public static new MutableVector Copy(Vector otherVector)
+	{
+		return new MutableVector(otherVector.FloatRepresentation);
+	}
+	
+	public bool Equals(MutableVector other)
+	{
+		if (other != null)
 		{
-			return new MutableVector(vec3);
+			return this.FloatRepresentation.Equals(other.FloatRepresentation);
 		}
 
-		public MutableVector From(float x, float y, float z)
-		{
-			return new MutableVector(new Vector3(x, y, z));
-		}
+		return false;
+	}
 
-		public MutableVector Copy(Vector otherVector)
-		{
-			return new MutableVector(otherVector.FloatRepresentation);
-		}
+	public override bool Equals(object obj)
+	{
+		return this.Equals(obj as MutableVector);
+	}
+
+	public static bool operator ==(MutableVector lhs, MutableVector rhs)
+	{
+		bool isLhsNull = object.ReferenceEquals(lhs, null);
+		bool isRhsNull = object.ReferenceEquals(rhs, null);
+
+		if (isLhsNull && isRhsNull)
+			return true;    // TODO: cover with tests (same in stub? or remove stub...)
+		else if (isLhsNull)
+			return false;   // TODO: cover with tests
+		else
+			return lhs.Equals(rhs);
+	}
+
+	public static bool operator !=(MutableVector lhs, MutableVector rhs)
+	{
+		return !(lhs == rhs);
+	}
+
+	public override int GetHashCode()
+	{
+		return -509336368 + FloatRepresentation.GetHashCode();
 	}
 
 	private MutableVector(Vector3 vector3)

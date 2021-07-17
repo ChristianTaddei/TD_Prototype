@@ -28,7 +28,7 @@ namespace Tests
 		{ 
 			Vector3 initial = new Vector3(1,3,4);
 
-			MutableVector v = (MutableVector) MutableVector.Factory.From(initial);
+			MutableVector v = (MutableVector) MutableVector.From(initial);
 			v.x = 12;
 
 			Assert.AreNotEqual(initial, v.FloatRepresentation);
@@ -39,7 +39,7 @@ namespace Tests
 		{
 			Vector3 vec3 = new Vector3(1, 2, 3);
 
-			Vector vector = MutableVector.Factory.From(vec3);
+			Vector vector = MutableVector.From(vec3);
 
 			Assert.AreEqual(vec3, vector.FloatRepresentation);
 		}
@@ -49,7 +49,7 @@ namespace Tests
 		{
 			float x = 1, y = 2, z = 3;
 
-			Vector vector = MutableVector.Factory.From(x, y, z);
+			Vector vector = MutableVector.From(x, y, z);
 
 			Assert.AreEqual(x, vector.FloatRepresentation.x);
 			Assert.AreEqual(y, vector.FloatRepresentation.y);
@@ -61,7 +61,7 @@ namespace Tests
 		{
 			Vector original = new VectorStub(1, 3, 4);
 
-			Vector copy = MutableVector.Factory.Copy(original);
+			Vector copy = MutableVector.Copy(original);
 
 			Assert.AreEqual(original, copy);
 		}

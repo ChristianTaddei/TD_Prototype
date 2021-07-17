@@ -3,28 +3,81 @@ using System.Collections.Generic;
 using UnityEngine;
 using NUnit.Framework;
 using Moq;
+using System.Reflection;
 
 namespace Tests
 {
 	[TestFixture(typeof(FloatVector))]
-	// public class VectorAndFactory_Tests
+	[TestFixture(typeof(MutableVector))]
 	public class Vector_Tests<TVector> where TVector : Vector
 	{
 
-		// TFactory factory = new TFactory();
+		MethodInfo FromVec3; // Static method, needs to be recovered through reflection
+
+		// TODO: consider if comments below are worth changing tests
+
+		// those tests does not teach much on how Vectors are used -> fine, that's in integration testing?
+
+		// using internal (exposed to tests) constructor: 
+		// -faliure of From does not cascade on other tests
+
+		// can all test that are not testing equals use something else?
+		// -vector3 equals?
+
+		[OneTimeSetUp]
+		public void GetStaticMethods()
+		{
+			FromVec3 = typeof(TVector).GetMethod("From", new[] { typeof(Vector3) });
+		}
 
 		[Test]
-		[TestCaseSource("Vec3s")]
-		public void from123_vec3_isEqualToFloatingRepresentation(Vector3 vec3)
+		public void fromVec3_isOverridden()
 		{
-			// Reflection required to access static methods
-			// TODO: check all overload exist and are correctly typed
-			Vector vector = (Vector)typeof(TVector).GetMethod("From", new[] { typeof(Vector3) }).Invoke(null, new object[] { vec3 });
+			if (FromVec3 == null)
+			{
+				Assert.Fail("Class does not override From(Vector3)");
+			}
+		}
+
+		[Test]
+		[TestCaseSource("testVec3s")]
+		public void fromVec3_testVec3_isEqualToFloatingRepresentation(Vector3 vec3)
+		{
+			Vector vector = (Vector)FromVec3.Invoke(null, new object[] { vec3 });
 
 			Assert.AreEqual(vec3, vector.FloatRepresentation);
 		}
 
-		public static IEnumerable<Vector3> Vec3s
+		[Test]
+		[TestCaseSource("equalVec3Pairs")]
+		public void equals_equalVec3Pair_isEqualToFloatingRepresentation((Vector3, Vector3) vectorPair)
+		{
+			TVector v1 = (TVector)FromVec3.Invoke(null, new object[] { vectorPair.Item1 });
+			TVector v2 = (TVector)FromVec3.Invoke(null, new object[] { vectorPair.Item2 });
+
+			EqualsTestingUtility.TestEqualObjects<TVector>(v1, v2);
+		}
+
+		[Test]
+		[TestCaseSource("differentVec3Pairs")]
+		public void equals_differentVec3Pair_isNotEqualToFloatingRepresentation((Vector3, Vector3) vectorPair)
+		{
+			TVector v1 = (TVector)FromVec3.Invoke(null, new object[] { vectorPair.Item1 });
+			TVector v2 = (TVector)FromVec3.Invoke(null, new object[] { vectorPair.Item2 });
+
+			EqualsTestingUtility.TestUnequalObjects<TVector>(v1, v2);
+		}
+
+		[Test]
+		[TestCaseSource("testVec3s")]
+		public void equals_null_isNotEqualToFloatingRepresentation(Vector3 vec3)
+		{
+			TVector v = (TVector)FromVec3.Invoke(null, new object[] { vec3 });
+
+			EqualsTestingUtility.TestAgainstNull<TVector>(v);
+		}
+
+		public static IEnumerable<Vector3> testVec3s
 		{
 			get => new List<Vector3>()
 				{
@@ -32,59 +85,23 @@ namespace Tests
 					new Vector3(2,3,4)
 				};
 		}
-		/*
-				public void from_coords_areEqualTofloatingRepresentationCoords()
+
+		public static IEnumerable<(Vector3, Vector3)> equalVec3Pairs
+		{
+			get => new List<(Vector3, Vector3)>()
 				{
-					float x = 1, y = 2, z = 3;
+					(new Vector3(1,2,3), new Vector3(1,2,3)),
+					(new Vector3(2,3,4), new Vector3(2,3,4)),
+				};
+		}
 
-					Vector vector = FloatVector.Factory.From(x, y, z);
-
-					Assert.AreEqual(x, vector.FloatRepresentation.x);
-					Assert.AreEqual(y, vector.FloatRepresentation.y);
-					Assert.AreEqual(z, vector.FloatRepresentation.z);
-				}
-
-
-				public void copy_vector_isEqualToCopy()
+		public static IEnumerable<(Vector3, Vector3)> differentVec3Pairs
+		{
+			get => new List<(Vector3, Vector3)>()
 				{
-					Vector original = FloatVector.Factory.From(1, 2, 3);
-
-					Vector copy = FloatVector.Factory.Copy(original);
-
-					Assert.AreEqual(original, copy);
-				}
-
-
-				public void equals_VectorFromSameVec3_areEqual()
-				{
-					Vector3 sharedVec3 = new Vector3(1, 3, 4);
-
-					FloatVector lhs = (FloatVector)FloatVector.Factory.From(sharedVec3);
-					FloatVector rhs = (FloatVector)FloatVector.Factory.From(sharedVec3);
-
-					EqualsTestingUtility.TestEqualObjects<Vector>(lhs, rhs);
-				}
-
-				public void equals_VectorFromDifferentVec3_areNotEqual()
-				{
-					Vector3 v1 = new Vector3(1, 3, 4);
-					Vector3 v2 = new Vector3(2, 4, 2);
-
-					FloatVector lhs = (FloatVector)FloatVector.Factory.From(v1);
-					FloatVector rhs = (FloatVector)FloatVector.Factory.From(v2);
-
-					EqualsTestingUtility.TestUnequalObjects<Vector>(lhs, rhs);
-				}
-
-				// TODO: can/should test null against null? 
-
-
-				public void equals_NotNullAgainstNull_areNotEqual()
-				{
-					FloatVector notNullVector = (FloatVector)FloatVector.Factory.From(1, 2, 3);
-
-					EqualsTestingUtility.TestAgainstNull<Vector>(notNullVector);
-				}
-		*/
+					(new Vector3(1,2,3), new Vector3(3,4,5)),
+					(new Vector3(2,3,4), new Vector3(5,5,5)),
+				};
+		}
 	}
 }
