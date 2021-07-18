@@ -34,44 +34,6 @@ public class MutableVector : Vector
 	{
 		return new MutableVector(otherVector.FloatRepresentation);
 	}
-	
-	public bool Equals(MutableVector other)
-	{
-		if (other != null)
-		{
-			return this.FloatRepresentation.Equals(other.FloatRepresentation);
-		}
-
-		return false;
-	}
-
-	public override bool Equals(object obj)
-	{
-		return this.Equals(obj as MutableVector);
-	}
-
-	public static bool operator ==(MutableVector lhs, MutableVector rhs)
-	{
-		bool isLhsNull = object.ReferenceEquals(lhs, null);
-		bool isRhsNull = object.ReferenceEquals(rhs, null);
-
-		if (isLhsNull && isRhsNull)
-			return true;    // TODO: cover with tests (same in stub? or remove stub...)
-		else if (isLhsNull)
-			return false;   // TODO: cover with tests
-		else
-			return lhs.Equals(rhs);
-	}
-
-	public static bool operator !=(MutableVector lhs, MutableVector rhs)
-	{
-		return !(lhs == rhs);
-	}
-
-	public override int GetHashCode()
-	{
-		return -509336368 + FloatRepresentation.GetHashCode();
-	}
 
 	private MutableVector(Vector3 vector3)
 	{

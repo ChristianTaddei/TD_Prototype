@@ -7,21 +7,23 @@ public abstract class Vector : IEquatable<Vector>
 {
 	public abstract Vector3 FloatRepresentation { get; }
 
-	public static Vector From(Vector3 vector3) // Default factory 
+	// Default factory methods, transparently returns an implemetation
+	public static Vector From(Vector3 vector3) 
 	{ 
 		return FloatVector.From(vector3);
 	}
 
-	public static Vector From(float x, float y, float z) // Default factory shorthand -> TODO: force override for this too
+	public static Vector From(float x, float y, float z) 
 	{ 
 		return FloatVector.From(new Vector3(x, y, z));
 	}
 
-	public static Vector Copy(Vector other) // Default factory shorthand
+	public static Vector Copy(Vector other)
 	{ 
-		return FloatVector.From(other.FloatRepresentation);
+		return FloatVector.Copy(other);
 	}
 
+	// Default Equals and operators implementations
 	public bool Equals(Vector other)
 	{
 		if (other != null)
